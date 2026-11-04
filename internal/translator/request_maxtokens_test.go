@@ -7,7 +7,7 @@ import (
 )
 
 // The Claude lane's rename predicate must cover gpt-6.x, which rejects
-// max_tokens the same way gpt-5.x does (upstream decolua/9router 7c42d8f8).
+// max_tokens the same way gpt-5.x does (upstream decolua/xroute 7c42d8f8).
 
 func TestTranslateClaudeToOpenAIMaxTokens(t *testing.T) {
 	out, err := TranslateClaudeToOpenAI([]byte(`{"model":"gpt-6.1","max_tokens":2048,"messages":[{"role":"user","content":"hi"}]}`))

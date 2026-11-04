@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
 )
 
 // The gate occasionally refuses a correctly-fingerprinted request and serves the

@@ -1,6 +1,6 @@
 # Mini-Plan Triển khai — Task 3: Bộ Adapter 9 Client (G24b)
 
-**Repo:** `9router-go` · **Ngày:** 2026-10-23
+**Repo:** `xroute` · **Ngày:** 2026-10-23
 **Đặc tả chi tiết:** `docs/specs/client-schema-matrix.md` (553 dòng, Discovery Gate)
 **Đặc tả phụ thuộc:** `docs/specs/safe-file-operations.md` (Task 1) · `docs/specs/config-patch-spec.md` (Task 2) · `connect-cli-spec.md` §3.2.4 (Task 5, tier precedence)
 
@@ -60,12 +60,12 @@ Ba giới hạn, mỗi cái chặn một nhóm yêu cầu của Bảng 1:
 | --- | --- | --- |
 | `claude` ghi 6 env **scalar** (`env.ANTHROPIC_BASE_URL`, …) | **làm được** | `Edit{KeyPath: ["env","ANTHROPIC_BASE_URL"], Value: v, CreateIfMissing: true}` |
 | `claude` reset: **xoá** 6 key, rồi xoá `env` nếu rỗng | **không làm được** | primitive `Delete` |
-| `opencode`: `provider["9router"] = {npm, options:{baseURL, apiKey}, models:{…}}` | **không làm được** | ghi object lồng |
+| `opencode`: `provider["xroute"] = {npm, options:{baseURL, apiKey}, models:{…}}` | **không làm được** | ghi object lồng |
 | `droid`: chèn phần tử vào **đầu mảng** `customModels` rồi re-index toàn mảng | **không làm được** | sửa mảng |
-| `codex` (TOML): `model_providers["9router"].http_headers.Authorization` | **làm được** nếu bảng đã có; `CreateIfMissing` tự thêm `[table]` | |
-| `crush`/`pi`/`omp`: `providers["9router"] = { type, base_url, api_key, models:[…] }` | **không làm được** | ghi object + mảng |
+| `codex` (TOML): `model_providers["xroute"].http_headers.Authorization` | **làm được** nếu bảng đã có; `CreateIfMissing` tự thêm `[table]` | |
+| `crush`/`pi`/`omp`: `providers["xroute"] = { type, base_url, api_key, models:[…] }` | **không làm được** | ghi object + mảng |
 
-**Đây là phát hiện chính của mini-plan này.** Spec §5 giả định `Patch` phủ được toàn bộ Bảng 1; thực tế nó chỉ phủ nhóm **scalar**. Không có primitive nào cho object/mảng/xoá, và `ErrUnsupportedStructure` là fail-closed — adapter gọi `Patch` cho `provider["9router"]` sẽ nhận lỗi, không phải ghi sai.
+**Đây là phát hiện chính của mini-plan này.** Spec §5 giả định `Patch` phủ được toàn bộ Bảng 1; thực tế nó chỉ phủ nhóm **scalar**. Không có primitive nào cho object/mảng/xoá, và `ErrUnsupportedStructure` là fail-closed — adapter gọi `Patch` cho `provider["xroute"]` sẽ nhận lỗi, không phải ghi sai.
 
 ### 1.3 Ba lựa chọn, và cái nào là đúng
 
@@ -106,7 +106,7 @@ Spec §8.3 đã đề xuất; mini-plan này **giữ nguyên toàn bộ** vì kh
 | D3 | `omp` dùng splicer | **Giữ** — `FormatYAML` đã có |
 | D4 | Bảng 2 ngoài `connect` | **Giữ** — Task 3 chỉ 9 client Bảng 1 |
 | D5 | Zed không cần adapter | **Giữ** |
-| D6 | Header `managed by 9Router` một lần | **Giữ** — `rãnh` này rời Task 3 (§1.5) |
+| D6 | Header `managed by XRoute` một lần | **Giữ** — `rãnh` này rời Task 3 (§1.5) |
 | D7 | `kilo` không vá VSCode settings | **Giữ** |
 
 ### 1.5 `deepseek-tui`, `jcode`, `forge`, `codewhale` không nằm trong Bảng 1
@@ -128,7 +128,7 @@ internal/clientconfig/
 ├── codex.go          # TOML, provider table, header auth                   ~120
 ├── opencode.go       # JSONC, provider object + model prefix               ~110
 ├── droid.go          # JSON, mảng customModels + re-index                  ~90
-├── crush.go          # JSON, providers["9router"] object                   ~70
+├── crush.go          # JSON, providers["xroute"] object                   ~70
 ├── pi.go             # JSON, merge provider, models array                  ~80
 ├── omp.go            # YAML, delete-file branch                            ~90
 ├── kilo.go           # JSON, auth["openai-compatible"]                     ~70
@@ -191,8 +191,8 @@ type Result struct {
 | **3.1** | `adapter.go` + `paths.go` + `v1url.go` | — | 9 đường dẫn khớp §3 trên 3 OS; không chuỗi nào còn `~` hay biến chưa mở; test bảng 9×3 |
 | **3.2** | `claude.go` | 3.0, 3.1 | Apply→Reset byte-identical **trừ** `hasCompletedOnboarding`; tier vắng ở cả hai nguồn ⇒ **giữ nguyên** key |
 | **3.3** | `codex.go` | 3.0, 3.1 | `Authorization` xuất hiện **đúng một** lần sau 3 lần Apply; reset dọn `agents` rỗng |
-| **3.4** | `opencode.go` | 3.0, 3.1 | Tiền tố `9router/` đúng; reset chỉ chạm model của ta |
-| **3.5** | `droid.go` | 3.0, 3.1 | Re-index đúng sau chèn; reset lọc sạch marker `custom:9Router` |
+| **3.4** | `opencode.go` | 3.0, 3.1 | Tiền tố `xroute/` đúng; reset chỉ chạm model của ta |
+| **3.5** | `droid.go` | 3.0, 3.1 | Re-index đúng sau chèn; reset lọc sạch marker `custom:XRoute` |
 | **3.6** | `crush.go`, `pi.go` | 3.0, 3.1 | Reset **không** xoá tệp; chỉ dọn `providers` rỗng |
 | **3.7** | `omp.go` | 3.0, 3.1 | Chỉ còn `providers:` trơ ⇒ xoá tệp; có key khác ⇒ giữ |
 | **3.8** | `kilo.go`, `cline.go` | 3.0, 3.1 | `cline` ghi origin **trần**; hai tệp reset cùng lượt, lỗi tệp 2 báo cả hai |
@@ -210,7 +210,7 @@ Kế thừa §8.4, cộng hai điều kiện đo được:
 - **S2** — fixture chứa key lạ, comment, thứ tự cố ý ⇒ sau `Apply` còn nguyên **byte-for-byte**.
 - **S3** — fixture malformed ⇒ `Apply` lỗi fail-closed, **không** tạo `.bak`, **không** ghi đĩa. Kiểm bằng `countingRoot`.
 - **S4** — `go test ./internal/clientconfig/` xanh trên Windows 11, macOS, Linux thật; không cross-compile.
-- **S5** (mới) — `go build ./cmd/9router-go/` vẫn xanh và `go list -deps ./cmd/9router-go | grep clientconfig` **vẫn rỗng**: Task 3 chưa được Task 5 gọi, nên binary chưa được phình. Đây là chốt chống "tích hợp sớm".
+- **S5** (mới) — `go build ./cmd/xroute/` vẫn xanh và `go list -deps ./cmd/xroute | grep clientconfig` **vẫn rỗng**: Task 3 chưa được Task 5 gọi, nên binary chưa được phình. Đây là chốt chống "tích hợp sớm".
 - **S6** (mới) — không tệp nào > 300 LoC; `gofmt` sạch trên bản LF.
 
 ---
@@ -231,7 +231,7 @@ Kế thừa §8.4, cộng hai điều kiện đo được:
 | --- | --- |
 | `internal/clientconfig/adapter.go` tồn tại? | **Không** |
 | `paths.go` / `v1url.go` / 9 file adapter? | **Không** |
-| `go list -deps ./cmd/9router-go \| grep clientconfig` | **rỗng** — Task 4 vẫn 0 importer |
+| `go list -deps ./cmd/xroute \| grep clientconfig` | **rỗng** — Task 4 vẫn 0 importer |
 | `Patch` xử lý container? | **Không** — `ErrUnsupportedStructure` (`jsonc.go:222`) |
 | `Edit` có `Delete`? | **Không** |
 | Task 1 API gọi được từ package khác? | **Không** — `guard`/`hooks`/`rootFS` chưa export |
@@ -251,4 +251,4 @@ Kế thừa §8.4, cộng hai điều kiện đo được:
 | `internal/clientconfig/write.go:24` | `BackupAndWrite` — backup + atomic, cùng lượt |
 | `internal/clientconfig/connect_dryrun.go:46` | `countingRoot` — S3 dùng lại, không viết mới |
 | `connect-cli-spec.md` §3.2.4 | Tier precedence của `claude` |
-| `docs/superpowers/plans/2026-10-19-9router-go-desktop.md:93` | Stop condition mà mini-plan này thoả |
+| `docs/superpowers/plans/2026-10-19-xroute-desktop.md:93` | Stop condition mà mini-plan này thoả |

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/providers"
 )
 
 // setupDeprecatedModelCombo points a mock provider at an upstream that refuses

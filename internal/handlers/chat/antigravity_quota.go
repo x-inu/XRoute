@@ -1,11 +1,11 @@
 package chat
 
 import (
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/translator"
 	"bytes"
 	"context"
-	json "9router/proxy/internal/fastjson"
+	json "xroute/proxy/internal/fastjson"
 	"fmt"
 	"io"
 	"math"
@@ -54,7 +54,7 @@ var (
 	agStrikeThreshold     = 3
 	agStrikeBlockDuration = 15 * time.Minute
 
-	// Explicit quota-error markers (parity with decolua/9router#4197): only
+	// Explicit quota-error markers (parity with decolua/xroute#4197): only
 	// 429s carrying one of these count toward the strike-breaker. Generic or
 	// content-triggered 429s must not synthesize 15m blocks while quota reads
 	// optimistic. NOTE: bare "RESOURCE_EXHAUSTED" is deliberately NOT a
@@ -171,7 +171,7 @@ func IsAntigravityModelBlocked(connectionID, model string) bool {
 	}
 
 	// Check family weekly + 5h-session quotas (parity with
-	// decolua/9router#4209: session exhaustion blocks the family even when
+	// decolua/xroute#4209: session exhaustion blocks the family even when
 	// weekly remains).
 	if strings.Contains(model, "argon") {
 		for _, key := range []string{"argon_weekly", "argon_session"} {
@@ -381,7 +381,7 @@ type AntigravityQuotaError struct {
 }
 
 // isExplicitQuotaError reports whether an upstream error message explicitly
-// indicates quota/rate limiting (parity with decolua/9router#4197).
+// indicates quota/rate limiting (parity with decolua/xroute#4197).
 func isExplicitQuotaError(errorMessage string) bool {
 	for _, marker := range agQuotaErrorMarkers {
 		if strings.Contains(errorMessage, marker) {
@@ -535,7 +535,7 @@ func ParseWeeklyQuotaSummary(raw []byte) map[string]AntigravityWeeklyQuota {
 
 		for _, b := range g.Buckets {
 			// Classify weekly vs 5h-session buckets (parity with
-			// decolua/9router#4209). A disabled session bucket is kept at
+			// decolua/xroute#4209). A disabled session bucket is kept at
 			// 0 (upstream marks it disabled when weekly is hit); disabled
 			// weekly buckets are truly disabled and skipped.
 			windowType := strings.ToLower(b.Window)

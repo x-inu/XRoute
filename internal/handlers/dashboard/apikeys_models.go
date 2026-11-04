@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"strings"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
 )
 
 // Per-API-key model access control (F-7) — dashboard surface.

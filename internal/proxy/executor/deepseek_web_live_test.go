@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 // Live deepseek-web: one real turn against chat.deepseek.com, through the
@@ -19,7 +19,7 @@ import (
 //
 // It is opt-in twice over, and skips silently without both:
 //
-//	9ROUTER_LIVE_TESTS=1   the suite-wide live gate (see live_guard_test.go)
+//	XROUTE_LIVE_TESTS=1   the suite-wide live gate (see live_guard_test.go)
 //	DEEPSEEK_LIVE_TOKEN    the credential, a real account's userToken
 //
 // The credential never belongs in the repo; it arrives by environment. One
@@ -29,11 +29,11 @@ import (
 //
 // Run it locally with:
 //
-//	9ROUTER_LIVE_TESTS=1 DEEPSEEK_LIVE_TOKEN='{"value":"…"}' \
+//	XROUTE_LIVE_TESTS=1 DEEPSEEK_LIVE_TOKEN='{"value":"…"}' \
 //		go test ./internal/proxy/executor/ -v -run TestLiveDeepSeekWeb
 func TestLiveDeepSeekWebOneTurn(t *testing.T) {
-	if strings.ToLower(os.Getenv("9ROUTER_LIVE_TESTS")) != "1" {
-		t.Skip("live deepseek-web test: set 9ROUTER_LIVE_TESTS=1")
+	if strings.ToLower(os.Getenv("XROUTE_LIVE_TESTS")) != "1" {
+		t.Skip("live deepseek-web test: set XROUTE_LIVE_TESTS=1")
 	}
 	token := strings.TrimSpace(os.Getenv("DEEPSEEK_LIVE_TOKEN"))
 	if token == "" {
@@ -130,8 +130,8 @@ func tailFor(s string, n int) string {
 // sign-in. What CAN be checked without the human is that the refresh the
 // gateway does on its own still works end to end.
 func TestLiveDeepSeekWebAccessTokenRefresh(t *testing.T) {
-	if strings.ToLower(os.Getenv("9ROUTER_LIVE_TESTS")) != "1" {
-		t.Skip("live deepseek-web test: set 9ROUTER_LIVE_TESTS=1")
+	if strings.ToLower(os.Getenv("XROUTE_LIVE_TESTS")) != "1" {
+		t.Skip("live deepseek-web test: set XROUTE_LIVE_TESTS=1")
 	}
 	token := strings.TrimSpace(os.Getenv("DEEPSEEK_LIVE_TOKEN"))
 	if token == "" {
@@ -287,8 +287,8 @@ func liveToolTurn(t *testing.T, token, prompt string) string {
 // executor path. The model may answer in DSML or JSON; either dialect must be
 // recovered into tool_calls, and neither may leak into the assistant content.
 func TestLiveDeepSeekWebToolCalls(t *testing.T) {
-	if strings.ToLower(os.Getenv("9ROUTER_LIVE_TESTS")) != "1" {
-		t.Skip("live deepseek-web test: set 9ROUTER_LIVE_TESTS=1")
+	if strings.ToLower(os.Getenv("XROUTE_LIVE_TESTS")) != "1" {
+		t.Skip("live deepseek-web test: set XROUTE_LIVE_TESTS=1")
 	}
 	token := strings.TrimSpace(os.Getenv("DEEPSEEK_LIVE_TOKEN"))
 	if token == "" {
@@ -320,8 +320,8 @@ func TestLiveDeepSeekWebToolCalls(t *testing.T) {
 // TestLiveDeepSeekWebMultiToolCalls pins the plural path end to end: one turn
 // must recover two calls in one answer, each with its own arguments.
 func TestLiveDeepSeekWebMultiToolCalls(t *testing.T) {
-	if strings.ToLower(os.Getenv("9ROUTER_LIVE_TESTS")) != "1" {
-		t.Skip("live deepseek-web test: set 9ROUTER_LIVE_TESTS=1")
+	if strings.ToLower(os.Getenv("XROUTE_LIVE_TESTS")) != "1" {
+		t.Skip("live deepseek-web test: set XROUTE_LIVE_TESTS=1")
 	}
 	token := strings.TrimSpace(os.Getenv("DEEPSEEK_LIVE_TOKEN"))
 	if token == "" {

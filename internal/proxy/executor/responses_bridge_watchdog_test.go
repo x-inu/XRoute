@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/translator"
 )
 
 // stalledUpstream streams the answer and its finish_reason — the two chunks a

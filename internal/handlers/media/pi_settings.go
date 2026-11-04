@@ -10,26 +10,26 @@ import (
 	"path/filepath"
 	"strings"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
 	"encoding/json/jsontext"
 	json "encoding/json/v2"
 )
 
 // Pi settings API. Port of upstream
 // `src/app/api/cli-tools/pi-settings/route.js`, including the POST merge that
-// commit 342ecb0d fixed there: previously saved fields of the 9router block
+// commit 342ecb0d fixed there: previously saved fields of the xroute block
 // (a stored key, a custom `api`) survive an apply instead of being dropped.
 //
 // The config is the pi coding agent's models.json, read and rewritten whole;
 // everything else in the file belongs to pi or the user and is preserved.
 
-const piProviderName = "9router"
+const piProviderName = "xroute"
 
 // piPlaceholderKey is the fake key old clients sent when they could not read
 // the stored one back. It was never a real credential and must never be
 // written into a config.
-const piPlaceholderKey = "sk_9router"
+const piPlaceholderKey = "sk_xroute"
 
 // PiHandler serves the pi settings API. repo backs the API-key fallback for a
 // caller that sends none.
@@ -99,10 +99,10 @@ func readPiConfig() map[string]any {
 	return nil
 }
 
-// piHas9RouterConfig reports whether any provider block points at a local
-// 9router: the named block with a baseUrl, or any block carrying one of the
+// piHasXRouteConfig reports whether any provider block points at a local
+// xroute: the named block with a baseUrl, or any block carrying one of the
 // two default gateway ports (20128 upstream's, 20130 this gateway's).
-func piHas9RouterConfig(config map[string]any) bool {
+func piHasXRouteConfig(config map[string]any) bool {
 	providers, _ := config["providers"].(map[string]any)
 	if p, ok := providers[piProviderName].(map[string]any); ok {
 		if b, _ := p["baseUrl"].(string); strings.TrimSpace(b) != "" {
@@ -136,7 +136,7 @@ func (h *PiHandler) HandleGet(w http.ResponseWriter, r *http.Request) {
 	handlerutil.WriteJSON(w, http.StatusOK, map[string]any{
 		"installed":  true,
 		"config":     config,
-		"has9Router": piHas9RouterConfig(config),
+		"hasXRoute": piHasXRouteConfig(config),
 		"configPath": resolvePiModelsPath(),
 	})
 }
@@ -150,7 +150,7 @@ type piSettingsRequest struct {
 	Models  []any  `json:"models"`
 }
 
-// HandlePost serves POST /api/cli-tools/pi-settings — writes the 9router
+// HandlePost serves POST /api/cli-tools/pi-settings — writes the xroute
 // provider block into models.json, merging over the previously saved one.
 func (h *PiHandler) HandlePost(w http.ResponseWriter, r *http.Request) {
 	var req piSettingsRequest
@@ -206,12 +206,12 @@ func (h *PiHandler) HandlePost(w http.ResponseWriter, r *http.Request) {
 	}
 	handlerutil.WriteJSON(w, http.StatusOK, map[string]any{
 		"success":    true,
-		"message":    "Pi settings applied! Use /model in Pi to select the 9Router model.",
+		"message":    "Pi settings applied! Use /model in Pi to select the XRoute model.",
 		"configPath": configPath,
 	})
 }
 
-// HandleDelete serves DELETE /api/cli-tools/pi-settings — removes the 9router
+// HandleDelete serves DELETE /api/cli-tools/pi-settings — removes the xroute
 // block and leaves every other provider untouched.
 func (h *PiHandler) HandleDelete(w http.ResponseWriter, r *http.Request) {
 	configPath := resolvePiModelsPath()
@@ -233,7 +233,7 @@ func (h *PiHandler) HandleDelete(w http.ResponseWriter, r *http.Request) {
 		// dashboard would remove is not in there.
 		handlerutil.WriteJSON(w, http.StatusOK, map[string]any{
 			"success": true,
-			"message": "9Router removed from Pi",
+			"message": "XRoute removed from Pi",
 		})
 		return
 	}
@@ -251,7 +251,7 @@ func (h *PiHandler) HandleDelete(w http.ResponseWriter, r *http.Request) {
 	}
 	handlerutil.WriteJSON(w, http.StatusOK, map[string]any{
 		"success": true,
-		"message": "9Router removed from Pi",
+		"message": "XRoute removed from Pi",
 	})
 }
 

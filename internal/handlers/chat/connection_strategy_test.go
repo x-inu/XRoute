@@ -8,8 +8,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/models"
 )
 
 func TestApplyConnectionStrategy_RoundRobin(t *testing.T) {

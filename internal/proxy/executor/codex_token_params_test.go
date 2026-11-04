@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 // decodeBody is a small test helper: the executors work on raw JSON bytes, so

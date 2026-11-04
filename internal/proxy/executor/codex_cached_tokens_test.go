@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/translator"
 )
 
 // TestCaptureUsageFromSSEChunk_ResponsesSSE verifies that captureUsageFromSSEChunk

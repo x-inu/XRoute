@@ -163,7 +163,7 @@
     <div class="cf-route">
       <div class="cf-chip" data-role="router" data-state={routeState}>
         <img src="/favicon.svg" alt="" loading="lazy" decoding="async" />
-        <span>9router-go</span>
+        <span>xroute</span>
       </div>
       <span class="cf-route-arrow" data-state={routeState} aria-hidden="true">
         <svg viewBox="0 0 40 12" preserveAspectRatio="none">

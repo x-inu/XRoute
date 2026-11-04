@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/semanticcache"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/semanticcache"
+	"xroute/proxy/internal/translator"
 )
 
 func TestChatHandler_SemanticCacheHit(t *testing.T) {

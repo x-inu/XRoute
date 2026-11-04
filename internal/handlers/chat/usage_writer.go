@@ -5,7 +5,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/log"
 )
 
 // Off-path usage writes.

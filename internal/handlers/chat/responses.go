@@ -1,7 +1,7 @@
 package chat
 
 import (
-	json "9router/proxy/internal/fastjson"
+	json "xroute/proxy/internal/fastjson"
 	"bytes"
 	"context"
 	"errors"
@@ -11,13 +11,13 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/middleware"
-	internalproxy "9router/proxy/internal/proxy"
-	"9router/proxy/internal/proxy/executor"
-	"9router/proxy/internal/thinking"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/middleware"
+	internalproxy "xroute/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/thinking"
+	"xroute/proxy/internal/translator"
 )
 
 // responsesEndpoint labels the client-facing endpoint in usage logs.

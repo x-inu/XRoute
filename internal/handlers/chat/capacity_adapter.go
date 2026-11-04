@@ -4,9 +4,9 @@ import (
 	"slices"
 	"strings"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/providers"
 )
 
 // Capacity Adapter — global fallback pools of models per input-modality
@@ -18,7 +18,7 @@ import (
 // none of the original models can handle the request — so this never overrides
 // a combo that already has a member covering the capability.
 //
-// Port of open-sse/services/capacityAdapter.js (upstream decolua/9router).
+// Port of open-sse/services/capacityAdapter.js (upstream decolua/xroute).
 
 // adapterCapabilityKeys is the ordered capability set a pool can be declared for.
 // The order is upstream's CAPABILITY_KEYS and is load-bearing: it is the

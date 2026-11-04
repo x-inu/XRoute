@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/dbtest"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/dbtest"
 )
 
 func TestApplyComboStrategy_capacity(t *testing.T) {

@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/browserlogin"
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/browserlogin"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/models"
 )
 
 // The renewal writes the credential it produced back to the row.

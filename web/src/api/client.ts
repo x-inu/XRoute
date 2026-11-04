@@ -15,7 +15,7 @@ export interface PruneUsageResult {
   carriedTokens?: number
   cutoff: string
 }
-// Typed API client for 9router-go Native Dashboard
+// Typed API client for xroute Native Dashboard
 
 export interface ProviderConnection {
   id: string
@@ -372,7 +372,7 @@ export interface TunnelStatusResponse {
   }
 }
 
-// --- Hermes per-profile configuration (upstream decolua/9router#4660) ---
+// --- Hermes per-profile configuration (upstream decolua/xroute#4660) ---
 
 /** One Hermes profile as reported by `GET /api/cli-tools/hermes-profiles`. */
 export interface HermesProfile {
@@ -384,7 +384,7 @@ export interface HermesProfile {
   alias: string | null
   model: string | null
   baseUrl: string | null
-  has9Router: boolean
+  hasXRoute: boolean
 }
 
 export interface HermesProfilesResponse {
@@ -423,7 +423,7 @@ export interface HermesSettingsResponse {
   installed: boolean
   profile?: { name: string; dir: string; isDefault: boolean }
   settings: HermesSettings | null
-  has9Router?: boolean
+  hasXRoute?: boolean
   configPath?: string
   message?: string
 }
@@ -973,7 +973,7 @@ export interface CompressionAnalyticsSummary {
   roiTokensPerMs?: number
   topSavers?: CompressionTopSaver[]
 }
-/** Jailbreak: the default injected document (upstream decolua/9router parity). */
+/** Jailbreak: the default injected document (upstream decolua/xroute parity). */
 export interface JailbreakDoc {
   prompt: string
   geminiSafety: boolean
@@ -1052,7 +1052,7 @@ export interface JailbreakMatch {
 
 export function isAuthenticated(): boolean {
   if (typeof window === 'undefined') return false
-  if (sessionStorage.getItem('9router_auth') === 'true' || localStorage.getItem('9router_auth') === 'true') {
+  if (sessionStorage.getItem('xroute_auth') === 'true' || localStorage.getItem('xroute_auth') === 'true') {
     return true
   }
   if (typeof document !== 'undefined' && document.cookie.includes('auth_token=')) {
@@ -1069,7 +1069,7 @@ export function isUsableAPIKey(value: string): boolean {
 
 export function getStoredAPIKey(): string {
   if (typeof localStorage === 'undefined') return ''
-  const value = (localStorage.getItem('9router_key') || '').trim()
+  const value = (localStorage.getItem('xroute_key') || '').trim()
   return isUsableAPIKey(value) ? value : ''
 }
 
@@ -1161,11 +1161,11 @@ export function handleUnauthorized(path?: string) {
 
   // Clear stale local auth session tokens and invalid stored keys
   if (typeof sessionStorage !== 'undefined') {
-    sessionStorage.removeItem('9router_auth')
+    sessionStorage.removeItem('xroute_auth')
   }
   if (typeof localStorage !== 'undefined') {
-    localStorage.removeItem('9router_auth')
-    localStorage.removeItem('9router_key')
+    localStorage.removeItem('xroute_auth')
+    localStorage.removeItem('xroute_key')
   }
 
   // Debounce multiple concurrent 401 responses
@@ -2131,13 +2131,13 @@ export const api = {
       }
     } catch {}
     try {
-      const res = await fetch('https://raw.githubusercontent.com/luqman-v1/9router-go/main/CHANGELOG.md')
+      const res = await fetch('https://raw.githubusercontent.com/x-inu/XRoute/main/CHANGELOG.md')
       if (res.ok) {
         const text = await res.text()
         if (text && text.trim().length > 0) return text
       }
     } catch {}
-    const res = await fetch('https://raw.githubusercontent.com/decolua/9router/refs/heads/master/CHANGELOG.md')
+    const res = await fetch('https://raw.githubusercontent.com/decolua/xroute/refs/heads/master/CHANGELOG.md')
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     return await res.text()
   },
@@ -2380,7 +2380,7 @@ export const api = {
 
   // CLI Tools status
   getCliToolsStatuses: () =>
-    request<Record<string, { installed?: boolean; version?: string | null; has9Router?: boolean } | null>>(
+    request<Record<string, { installed?: boolean; version?: string | null; hasXRoute?: boolean } | null>>(
       '/api/cli-tools/all-statuses'
     ).catch(() => ({})),
 
@@ -2393,7 +2393,7 @@ export const api = {
     request<HermesSettingsResponse>(
       `/api/cli-tools/hermes-settings${profile ? `?profile=${encodeURIComponent(profile)}` : ''}`
     ),
-  // `applyToAll` carries the endpoint to every 9router-wired profile; the
+  // `applyToAll` carries the endpoint to every xroute-wired profile; the
   // client splits it out because the two shapes share one endpoint.
   applyHermesSettings: (payload: HermesApplyPayload) =>
     request<HermesApplyResponse>('/api/cli-tools/hermes-settings', {
@@ -2452,8 +2452,8 @@ export const api = {
       const data = await res.json()
       // The server sets the httpOnly auth_token cookie; this flag only drives
       // the client-side gate (isAuthenticated) since JS cannot read it.
-      sessionStorage.setItem('9router_auth', 'true')
-      localStorage.setItem('9router_auth', 'true')
+      sessionStorage.setItem('xroute_auth', 'true')
+      localStorage.setItem('xroute_auth', 'true')
       return { success: true, mustChangePassword: !!data.mustChangePassword }
     }
     let errText = 'Invalid password'
@@ -2527,8 +2527,8 @@ export const api = {
     try {
       await fetch('/api/auth/logout', { method: 'POST' })
     } catch {}
-    sessionStorage.removeItem('9router_auth')
-    localStorage.removeItem('9router_auth')
+    sessionStorage.removeItem('xroute_auth')
+    localStorage.removeItem('xroute_auth')
   },
   // Jailbreak
   getJailbreak: () => request<JailbreakDoc>('/api/jailbreak'),

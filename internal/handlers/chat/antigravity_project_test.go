@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 // TestFetchAntigravityProjectID_outcomes pins the classification that drives the

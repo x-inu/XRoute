@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"9router/proxy/internal/constants"
+	"xroute/proxy/internal/constants"
 )
 
 const (

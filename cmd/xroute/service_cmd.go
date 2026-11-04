@@ -7,8 +7,8 @@ import (
 
 	"github.com/urfave/cli/v2"
 
-	"9router/proxy/internal/daemon"
-	"9router/proxy/internal/service"
+	"xroute/proxy/internal/daemon"
+	"xroute/proxy/internal/service"
 )
 
 // serviceInstall writes the autostart entry so the gateway starts on boot,
@@ -34,7 +34,7 @@ func serviceInstall(cCtx *cli.Context) error {
 		fmt.Println("  State:   enabled and running — it will start automatically on boot.")
 	case info.Enabled:
 		fmt.Println("  State:   enabled — it will start automatically on next boot.")
-		fmt.Println("  Note:    the current gateway (if any) keeps running; reboot or run `9router-go service restart` to hand over.")
+		fmt.Println("  Note:    the current gateway (if any) keeps running; reboot or run `xroute service restart` to hand over.")
 	}
 	if info.Backend == service.BackendSystemdUser {
 		fmt.Println("  Tip:     run `loginctl enable-linger $USER` to keep it alive after logout.")
@@ -55,7 +55,7 @@ func serviceUninstall(_ *cli.Context) error {
 		if info, ok := service.Status(); ok {
 			return fmt.Errorf("failed to remove %s entry %s — check permissions and retry", info.Backend, info.Path)
 		}
-		fmt.Println("9router-go autostart is not installed.")
+		fmt.Println("xroute autostart is not installed.")
 		return nil
 	}
 	for _, info := range removed {
@@ -77,7 +77,7 @@ func serviceStart(cCtx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("9router-go started via %s (%s, starts on boot)\n", info.Backend, activeState(info))
+	fmt.Printf("xroute started via %s (%s, starts on boot)\n", info.Backend, activeState(info))
 	return nil
 }
 
@@ -91,7 +91,7 @@ func serviceStop(cCtx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("9router-go stopped via %s (still enabled for boot)\n", info.Backend)
+	fmt.Printf("xroute stopped via %s (still enabled for boot)\n", info.Backend)
 	return nil
 }
 
@@ -105,17 +105,17 @@ func serviceRestart(cCtx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("9router-go restarted via %s (%s)\n", info.Backend, activeState(info))
+	fmt.Printf("xroute restarted via %s (%s)\n", info.Backend, activeState(info))
 	return nil
 }
 
 // warnPidConflict notes when the pid-file daemon is also alive: two
 // supervisors binding the same port means one of them crash-loops, which is
 // exactly the `activating (auto-restart)` state users hit after installing
-// the unit while `9router-go start` still holds the port.
+// the unit while `xroute start` still holds the port.
 func warnPidConflict() {
 	if pid := daemon.RunningPID(); pid > 0 {
-		fmt.Printf("  Warning: background daemon (pid %d) from `9router-go start` is also running — both bind the same port. Keep one: `9router-go stop` or `9router-go service stop`.\n", pid)
+		fmt.Printf("  Warning: background daemon (pid %d) from `xroute start` is also running — both bind the same port. Keep one: `xroute stop` or `xroute service stop`.\n", pid)
 	}
 }
 
@@ -123,8 +123,8 @@ func warnPidConflict() {
 func serviceStatus(_ *cli.Context) error {
 	info, ok := service.Status()
 	if !ok {
-		fmt.Println("9router-go autostart is not installed.")
-		fmt.Println("  Install with: 9router-go service install")
+		fmt.Println("xroute autostart is not installed.")
+		fmt.Println("  Install with: xroute service install")
 		return nil
 	}
 	fmt.Printf("Autostart backend: %s\n", info.Backend)
@@ -161,17 +161,17 @@ func activeState(info service.Info) string {
 func inspectHint(backend service.Backend) string {
 	switch backend {
 	case service.BackendSystemdUser:
-		return "systemctl --user status 9router-go.service"
+		return "systemctl --user status xroute.service"
 	case service.BackendLaunchd:
-		return "launchctl list com.9router.gateway"
+		return "launchctl list com.xroute.gateway"
 	case service.BackendOpenRC:
-		return "rc-service 9router-go status"
+		return "rc-service xroute status"
 	case service.BackendRunit:
-		return "sv status 9router-go"
+		return "sv status xroute"
 	case service.BackendCron:
-		return "crontab -l | grep 9router-go"
+		return "crontab -l | grep xroute"
 	case service.BackendWindowsTask:
-		return "schtasks /query /tn 9router-go"
+		return "schtasks /query /tn xroute"
 	default:
 		return ""
 	}

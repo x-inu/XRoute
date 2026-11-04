@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Three clients that each keep a providers["9router"] table and disagree on
+// Three clients that each keep a providers["xroute"] table and disagree on
 // what an empty one means. docs/specs/client-schema-matrix.md §3.5, §3.8, §3.9.
 //
 // They share the write shape and nothing else, and the shared part is two
@@ -13,7 +13,7 @@ import (
 // content would be the differences.
 
 // providerTableKey is the providers entry name crush, pi and omp all use.
-const providerTableKey = "9router"
+const providerTableKey = "xroute"
 
 // crushContextWindow is the fallback window when the gateway could not
 // resolve the model's real one. A resolved value wins: 128000 was always a
@@ -69,7 +69,7 @@ func (a crushAdapter) Reset(opts Options) (Result, error) {
 	}}}, nil)
 }
 
-// pi merges into providers["9router"] rather than replacing it (§3.8): the
+// pi merges into providers["xroute"] rather than replacing it (§3.8): the
 // user may have other fields on the same entry, and the matrix calls that out
 // as the thing this adapter must not break.
 const piContextWindow = 128000

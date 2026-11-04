@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/providers"
 )
 
 // parkRejectedOAuthAccount cools a connection down after the provider rejected

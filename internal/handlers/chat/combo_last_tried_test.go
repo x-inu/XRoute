@@ -11,7 +11,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 // TestComboTimeoutSparesLastTriedCandidate pins that the combo response timeout

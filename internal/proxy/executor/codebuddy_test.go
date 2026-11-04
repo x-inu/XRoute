@@ -10,8 +10,8 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
 )
 
 func TestTransformCodebuddyBody_ForceStream(t *testing.T) {

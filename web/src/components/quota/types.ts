@@ -1,4 +1,4 @@
-// Port of 9router Next.js ProviderLimits/utils.js for the native Go dashboard.
+// Port of xroute Next.js ProviderLimits/utils.js for the native Go dashboard.
 // Pure helpers + localStorage quota cache + quota visibility filtering.
 import { getModelsByProviderId } from '../../lib/models'
 

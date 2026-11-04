@@ -34,7 +34,7 @@ import (
 	"sync"
 	"time"
 
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/handlerutil"
 )
 
 var (
@@ -53,7 +53,7 @@ const (
 	netlifyFunctionName = "relay"
 	netlifyFunctionPath = "/.netlify/functions/relay"
 
-	netlifyRelayUserAgent = "9Router"
+	netlifyRelayUserAgent = "XRoute"
 )
 
 // Digest-deployed functions run no build step, so the bundle is served by the
@@ -130,8 +130,8 @@ const netlifyRelayCode = `exports.handler = async (event) => {
 `
 
 const netlifyIndexHTML = `<!doctype html>
-<html><head><meta charset="utf-8"><title>9Router Relay</title></head>
-<body><p>9Router relay function lives at <code>/.netlify/functions/relay</code>.</p></body></html>
+<html><head><meta charset="utf-8"><title>XRoute Relay</title></head>
+<body><p>XRoute relay function lives at <code>/.netlify/functions/relay</code>.</p></body></html>
 `
 
 // ─── Minimal stored (uncompressed) ZIP writer ───────────────────────────

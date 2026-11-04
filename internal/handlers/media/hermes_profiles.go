@@ -56,7 +56,7 @@ type hermesProfile struct {
 	Alias       *string `json:"alias"`
 	Model       *string `json:"model"`
 	BaseURL     *string `json:"baseUrl"`
-	Has9Router  bool    `json:"has9Router"`
+	HasXRoute  bool    `json:"hasXRoute"`
 }
 
 // hermesRoot is the install root. HERMES_HOME wins over the home directory so
@@ -172,7 +172,7 @@ func buildHermesEntry(home hermesHome) (hermesProfile, error) {
 		Command:     "hermes",
 		Model:       model.defaultModel(),
 		BaseURL:     model.baseURL(),
-		Has9Router:  has9RouterConfig(model.provider(), model.baseURL()) || has9RouterConfig(delegation.provider(), delegation.baseURL()),
+		HasXRoute:  hasXRouteConfig(model.provider(), model.baseURL()) || hasXRouteConfig(delegation.provider(), delegation.baseURL()),
 	}
 	if !home.IsDefault {
 		// What the user types to run this profile; alias is the
@@ -181,8 +181,8 @@ func buildHermesEntry(home hermesHome) (hermesProfile, error) {
 		entry.Alias = new(home.Name)
 	}
 	for _, cfg := range parseHermesAuxRoles(yaml) {
-		if has9RouterConfig(cfg.Provider, cfg.BaseURL) {
-			entry.Has9Router = true
+		if hasXRouteConfig(cfg.Provider, cfg.BaseURL) {
+			entry.HasXRoute = true
 			break
 		}
 	}

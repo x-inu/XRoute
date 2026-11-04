@@ -3,9 +3,9 @@ package chat
 import (
 	"context"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/thinking"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/thinking"
+	"xroute/proxy/internal/translator"
 	json "encoding/json/v2"
 	"strings"
 )

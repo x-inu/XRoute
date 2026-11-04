@@ -16,7 +16,7 @@ func TestGpt6Astra_Capabilities(t *testing.T) {
 		t.Errorf("custom-gpt-6-test should match *gpt-6* pattern, got %+v", capsPattern)
 	}
 
-	// The token window moved upstream (decolua/9router 89ffac5a): gpt-6 is a
+	// The token window moved upstream (decolua/xroute 89ffac5a): gpt-6 is a
 	// 1.05M family, not one gateway's 272k truncation. GetGPTTokenWindows pins
 	// the per-family numbers now.
 }

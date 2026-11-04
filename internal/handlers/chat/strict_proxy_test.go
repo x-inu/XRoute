@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"9router/proxy/internal/db"
-	internalproxy "9router/proxy/internal/proxy"
+	"xroute/proxy/internal/db"
+	internalproxy "xroute/proxy/internal/proxy"
 )
 
 // setupProxyPools gives the handler a repo that can store proxy pools and

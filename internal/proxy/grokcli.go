@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/providers"
 )
 
 func setAuth(headers map[string]string, cfg *providers.ProviderConfig, apiKey string) {
@@ -261,7 +261,7 @@ func kiroEndpoints(cfg *providers.ProviderConfig, psd map[string]any) []string {
 
 const (
 	// KiroToolResultsPlaceholder is a neutral placeholder for user turns carrying only tool results.
-	// Prevents models from answering "Nothing in progress to continue" (decolua/9router #4109).
+	// Prevents models from answering "Nothing in progress to continue" (decolua/xroute #4109).
 	KiroToolResultsPlaceholder = "Tool results provided."
 	KiroEmptyUserPlaceholder   = "continue"
 )

@@ -1,7 +1,7 @@
 package translator
 
 import (
-	"9router/proxy/internal/thinking"
+	"xroute/proxy/internal/thinking"
 	"encoding/json/jsontext"
 	json "encoding/json/v2"
 	"strings"

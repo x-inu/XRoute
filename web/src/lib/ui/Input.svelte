@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Port of decolua/9router src/shared/components/Input.js
+  // Port of decolua/xroute src/shared/components/Input.js
   let {
     label = '',
     type = 'text',

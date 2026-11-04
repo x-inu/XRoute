@@ -1,17 +1,17 @@
-# KeiRouter Feature Port Plan — 9router-go
+# KeiRouter Feature Port Plan — xroute
 
 > **Dibuat**: 2026-10-07
 > **Sumber**: KeiRouter `https://github.com/mydisha/keirouter` `backend/internal/*` (41 paket), `store/migrations/*` (MIT)
-> **Target**: `https://github.com/luqman-v1/9router-go` (Go 1.27 + Chi + Uber Fx + Svelte 5, SQLite WAL, single-binary)
+> **Target**: `https://github.com/x-inu/XRoute` (Go 1.27 + Chi + Uber Fx + Svelte 5, SQLite WAL, single-binary)
 > **Status**: Analisis & spesifikasi siap implementasi
 
-> **BACA BAGIAN INI DULU.** Beberapa fitur di bawah sudah selesai di 9router-go; jangan dikerjakan ulang.
+> **BACA BAGIAN INI DULU.** Beberapa fitur di bawah sudah selesai di xroute; jangan dikerjakan ulang.
 
 ---
 
 ## Status & Rencana Eksekusi (2026-10-16)
 
-**Koreksi sumber.** Dokumen ini ditulis 2026-10-07 dari klon KeiRouter `3d8b702` (fork `helmiau`, 2026-09-08). Upstream `mydisha/keirouter` kini `0918b9e` (**v0.2.0**, 2026-10-13): **20 commit di depan, 453 file berubah**, +3 paket (`audit`, `errclass`, `skills`) dan +4 migrasi (`0030`–`0033`). Worktree baca-saja upstream: `D:/GithubRepository/keirouter-upstream`. Semua status di bawah diverifikasi ulang ke kode 9router-go `d995986` (1.9.14-exp.1), bukan dari dokumen ini.
+**Koreksi sumber.** Dokumen ini ditulis 2026-10-07 dari klon KeiRouter `3d8b702` (fork `helmiau`, 2026-09-08). Upstream `mydisha/keirouter` kini `0918b9e` (**v0.2.0**, 2026-10-13): **20 commit di depan, 453 file berubah**, +3 paket (`audit`, `errclass`, `skills`) dan +4 migrasi (`0030`–`0033`). Worktree baca-saja upstream: `D:/GithubRepository/keirouter-upstream`. Semua status di bawah diverifikasi ulang ke kode xroute `d995986` (1.9.14-exp.1), bukan dari dokumen ini.
 
 ### A. Status per fitur (terverifikasi 2026-10-16)
 
@@ -112,9 +112,9 @@ Plan adalah payung yang memuat limit RPM/TPM/konkurensi, kuota token, dan `allow
 
 ## 0. Ruang Lingkup
 
-Dokumen ini **hanya** mencakup fitur KeiRouter yang **BELUM ADA** di 9router-go dan **perlu di-port**.
+Dokumen ini **hanya** mencakup fitur KeiRouter yang **BELUM ADA** di xroute dan **perlu di-port**.
 
-**Dikecualikan** (sudah ada di 9router-go, jangan port):
+**Dikecualikan** (sudah ada di xroute, jangan port):
 - RTK / kompresi tool output (`internal/tokensaver/compress.go`)
 - Caveman / Ponytail / ADHD injection (`internal/tokensaver/injection.go`)
 - Headroom proxy (`internal/headroom/`)
@@ -133,13 +133,13 @@ Dokumen ini **hanya** mencakup fitur KeiRouter yang **BELUM ADA** di 9router-go 
 
 ## 1. Ringkasan Kandidat Port
 
-Skor = **value untuk use-case 9router-go** (developer proxy / resale gateway) ÷ **effort port**.
+Skor = **value untuk use-case xroute** (developer proxy / resale gateway) ÷ **effort port**.
 
 ### Tier A — Governance inti, value tinggi
 
 #### 1.1 Per-key Rate Limiting (RPM / TPM / Concurrency)
 - **Asli**: `internal/limits/limits.go` (+ `repo_plans.go` untuk plan override).
-- **Kenapa penting**: 9router-go adalah gateway multi-akun publik. Tanpa limit, satu klien boros bisa habiskan kuota upstream untuk semua. Ini pelengkap alami `RequireApiKey` yang sudah ada.
+- **Kenapa penting**: xroute adalah gateway multi-akun publik. Tanpa limit, satu klien boros bisa habiskan kuota upstream untuk semua. Ini pelengkap alami `RequireApiKey` yang sudah ada.
 - **Fit arsitektur**: middleware baru `middleware/ratelimit.go`, dipasang setelah `RequireApiKey` di `router.go`. Backend in-memory dulu (sama seperti KeiRouter `backend: memory`).
 - **Skema**: kolom `apiKeys.rateLimitRPM/TPM/concurrency` (additive, sudah ada di [§F-14](#f-14-api-key-time-limit--resale-metadata)).
 - **Effort**: Rendah–Sedang. **Prioritas: #1.**
@@ -147,15 +147,15 @@ Skor = **value untuk use-case 9router-go** (developer proxy / resale gateway) ÷
 #### 1.2 Budget Engine (USD + Token Hard-Cutoff)
 - **Asli**: `internal/budget/budget.go` + `repo_budgets.go`, migration `0008_token_budgets_and_model_access.sql`.
 - **Model**: `limit_micros` (USD micro-dollar, hindari float), `limit_tokens`, `period` (daily/weekly/monthly/total), `alert_pct`, `hard_cutoff`.
-- **Kenapa penting**: 9router-go sudah catat usage per request (`usagetracker`, `usageHistory`). Tinggal tambahkan **lapisan enforcement**: sebelum dispatch, cek spending key vs budget → 402/blokir. Tanpa ini, `cost REAL` di `usageHistory` cuma telemetry, bukan kontrol.
+- **Kenapa penting**: xroute sudah catat usage per request (`usagetracker`, `usageHistory`). Tinggal tambahkan **lapisan enforcement**: sebelum dispatch, cek spending key vs budget → 402/blokir. Tanpa ini, `cost REAL` di `usageHistory` cuma telemetry, bukan kontrol.
 - **Fit**: pre-dispatch check di `chat.HandleChatCompletions`; increment di post-response meter (sudah ada `usage.go`).
 - **Effort**: Sedang. **Prioritas: #2.**
 
 #### 1.3 Plans (Template Reusable)
 - **Asli**: `0015_plans.sql` + `0019_plan_rate_limits.sql` (`rpm_limit/tpm_limit/concurrency_limit`).
 - **Model**: `plans(id, tenant_id, name, limit_micros, limit_tokens, period, alert_pct, hard_cutoff, allowed_models, rpm/tpm/concurrency)`; `api_keys.plan_id` FK.
-- **Kenapa penting**: satu preset → tempel ke banyak key. Ini **gabungkan** §1.1 + §1.2 + model-access (§1.7) dalam satu objek. Sangat pas untuk skenario jual-key 9router-go.
-- **Catatan**: KeiRouter punya `tenant_id`; 9router-go single-tenant → pakai `'default'` konstan dulu, kolom tetap ada biar multi-tenant gampang nanti.
+- **Kenapa penting**: satu preset → tempel ke banyak key. Ini **gabungkan** §1.1 + §1.2 + model-access (§1.7) dalam satu objek. Sangat pas untuk skenario jual-key xroute.
+- **Catatan**: KeiRouter punya `tenant_id`; xroute single-tenant → pakai `'default'` konstan dulu, kolom tetap ada biar multi-tenant gampang nanti.
 - **Effort**: Sedang. **Prioritas: #3.**
 
 ### Tier B — Keamanan & efisiensi
@@ -163,14 +163,14 @@ Skor = **value untuk use-case 9router-go** (developer proxy / resale gateway) ÷
 #### 1.4 Guardrails (PII / Injection / Toxicity / Topics / Bias)
 - **Asli**: `internal/guardrails/*` (20 file: `pii.go`, `injection.go`, `toxicity.go`, `topics.go`, `bias.go`, `engine.go`, `hub.go`, `resolver.go`, `policy.go`, `audit.go`, `presidio.go`, `embedding.go`…), migration `0017_guardrails.sql`.
 - **Kekuatan desain**: layering `global → provider → model → chain → apikey`, merge saat request (most-specific menang). Aksi `log_only/warn/mask/block`. Streaming-safe (buffer 256 char scan output). PII lokal (NIK/NPWP/passport ID). Engine opsional: Presidio sidecar / OpenAI Moderation / embedding.
-- **Kenapa penting**: 9router-go jadi titik transit **semua** prompt/response. Untuk resale/enterprise, filter PII sebelum keluar ke upstream = selling point compliance besar.
+- **Kenapa penting**: xroute jadi titik transit **semua** prompt/response. Untuk resale/enterprise, filter PII sebelum keluar ke upstream = selling point compliance besar.
 - **Fit**: middleware/interceptor sebelum `chat` dispatch + tap di stream translator.
 - **Trade-off**: paket guardrails KeiRouter **besar** (lexicon bilingual, presidio, retention). Port penuh = beban. **Rekomendasi MVP**: `injection` (regex) + `pii` (regex native) + action `log_only|mask|block`, skip Presidio/embedding/bias dulu.
 - **Effort**: Tinggi (full) / Sedang (MVP). **Prioritas: #4 (MVP), #8 (full).**
 
 #### 1.5 Credential Vault (AES-256-GCM Envelope)
 - **Asli**: `internal/vault/vault.go` + `internal/crypto/envelope.go`.
-- **Masalah 9router-go SEKARANG**: kredensial provider disimpan **plaintext JSON** di `providerConnections.data` (DATABASE.md: *"provider credentials … protect the file and volume as secrets"*). Untuk resale/multi-user, ini risiko nyata.
+- **Masalah xroute SEKARANG**: kredensial provider disimpan **plaintext JSON** di `providerConnections.data` (DATABASE.md: *"provider credentials … protect the file and volume as secrets"*). Untuk resale/multi-user, ini risiko nyata.
 - **Desain KeiRouter**: envelope encryption, `master_key` sebagai root of trust. Credential di-encrypt at-rest, di-decrypt in-memory saat dispatch.
 - **Fit**: bungkus `connection.Data` dengan vault sebelum write, buka sebelum `proxy/executor`. Perlu migrasi satu-arah (plaintext → encrypted) + fallback read plaintext untuk kompat.
 - **Effort**: Sedang (encrypt) + Tinggi (migrasi aman tanpa corrupt data existing). **Prioritas: #5.**
@@ -178,7 +178,7 @@ Skor = **value untuk use-case 9router-go** (developer proxy / resale gateway) ÷
 
 #### 1.6 API Key Argon2id Hashing
 - **Asli**: `internal/identity/identity.go` — key tak pernah plaintext; simpan argon2id verifier + SHA-256 lookup index; auth cache 5 dtk untuk hemat argon2 (64 MiB/verifikasi).
-- **Masalah 9router-go**: `apiKeys.key` plaintext, lookup `WHERE key = ?`. Bocor DB = bocor semua key.
+- **Masalah xroute**: `apiKeys.key` plaintext, lookup `WHERE key = ?`. Bocor DB = bocor semua key.
 - **Fit**: ganti `GetApiKeyByKey` → hash lookup + constant-time argon2. Plaintext ditampilkan sekali saat create (sudah begitu).
 - **Trade-off**: lookup hash SHA-256 dulu (index) baru argon2 confirm → tetap cepat. Auth cache wajib, kalau tidak argon2 per-request = CPU jebol (Claude Code 10+ req/s, disebut di kode KeiRouter).
 - **Catatan**: `API-KEY-TIMELIMIT...` spec pakai model plaintext. Kalau vault/argon diambil, spec itu harus di-revisi (lookup by hash index).
@@ -196,37 +196,37 @@ Skor = **value untuk use-case 9router-go** (developer proxy / resale gateway) ÷
 #### 1.8 Public Usage Portal
 - **Asli**: `internal/usagehub/hub.go` + frontend `KeyPortal.tsx`; endpoint publik `/v1/portal/branding`, `/v1/portal/usage` (auth = API key itu sendiri, tanpa sesi admin).
 - **Kenapa penting**: pembeli key lihat pemakaian sendiri tanpa akses admin. Lengkapi §1.1–1.3 untuk skenario jual-key.
-- **Fit**: route publik baru yang validasi API key via query/header (bukan sesi). 9router-go sudah punya `RequireApiKey` untuk domain mesin → reuse.
+- **Fit**: route publik baru yang validasi API key via query/header (bukan sesi). xroute sudah punya `RequireApiKey` untuk domain mesin → reuse.
 - **Effort**: Sedang (backend kecil, UI Svelte portal perlu baru). **Prioritas: #9.**
 
 #### 1.9 Semantic Response Cache
 - **Asli**: `internal/cache/{cache.go,embedder.go,embedder_api.go,redis.go}` — cosine similarity, threshold (default 0.95), TTL, eviction; backend in-memory (brute-force) / Redis.
-- **Kenapa penting**: hemat biaya untuk prompt berulang. **Tapi**: untuk *coding* gateway, request jarang identik → hit-rate rendah. Cache persis (hash exact-match) jauh lebih murah dan tetap berguna untuk health-check/keepalive (9router-go sudah bypass `warmup/keepalive` di `chat.go`).
-- **Trade-off**: semantic cache butuh **embedding model** (biaya + latensi extra). ROI meragukan untuk use-case utama 9router-go.
+- **Kenapa penting**: hemat biaya untuk prompt berulang. **Tapi**: untuk *coding* gateway, request jarang identik → hit-rate rendah. Cache persis (hash exact-match) jauh lebih murah dan tetap berguna untuk health-check/keepalive (xroute sudah bypass `warmup/keepalive` di `chat.go`).
+- **Trade-off**: semantic cache butuh **embedding model** (biaya + latensi extra). ROI meragukan untuk use-case utama xroute.
 - **Rekomendasi**: **skip semantic**; kalau perlu cache, mulai dari **exact-match cache** (hash) untuk response deterministik. Prioritas rendah.
 - **Effort**: Tinggi (semantic) / Rendah (exact). **Prioritas: #12.**
 
 #### 1.10 Prometheus /metrics
 - **Asli**: `internal/observ/metrics.go` — `keirouter_guardrail_decisions_total`, `keirouter_guardrail_eval_seconds` di `/metrics`.
-- **Kenapa penting**: ops-ready. 9router-go cuma `tracing` (per-request). Metrics endpoint standar = gampang pantau di VPS/Coolify.
+- **Kenapa penting**: ops-ready. xroute cuma `tracing` (per-request). Metrics endpoint standar = gampang pantau di VPS/Coolify.
 - **Fit**: handler publik/ter-guard `/metrics`.
 - **Effort**: Rendah. **Prioritas: #10.**
 
 #### 1.11 System Tray (tray)
 - **Asli**: `internal/tray/` (desktop tray icon), `keirouter tray`.
-- **Trade-off**: 9router-go fokus single-binary + daemon (`start/stop/status/logs`) headless. Tray = dep GUI (fenster/energye systray), bentrok dengan ethos CGO-free/lightweight. **Rekomendasi skip** kecuali target desktop-user.
+- **Trade-off**: xroute fokus single-binary + daemon (`start/stop/status/logs`) headless. Tray = dep GUI (fenster/energye systray), bentrok dengan ethos CGO-free/lightweight. **Rekomendasi skip** kecuali target desktop-user.
 - **Prioritas: #13.**
 
 #### 1.12 Multi-tenant
 - **Asli**: tabel `tenants`, semua tabel lain punya `tenant_id`.
-- **Trade-off**: 9router-go dirancang single-user self-host (satu DB, satu password). Multi-tenant = refactor auth + isolasi query + resolusi tenant (mirum `X-Tenant` / subdomain). Besar dan mengubah DNA produk.
+- **Trade-off**: xroute dirancang single-user self-host (satu DB, satu password). Multi-tenant = refactor auth + isolasi query + resolusi tenant (mirum `X-Tenant` / subdomain). Besar dan mengubah DNA produk.
 - **Rekomendasi**: **tunda**. Untuk resale cukup **plans + key-scoping** single-tenant (§1.3, §1.1, §1.7). Kolom `tenant_id` opsional dibiarkan konstan `'default'` supaya upgrade path terbuka tanpa migrasi ulang nanti.
 - **Prioritas: #11.**
 
 #### 1.13 Terse Output Saver (REQUEST-SIDE SERIALIZATION)
 - **Asli**: `internal/terse/terse.go` — Token-Efficient Serialization (bukan cuma directive output seperti Caveman).
 - **Kenapa penting**: Terse mengompaksi bentuk pesan/tools ke format ringkas + tambah directive → hemat token input. Berbeda dari Caveman (directive output saja).
-- **Gap di 9router-go**: `injection.go`/`prompts.go` punya Caveman (directive output), tapi belum ada request-side message/tool serialization.
+- **Gap di xroute**: `injection.go`/`prompts.go` punya Caveman (directive output), tapi belum ada request-side message/tool serialization.
 - **Fit**: `internal/tokensaver/terse.go` baru. Level `light` (directive saja) / `medium` (directive + serialisasi messages+tools). Eksklusif vs Caveman, stackable vs Ponytail.
 - **Effort**: Rendah. **Prioritas: #14** (verifikasi coverage dulu).
 
@@ -239,7 +239,7 @@ Skor = **value untuk use-case 9router-go** (developer proxy / resale gateway) ÷
 
 ## 2. Detail Per Fitur
 
-Setiap sub-bagian: masalah + bukti terverifikasi → desain KeiRouter → desain 9router-go → API/frontend → testing → rollout → risiko.
+Setiap sub-bagian: masalah + bukti terverifikasi → desain KeiRouter → desain xroute → API/frontend → testing → rollout → risiko.
 
 ### F-1. Rate Limiting per-Key (RPM / TPM / Concurrency)
 
@@ -247,7 +247,7 @@ Setiap sub-bagian: masalah + bukti terverifikasi → desain KeiRouter → desain
 
 #### 1.1 Masalah
 
-9router-go punya `apiKeys` dengan `isActive` saja. Tidak ada pembatasan laju per key.
+xroute punya `apiKeys` dengan `isActive` saja. Tidak ada pembatasan laju per key.
 
 **Bukti terverifikasi:**
 - `internal/middleware/` = `auth.go`, `dashboard_auth.go`, `logging.go`, `max_body.go`, `request_id.go`. **Tidak ada** `ratelimit.go`.
@@ -272,7 +272,7 @@ limits:
   window: 1m
 ```
 
-#### 1.3 Desain untuk 9router-go
+#### 1.3 Desain untuk xroute
 
 **Kolom additive** (`internal/db/schema.go` → `goOnlyColumns`):
 
@@ -386,7 +386,7 @@ Format mengikuti envelope OpenAI-style `handlerutil.WriteJSONError`.
 
 #### 2.1 Masalah
 
-9router-go **mencatat** biaya tapi **tidak menegakkan** batas.
+xroute **mencatat** biaya tapi **tidak menegakkan** batas.
 
 **Bukti terverifikasi:**
 - `usageHistory` punya `cost REAL`; `internal/pricing/` menghitung harga model.
@@ -494,7 +494,7 @@ Plans = **satu objek** yang menggabungkan rate limit + budget + model access. Di
 
 #### 3.2 Masalah
 
-9router-go: key datar (`internal/models/types.go` — `id, key, name, machineId, isActive, createdAt`). Tidak ada template, tidak ada pengelompokan kebijakan, tidak ada model-access list. Semua key identik secara kebijakan.
+xroute: key datar (`internal/models/types.go` — `id, key, name, machineId, isActive, createdAt`). Tidak ada template, tidak ada pengelompokan kebijakan, tidak ada model-access list. Semua key identik secara kebijakan.
 
 #### 3.3 Skema (Go-only)
 
@@ -598,7 +598,7 @@ Middleware [§F-1](#f-1-rate-limiting-per-key-rpm--tpm--concurrency), budget [§
 
 - **Dua sumber kebenaran** bila kolom juga ditaruh di `apiKeys` → **dilarang**.
 - **Delete plan = kunci kehilangan limit** → fallback default yang *unlimited* justru melonggarkan. Konfirmasi destruktif di UI + audit.
-- **`allowed_models` wildcard** wajib pakai engine glob yang **sama** dengan `resolveModel` 9router-go — jangan bikin matcher kedua.
+- **`allowed_models` wildcard** wajib pakai engine glob yang **sama** dengan `resolveModel` xroute — jangan bikin matcher kedua.
 - **Skema bersama upstream:** `plans` Go-only, upstream Next.js mengabaikan.
 
 ---
@@ -609,7 +609,7 @@ Middleware [§F-1](#f-1-rate-limiting-per-key-rpm--tpm--concurrency), budget [§
 
 #### 4.1 Masalah
 
-9router-go jadi titik transit **semua** prompt & response, tapi tak punya lapisan safety.
+xroute jadi titik transit **semua** prompt & response, tapi tak punya lapisan safety.
 
 **Bukti:** tidak ada paket `guardrails`; `internal/middleware/` = auth/logging/maxbody/requestid; tak ada tabel policy/audit; search `guardrail` = 0.
 
@@ -676,7 +676,7 @@ RequireApiKey → RateLimit(1) → Budget(2) → ModelAccess(7)
    → [GR OUTBOUND] JSON: scan response.content ; stream: tap tiap event SSE
 ```
 
-**Wajib dua jalur** (JSON + SSE per-event), bukan body mentah saja. Implementasi: wrapper `http.ResponseWriter` + SSE scanner per-event; `block` → potong stream + emit terminal framing error (9router-go `response_writer.go` sudah punya konsep terminal framing).
+**Wajib dua jalur** (JSON + SSE per-event), bukan body mentah saja. Implementasi: wrapper `http.ResponseWriter` + SSE scanner per-event; `block` → potong stream + emit terminal framing error (xroute `response_writer.go` sudah punya konsep terminal framing).
 
 #### 4.6 API & Frontend
 
@@ -726,7 +726,7 @@ Svelte `GuardrailsView.svelte`: editor policy per scope, tabel audit live (pola 
 
 #### 5.1 Masalah — Temuan Keamanan Paling Tajam
 
-Kredensial provider 9router-go disimpan **plaintext JSON**:
+Kredensial provider xroute disimpan **plaintext JSON**:
 
 - `providerConnections.data` = plaintext JSON berisi `apiKey`, `accessToken`, `refreshToken`, client secrets (DATABASE.md §providerConnections, eksplisit).
 - DATABASE.md: *"Provider credentials are stored in the database; protect the file and volume as secrets."*
@@ -916,7 +916,7 @@ Pola idempoten startup:
 
 #### 7.1 Masalah
 
-9router-go membatasi model per **connection** (`enabledModels`, `strictModelAssignment`), tapi **tidak per API-key klien**.
+xroute membatasi model per **connection** (`enabledModels`, `strictModelAssignment`), tapi **tidak per API-key klien**.
 
 **Bukti:**
 - Tidak ada tabel allowlist per key.
@@ -962,7 +962,7 @@ func (h *ChatHandler) checkModelAccess(r *http.Request, modelID string) error {
 
 #### 7.4 Matcher
 
-Gunakan engine glob **sama** dengan model-resolver 9router-go (jangan bikin matcher kedua — risiko beda perilaku). Wildcard `*` per segmen; cocok pada `provider/model` dan bare id.
+Gunakan engine glob **sama** dengan model-resolver xroute (jangan bikin matcher kedua — risiko beda perilaku). Wildcard `*` per segmen; cocok pada `provider/model` dan bare id.
 
 #### 7.5 Backward-compat
 
@@ -1006,7 +1006,7 @@ Kosong = all-allowed → **tidak ada key existing terpengaruh**. Fitur aktif han
 
 #### 8.1 Masalah
 
-9router-go menampilkan usage **hanya di dashboard** (butuh sesi login).
+xroute menampilkan usage **hanya di dashboard** (butuh sesi login).
 
 **Bukti:** `/usage/stats`, `/usage/stream` berada di grup `RequireApiKey`/`RequireDashboardAuth`. Tidak ada route publik `/portal` / `/api/portal/*` yang mengautentikasi dengan **key itu sendiri**.
 
@@ -1074,13 +1074,13 @@ Sidebar/TopBar **tidak** menampilkan tautan portal ke admin; portal = surface te
 
 #### 9.1 Masalah
 
-9router-go **tidak punya cache respons**; setiap request identik → dispatch ulang ke provider (bayar token lagi).
+xroute **tidak punya cache respons**; setiap request identik → dispatch ulang ke provider (bayar token lagi).
 
 **Bukti:** tidak ada `internal/cache`. Yang ada hanya bypass request sintetik (`handleBypassRequest` untuk warmup/keepalive Claude Code).
 
 #### 9.2 Kenapa EXACT Dulu
 
-Use-case utama 9router-go = **coding proxy**. Prompt coding hampir tak pernah identik bit-for-bit → **semantic cache hit-rate rendah**, tapi butuh **embedding model** (biaya + latensi + dep).
+Use-case utama xroute = **coding proxy**. Prompt coding hampir tak pernah identik bit-for-bit → **semantic cache hit-rate rendah**, tapi butuh **embedding model** (biaya + latensi + dep).
 
 **Rekomendasi bertingkat:**
 - **Exact-match (PR ini):** hash kunci request → simpan response. Murah, nol-dep, tetap berguna (retry, fan-out combos identical, health-check).
@@ -1142,7 +1142,7 @@ RequireApiKey → RateLimit → Budget → ModelAccess → [CACHE LOOKUP] (exact
 
 #### 10.1 Masalah
 
-9router-go punya **tracing per-request** (`internal/tracing/`), bukan **metrics agregat**.
+xroute punya **tracing per-request** (`internal/tracing/`), bukan **metrics agregat**.
 
 **Bukti:** tidak ada `observ`/`metrics`; tak ada endpoint `/metrics`; grep `prometheus/promhttp` = 0.
 
@@ -1211,16 +1211,16 @@ Dep: `github.com/prometheus/client_golang` (murni Go, CGO-free).
 
 #### 11.2 Kenapa Tidak Cocok
 
-9router-go **sengaja** headless:
+xroute **sengaja** headless:
 - Model lifecycle = **daemon** (`internal/daemon` + `internal/proc`): `start/stop/restart/status/logs`, PID file, health-wait, spawn detached.
 - Filosofi binary: **single Go binary, CGO-free, 42 MB RAM, 32K RPS**.
 - Tray butuh **dep GUI** (`getlantern/systray` / `energye/systray` → Win32/Cocoa/GTK, sering **CGO**) → mengancam: CGO-free build, `make cross` 5 target, ukuran/footprint.
 
 #### 11.3 Fungsi Sudah Tercakup
 
-| Kebutuhan tray | Padanan 9router-go |
+| Kebutuhan tray | Padanan xroute |
 |----------------|--------------------|
-| Status | `9router-go status` (pid/dashboard/log) |
+| Status | `xroute status` (pid/dashboard/log) |
 | Start/stop | `start` / `stop` / `restart` |
 | Live log | `logs -n 100` + `DATA_DIR/run/gateway.log` |
 | Buka dashboard | URL di output start |
@@ -1249,7 +1249,7 @@ Atau lebih ringan: **PWA manifest + Service Worker** ("Install app" di browser) 
 
 #### 12.1 Posisi
 
-KeiRouter **multi-tenant sejak dasar** (tabel `tenants`, hampir semua tabel punya `tenant_id`). 9router-go **single-user self-host**: satu DB, satu dashboard password, satu set connection.
+KeiRouter **multi-tenant sejak dasar** (tabel `tenants`, hampir semua tabel punya `tenant_id`). xroute **single-user self-host**: satu DB, satu dashboard password, satu set connection.
 
 Multi-tenant = **mengubah DNA produk** (isolasi query di semua repo, resolusi tenant, auth boundary, per-tenant KEK).
 
@@ -1294,7 +1294,7 @@ Agar 12 tak menuntut migrasi ulang, spec lain sudah menulis **kolom `tenant_id` 
 
 **Tier — · Verifikasi coverage dulu · Effort: Rendah**
 
-#### 13.1 Pertanyaan: Apakah 9router-go Sudah Punya?
+#### 13.1 Pertanyaan: Apakah xroute Sudah Punya?
 
 **Hasil audit terverifikasi** (`internal/tokensaver/`):
 
@@ -1335,7 +1335,7 @@ Reuse pipeline token-saver existing (`tokensaver` + `TokenSaverConfig` di `app/h
 
 ```go
 // internal/tokensaver/terse.go (baru)
-const TerseSentinel = "<!-- 9router:terse -->"
+const TerseSentinel = "<!-- xroute:terse -->"
 type TerseLevel string // light|medium|heavy
 func ApplyTerse(body []byte, level TerseLevel) ([]byte, bool)
 ```
@@ -1497,7 +1497,7 @@ DATA_DIR/
 
 | Preset | Brand 500 | Brand 600 | Karakter |
 |--------|-----------|-----------|----------|
-| `terracotta` (default) | `#E56A4A` | `#CC5236` | Warm, identitas 9router saat ini |
+| `terracotta` (default) | `#E56A4A` | `#CC5236` | Warm, identitas xroute saat ini |
 | `sage-terra` | `#6a7450` | `#5d6745` | Earthy, grounded |
 | `ocean` | `#2563eb` | `#1d4ed8` | Fresh, professional |
 | `midnight` | `#4f46e5` | `#4338ca` | Premium |
@@ -1573,7 +1573,7 @@ internal/branding/
 
 ## 3. Rekomendasi Roadmap
 
-Skenario 9router-go = **jual/berbagi key dengan kontrol** (resale gateway):
+Skenario xroute = **jual/berbagi key dengan kontrol** (resale gateway):
 
 ```
 Fase 1 — Control plane (saling bergantung):
@@ -1608,11 +1608,11 @@ Tunda / Skip:
 
 | Risiko | Detail | Mitigasi |
 |--------|--------|----------|
-| **Stack frontend beda** | KeiRouter React/TanStack; 9router-go Svelte 5 | Port **logika + API**, bukan komponen. Tulis ulang view di Svelte. |
-| **Skema DB beda** | KeiRouter punya `tenants/plans/budgets/guardrail_*`; 9router-go skema upstream-v0.5.85 (additive-only) | Tabel baru Go-only; jangan ubah tabel upstream. `EnsureCoreSchema`-style idempotent. |
-| **Auth model beda** | KeiRouter argon2 + lookup index; 9router-go plaintext `WHERE key=?` | Ganti `db/apikeys.go` + middleware; pertahankan `apiKeys.key` untuk kompat read, tambah kolom hash. |
-| **Budget float vs micros** | 9router-go `usageHistory.cost REAL`; KeiRouter `limit_micros INTEGER` | Simpan budget sebagai **micros** (integer) untuk presisi; konversi dari REAL di meter. |
-| **Guardrails di stream** | 9router-go SSE translator (claude/openai) punya framing sendiri | Interceptor perlu tap **dua** jalur (JSON + per-event SSE), bukan cuma body mentah. |
+| **Stack frontend beda** | KeiRouter React/TanStack; xroute Svelte 5 | Port **logika + API**, bukan komponen. Tulis ulang view di Svelte. |
+| **Skema DB beda** | KeiRouter punya `tenants/plans/budgets/guardrail_*`; xroute skema upstream-v0.5.85 (additive-only) | Tabel baru Go-only; jangan ubah tabel upstream. `EnsureCoreSchema`-style idempotent. |
+| **Auth model beda** | KeiRouter argon2 + lookup index; xroute plaintext `WHERE key=?` | Ganti `db/apikeys.go` + middleware; pertahankan `apiKeys.key` untuk kompat read, tambah kolom hash. |
+| **Budget float vs micros** | xroute `usageHistory.cost REAL`; KeiRouter `limit_micros INTEGER` | Simpan budget sebagai **micros** (integer) untuk presisi; konversi dari REAL di meter. |
+| **Guardrails di stream** | xroute SSE translator (claude/openai) punya framing sendiri | Interceptor perlu tap **dua** jalur (JSON + per-event SSE), bukan cuma body mentah. |
 | **Vault = single point of failure** | Hilang `master_key` → kredensial hilang | Fallback read plaintext (selama migrasi) + docs recovery; jangan langsung matikan plaintext path. |
 | **License** | KeiRouter MIT | Compatible — kreditasi sumber saat port. |
 

@@ -9,8 +9,8 @@ import (
 	"net/http"
 	"time"
 
-	"9router/proxy/internal/codexquota"
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/codexquota"
+	"xroute/proxy/internal/handlerutil"
 )
 
 // Codex reset credits — port of OmniRoute's

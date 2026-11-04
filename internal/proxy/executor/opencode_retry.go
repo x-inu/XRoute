@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"time"
 
-	"9router/proxy/internal/constants"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/constants"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/proxy"
 )
 
 // The OpenCode free-tier gate occasionally refuses a request whose fingerprint

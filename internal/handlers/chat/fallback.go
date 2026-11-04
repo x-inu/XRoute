@@ -1,19 +1,19 @@
 package chat
 
 import (
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/headroom"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/middleware"
-	"9router/proxy/internal/observ"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy/executor"
-	"9router/proxy/internal/thinking"
-	"9router/proxy/internal/tokensaver"
-	"9router/proxy/internal/tracing"
-	"9router/proxy/internal/translator"
-	"9router/proxy/internal/usagetracker"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/headroom"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/middleware"
+	"xroute/proxy/internal/observ"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/thinking"
+	"xroute/proxy/internal/tokensaver"
+	"xroute/proxy/internal/tracing"
+	"xroute/proxy/internal/translator"
+	"xroute/proxy/internal/usagetracker"
 	"bytes"
 	"context"
 	json "encoding/json/v2"
@@ -26,7 +26,7 @@ import (
 	"strings"
 	"time"
 
-	internalproxy "9router/proxy/internal/proxy"
+	internalproxy "xroute/proxy/internal/proxy"
 )
 
 // StatusClientClosedRequest is the canonical HTTP status for client connection aborts (nginx 499).
@@ -988,7 +988,7 @@ func (h *ChatHandler) tryForwardWithConnection(f forwardRequestParams) error {
 		})
 	}
 
-	// Inject served route response headers (x-9router-provider, x-9router-model, etc.)
+	// Inject served route response headers (x-xroute-provider, x-xroute-model, etc.)
 	// before any executor or forwarding function writes headers to w.
 	injectRouteHeaders(w, provider, model, f.ComboName, f.Attempts)
 

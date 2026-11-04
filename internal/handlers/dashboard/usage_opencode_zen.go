@@ -14,7 +14,7 @@ import (
 	"net/http"
 	"strings"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 // openCodeZenUsageURL is the provider default (registry). openCodeZenUsageURLFor

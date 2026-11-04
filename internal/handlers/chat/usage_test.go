@@ -6,8 +6,8 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"9router/proxy/internal/constants"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/constants"
+	"xroute/proxy/internal/translator"
 )
 
 func TestExtractContent(t *testing.T) {

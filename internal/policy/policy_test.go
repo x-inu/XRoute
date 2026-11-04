@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/models"
 )
 
 // stubPlans is a PlanSource that answers from a map, or fails on demand.

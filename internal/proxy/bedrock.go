@@ -13,9 +13,9 @@ import (
 	"encoding/json/jsontext"
 	json "encoding/json/v2"
 
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy/aws"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy/aws"
 )
 
 // bedrockConnectTimeout bounds dialling a Bedrock runtime host. It is not a whole-request

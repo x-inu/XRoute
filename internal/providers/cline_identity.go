@@ -37,7 +37,7 @@ func nodePlatformVersion() string {
 }
 
 // ClineIdentityHeaders is the port of upstream buildClineHeaders
-// (open-sse/shared/clineAuth.js) — the identity 9router presents to
+// (open-sse/shared/clineAuth.js) — the identity xroute presents to
 // api.cline.bot. Platform values are the Go runtime's own. version is
 // passed in (never imported): providers cannot import the version owner
 // without an import cycle (db → providers → updater → daemon → auth → db),
@@ -46,10 +46,10 @@ func ClineIdentityHeaders(version string, extra map[string]string) map[string]st
 	headers := map[string]string{
 		"HTTP-Referer":       "https://cline.bot",
 		"X-Title":            "Cline",
-		"User-Agent":         "9Router/" + version,
+		"User-Agent":         "XRoute/" + version,
 		"X-PLATFORM":         nodePlatform(),
 		"X-PLATFORM-VERSION": nodePlatformVersion(),
-		"X-CLIENT-TYPE":      "9router",
+		"X-CLIENT-TYPE":      "xroute",
 		"X-CLIENT-VERSION":   version,
 		"X-CORE-VERSION":     version,
 		"X-IS-MULTIROOT":     "false",

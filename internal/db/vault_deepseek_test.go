@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/vault"
+	"xroute/proxy/internal/vault"
 )
 
 // The DeepSeek cookie is a credential: the WAF reads it, and it decides

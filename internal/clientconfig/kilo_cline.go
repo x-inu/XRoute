@@ -42,11 +42,11 @@ func (a kiloAdapter) Reset(opts Options) (Result, error) {
 	if err != nil {
 		return Result{}, err
 	}
-	// auth["9router"] is a leftover from an earlier schema this adapter never
+	// auth["xroute"] is a leftover from an earlier schema this adapter never
 	// wrote; §3.6 records it as part of what reset removes.
 	return applyPlans([]FilePlan{{File: paths.Files[0], Edits: []Edit{
 		{KeyPath: []string{"auth", kiloProviderKey}, Delete: true},
-		{KeyPath: []string{"auth", "9router"}, Delete: true},
+		{KeyPath: []string{"auth", "xroute"}, Delete: true},
 	}}}, nil)
 }
 

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/models"
 )
 
 // The ledger scale below mirrors the production install this endpoint was

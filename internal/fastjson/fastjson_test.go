@@ -12,7 +12,7 @@ type sample struct {
 }
 
 func TestMarshalUnmarshalRoundTrip(t *testing.T) {
-	in := sample{Name: "9router", Count: 42, Tags: []string{"a", "b"}}
+	in := sample{Name: "xroute", Count: 42, Tags: []string{"a", "b"}}
 	data, err := Marshal(in)
 	if err != nil {
 		t.Fatalf("Marshal: %v", err)

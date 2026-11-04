@@ -3,7 +3,7 @@ package executor
 import (
 	"net/http"
 
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/translator"
 )
 
 // toolNameRestoringWriter restores the caller's original tool names on every

@@ -210,7 +210,7 @@ func TranslateClaudeChunkToOpenAI(payload []byte, state *ClaudeToOpenAIStreamSta
 					// A refusal is a blocked turn, not a clean stop: without
 					// this mapping the client sees finish_reason "stop" with
 					// an empty message, indistinguishable from a real answer
-					// (parity with decolua/9router#4210).
+					// (parity with decolua/xroute#4210).
 					finishReason = "content_filter"
 				}
 				// A refusal carries no content blocks at all. Surface
@@ -327,7 +327,7 @@ func TranslateClaudeResponseToOpenAI(claudeBody []byte) ([]byte, error) {
 	case "end_turn", "stop_sequence":
 		finishReason = "stop"
 	case "refusal":
-		// Blocked turn, not a clean stop (parity with decolua/9router#4210).
+		// Blocked turn, not a clean stop (parity with decolua/xroute#4210).
 		finishReason = "content_filter"
 	}
 

@@ -12,11 +12,11 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/constants"
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy/executor"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/constants"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/translator"
 )
 
 // setupHandlerForForward wires a ChatHandler to a temp DB (no connections needed for forward tests).

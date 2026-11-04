@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"strings"
 
-	"9router/proxy/internal/models"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/models"
+	"xroute/proxy/internal/providers"
 )
 
 // Duplicate connection detection.

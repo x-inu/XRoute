@@ -1,13 +1,13 @@
 # SQLite Database and Operator Contract
 
-This document describes the storage contract implemented by `9router-go` v1.9.1. It deliberately separates:
+This document describes the storage contract implemented by `xroute` v1.9.1. It deliberately separates:
 
 - the core schema that the Go runtime **expects to already exist**;
 - the one Go-only table the runtime creates at startup;
 - compatibility with the historical upstream Next.js database; and
 - the limited, dashboard-triggered backup feature.
 
-The current Go source is the behavioral authority. The local upstream checkout (`decolua/9router` v0.5.85) is a compatibility reference, not a claim that the two products are identical.
+The current Go source is the behavioral authority. The local upstream checkout (`decolua/xroute` v0.5.85) is a compatibility reference, not a claim that the two products are identical.
 
 ## Storage location
 
@@ -15,11 +15,11 @@ The current Go source is the behavioral authority. The local upstream checkout (
 
 | Platform | Default path |
 |----------|--------------|
-| macOS/Linux | `$DATA_DIR/db/data.sqlite`, or `~/.9router/db/data.sqlite` |
-| Windows | `%APPDATA%\9router\db\data.sqlite` |
+| macOS/Linux | `$DATA_DIR/db/data.sqlite`, or `~/.xroute/db/data.sqlite` |
+| Windows | `%APPDATA%\xroute\db\data.sqlite` |
 | Docker | configured through the mounted data directory |
 
-`DATA_DIR` overrides the platform data root. When `DB_PATH` names an existing directory, the resolver recognizes compatible layouts in this order: `db/data.sqlite`, `data.sqlite`, then `9router.db` (`internal/config/config.go`).
+`DATA_DIR` overrides the platform data root. When `DB_PATH` names an existing directory, the resolver recognizes compatible layouts in this order: `db/data.sqlite`, `data.sqlite`, then `xroute.db` (`internal/config/config.go`).
 
 SQLite is opened through `modernc.org/sqlite` with WAL, `synchronous=NORMAL`, foreign keys, a 5-second busy timeout, and a maximum of four open connections (`internal/db/client.go`).
 
@@ -327,7 +327,7 @@ Upstream uses it for backup/migration/app metadata. Go neither creates nor reads
 | Default path | Go and upstream v0.5.85 both use `DATA_DIR/db/data.sqlite` | Compatible in the common configuration — an existing upstream database is opened as-is, with no import step |
 | Extra table | Upstream ignores `upstream_leases` | Generally harmless; back up separately if lease continuity matters |
 | JSON payloads | `providerConnections.data` and `kv` are shared conventions | Shape compatibility is field-by-field, not guaranteed by a version check |
-| Write coordination | SQLite serializes writes; only lease admission is explicitly cross-process | Use one active 9router-go writer unless the workload is tested |
+| Write coordination | SQLite serializes writes; only lease admission is explicitly cross-process | Use one active xroute writer unless the workload is tested |
 
 ## Backup scope
 
@@ -352,7 +352,7 @@ The three storage-maintenance routes are the one exception to the always-protect
 
 ### Physical SQLite backup
 
-For a full restore point, copy the SQLite database consistently. The simplest operator procedure is to stop 9router-go and copy the whole database directory, including `data.sqlite-wal` and `data.sqlite-shm` if present. For a live backup, use a SQLite-aware online backup/checkpoint procedure; do not copy only the main file while WAL contains committed pages.
+For a full restore point, copy the SQLite database consistently. The simplest operator procedure is to stop xroute and copy the whole database directory, including `data.sqlite-wal` and `data.sqlite-shm` if present. For a live backup, use a SQLite-aware online backup/checkpoint procedure; do not copy only the main file while WAL contains committed pages.
 
 Upstream's automatic pre-schema backup is separate: it lives under `db/backups/`, keeps only the newest three, and intentionally excludes `requestDetails`. Go does not create those upstream migration backups.
 
@@ -375,14 +375,14 @@ SQLite WAL and the five-second busy timeout reduce lock failures; they do not ma
 - Proxy-pool round-robin state and several provider/session/quota caches are process-local. Two active instances can choose different rotations or independently refresh/hold state.
 - `upstream_leases` provides cross-process coordination only for registered lease scopes.
 
-The supported operational model is one active 9router-go process writing a database. Co-running upstream Next.js and Go against the same DB may be useful for migration/testing, but it is not a conflict-free HA topology.
+The supported operational model is one active xroute process writing a database. Co-running upstream Next.js and Go against the same DB may be useful for migration/testing, but it is not a conflict-free HA topology.
 
 ## Operator checklist
 
 Before production use or an upgrade:
 
-- [ ] Confirm the exact DB path with `DATA_DIR`/`DB_PATH`; do not assume `9router.db`.
-- [ ] Decide which runtime owns the file. An existing upstream 9router database is picked up as-is — 9router-go adds only what is missing and never drops, renames, or retypes. A fresh `DATA_DIR` self-boots, so running upstream first is not required.
+- [ ] Confirm the exact DB path with `DATA_DIR`/`DB_PATH`; do not assume `xroute.db`.
+- [ ] Decide which runtime owns the file. An existing upstream xroute database is picked up as-is — xroute adds only what is missing and never drops, renames, or retypes. A fresh `DATA_DIR` self-boots, so running upstream first is not required.
 - [ ] If the database came from a much newer upstream release, check `_meta.schemaVersion` yourself; Go neither reads nor writes it and does not interpret what it records.
 - [ ] Verify required tables and columns, especially the two optional connection-metadata columns used by Go success paths.
 - [ ] Verify `journal_mode=wal`, a healthy write/read test, and sufficient free space for WAL growth.

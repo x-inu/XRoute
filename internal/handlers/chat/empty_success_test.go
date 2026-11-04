@@ -9,7 +9,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 // An upstream that answers HTTP 200 with nothing usable is a failure, not a

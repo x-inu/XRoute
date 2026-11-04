@@ -14,7 +14,7 @@ import (
 
 	json "encoding/json/v2"
 
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy"
 )
 
 // Image input on Gemini Web.

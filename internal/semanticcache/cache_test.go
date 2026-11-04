@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/translator"
 )
 
 func TestSemanticCache_ExactMatch(t *testing.T) {

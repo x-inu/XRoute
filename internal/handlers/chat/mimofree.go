@@ -1,7 +1,7 @@
 package chat
 
 import (
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/log"
 	"bytes"
 	"context"
 	"crypto/sha256"
@@ -15,11 +15,11 @@ import (
 	"sync"
 	"time"
 
-	"9router/proxy/internal/constants"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy/executor"
-	"9router/proxy/internal/thinking"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/constants"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/thinking"
+	"xroute/proxy/internal/translator"
 )
 
 // MiMo anti-abuse: the free chat endpoint returns 403 "Illegal access"

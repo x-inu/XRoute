@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Implement Session Affinity Sticky Round-Robin in 9router-go to bind client conversation sessions (`session_id`) to upstream accounts, maximizing prompt cache hit rate across multi-turn sessions while balancing load across multiple accounts.
+**Goal:** Implement Session Affinity Sticky Round-Robin in xroute to bind client conversation sessions (`session_id`) to upstream accounts, maximizing prompt cache hit rate across multi-turn sessions while balancing load across multiple accounts.
 
 **Architecture:** A concurrent in-memory `SessionAffinityStore` with inactivity TTL and capacity bounds maps `(provider, modelFamily, sessionID)` tuples to active connection IDs. The connection selector `getBestConnectionWithContext` checks this store when rotation is enabled, serving subsequent turns from the pinned connection when eligible and alternating new sessions across accounts. On terminal upstream errors (HTTP 429, 401, cooldown), `fallback.go` evicts the failed binding and re-binds to the winning fallback connection.
 
-**Tech Stack:** Go stdlib (`sync`, `time`, `strings`, `net/http`), existing 9router SQLite persistence & db types.
+**Tech Stack:** Go stdlib (`sync`, `time`, `strings`, `net/http`), existing xroute SQLite persistence & db types.
 
 **Spec:** `docs/superpowers/specs/2026-10-28-session-affinity-sticky-roundrobin-design.md`
 

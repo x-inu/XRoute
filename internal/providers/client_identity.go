@@ -14,7 +14,7 @@ const (
 	CodexCLIUserAgent = "codex_cli_rs/" + CodexCLIVersion
 	// CodexCLIVersionHeader carries the same value in the `version` header,
 	// which upstream sends alongside the User-Agent. Omitting it is what
-	// leaves newer Codex models gated (upstream decolua/9router ca6e8407).
+	// leaves newer Codex models gated (upstream decolua/xroute ca6e8407).
 	CodexCLIVersionHeader = CodexCLIVersion
 
 	// GrokCLIVersion is the @xai-official/grok identity cli-chat-proxy.grok.com

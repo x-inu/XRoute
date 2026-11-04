@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Port of decolua/9router src/shared/components/Modal.js
+  // Port of decolua/xroute src/shared/components/Modal.js
   import type { Snippet } from 'svelte'
   import { pushEscapeHandler } from './escapeStack'
 

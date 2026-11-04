@@ -32,9 +32,9 @@ max_threads = 4
 		`approval_policy = "on-request"`,
 		`max_threads = 4`,
 		`model = "cc/claude-sonnet-5-5"`,
-		`model_provider = "9router"`,
-		`[model_providers.9router]`,
-		`name = "9Router"`,
+		`model_provider = "xroute"`,
+		`[model_providers.xroute]`,
+		`name = "XRoute"`,
 		`base_url = "http://localhost:20130/v1"`,
 		`wire_api = "responses"`,
 		`Authorization = "Bearer sk-codex-1"`,
@@ -54,8 +54,8 @@ max_threads = 4
 		t.Fatalf("Reset: %v", err)
 	}
 	back := readFixture(t, path)
-	if strings.Contains(back, "9router") {
-		t.Errorf("Reset left 9router keys behind:\n%s", back)
+	if strings.Contains(back, "xroute") {
+		t.Errorf("Reset left xroute keys behind:\n%s", back)
 	}
 	for _, keep := range []string{"# my codex config", `approval_policy = "on-request"`, `max_threads = 4`} {
 		if !strings.Contains(back, keep) {
@@ -77,7 +77,7 @@ func TestCodexApplyIsIdempotent(t *testing.T) {
 		}
 	}
 	got := readFixture(t, path)
-	if n := strings.Count(got, `[model_providers.9router]`); n != 1 {
+	if n := strings.Count(got, `[model_providers.xroute]`); n != 1 {
 		t.Errorf("table header appears %d times, want 1:\n%s", n, got)
 	}
 	if n := strings.Count(got, "Authorization"); n != 1 {

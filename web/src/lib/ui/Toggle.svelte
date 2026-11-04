@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Port of decolua/9router src/shared/components/Toggle.js (switch)
+  // Port of decolua/xroute src/shared/components/Toggle.js (switch)
   let {
     checked = false,
     disabled = false,

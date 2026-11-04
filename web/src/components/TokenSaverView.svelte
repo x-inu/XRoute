@@ -742,7 +742,7 @@ f6e5d4c3b2a1   redis:7-alpine "docker-entrypoint.s…"   2 hours ago     Up 2 ho
 
   onMount(async () => {
     try {
-      const savedLocale = localStorage.getItem('9router-locale') || localStorage.getItem('locale')
+      const savedLocale = localStorage.getItem('xroute-locale') || localStorage.getItem('locale')
       if (savedLocale) locale = savedLocale
     } catch {}
 

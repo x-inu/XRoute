@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/analyticsrange"
+	"xroute/proxy/internal/analyticsrange"
 )
 
 func TestCompressionAnalytics_InsertAndSummary(t *testing.T) {

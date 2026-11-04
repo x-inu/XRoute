@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/constants"
-	"9router/proxy/internal/proc"
+	"xroute/proxy/internal/constants"
+	"xroute/proxy/internal/proc"
 )
 
 // StartupTimeout is how long start waits for the proxy to stay up.

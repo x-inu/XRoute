@@ -8,10 +8,10 @@ import (
 
 	"time"
 
-	"9router/proxy/internal/browserlogin"
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/browserlogin"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/models"
 )
 
 // The renewal of a DeepSeek Web credential.

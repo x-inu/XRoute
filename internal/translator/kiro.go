@@ -27,7 +27,7 @@ const kiroDefaultMaxTokens = 32000
 
 // kiroEmptyUserText mirrors kiroEmptyUserContent in kiroConversation.js: an
 // empty user turn would make the model answer "nothing to continue", so a
-// neutral placeholder is injected (decolua/9router #4109).
+// neutral placeholder is injected (decolua/xroute #4109).
 const (
 	kiroToolResultsPlaceholder = "Tool results provided."
 	kiroEmptyUserPlaceholder   = "continue"

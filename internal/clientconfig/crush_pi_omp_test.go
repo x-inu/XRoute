@@ -26,7 +26,7 @@ func TestCrushRoundTrip(t *testing.T) {
 		t.Fatalf("Reset: %v", err)
 	}
 	back := readFixture(t, path)
-	if strings.Contains(back, `"9router"`) {
+	if strings.Contains(back, `"xroute"`) {
 		t.Errorf("Reset left our provider:\n%s", back)
 	}
 	// crush keeps its file: §7.1 says reading it as a delete-file client is a
@@ -42,7 +42,7 @@ func TestCrushRoundTrip(t *testing.T) {
 func TestPiMergeKeepsForeignFields(t *testing.T) {
 	home := t.TempDir()
 	path := piPaths(home).Files[0].Path
-	writeFixture(t, path, `{"providers": {"9router": {"userField": "keep-me"}}}`+"\n")
+	writeFixture(t, path, `{"providers": {"xroute": {"userField": "keep-me"}}}`+"\n")
 
 	opts := Options{Home: home, BaseURL: "http://h:1", APIKey: "k", Model: "m"}
 	if _, err := newPiAdapter().Apply(opts); err != nil {
@@ -64,13 +64,13 @@ func TestPiMergeKeepsForeignFields(t *testing.T) {
 func TestOmpDeletesEmptyFileOnReset(t *testing.T) {
 	home := t.TempDir()
 	path := ompPaths(home).Files[0].Path
-	writeFixture(t, path, "providers:\n  \"9router\":\n    baseUrl: http://old\n")
+	writeFixture(t, path, "providers:\n  \"xroute\":\n    baseUrl: http://old\n")
 
 	if _, err := newOmpAdapter().Apply(Options{Home: home, BaseURL: "http://h:1", APIKey: "k"}); err != nil {
 		t.Fatalf("Apply: %v", err)
 	}
 	if got := readFixture(t, path); !strings.Contains(got, "http://h:1/v1") {
-		t.Errorf("Apply did not write providers.9router:\n%s", got)
+		t.Errorf("Apply did not write providers.xroute:\n%s", got)
 	}
 
 	if _, err := newOmpAdapter().Reset(Options{Home: home}); err != nil {
@@ -86,7 +86,7 @@ func TestOmpDeletesEmptyFileOnReset(t *testing.T) {
 func TestOmpKeepsFileWithOtherKeys(t *testing.T) {
 	home := t.TempDir()
 	path := ompPaths(home).Files[0].Path
-	writeFixture(t, path, "theme: dark\nproviders:\n  \"9router\":\n    baseUrl: http://old\n")
+	writeFixture(t, path, "theme: dark\nproviders:\n  \"xroute\":\n    baseUrl: http://old\n")
 
 	if _, err := newOmpAdapter().Apply(Options{Home: home, BaseURL: "http://h:1", APIKey: "k"}); err != nil {
 		t.Fatalf("Apply: %v", err)
@@ -98,7 +98,7 @@ func TestOmpKeepsFileWithOtherKeys(t *testing.T) {
 	if !strings.Contains(got, "theme: dark") {
 		t.Errorf("Reset lost a key outside providers:\n%s", got)
 	}
-	if strings.Contains(got, "9router") {
+	if strings.Contains(got, "xroute") {
 		t.Errorf("Reset left our provider entry:\n%s", got)
 	}
 }

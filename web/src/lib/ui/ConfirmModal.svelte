@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Port of decolua/9router src/shared/components/Modal.js ConfirmModal
+  // Port of decolua/xroute src/shared/components/Modal.js ConfirmModal
   import Button from './Button.svelte'
   import Modal from './Modal.svelte'
 

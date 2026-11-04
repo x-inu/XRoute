@@ -14,9 +14,9 @@ import (
 
 	json "encoding/json/v2"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/handlers/chat"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/handlers/chat"
 )
 
 // setupNvidiaTTS seeds one nvidia connection pointed at mock and returns the

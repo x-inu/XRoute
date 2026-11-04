@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 var (

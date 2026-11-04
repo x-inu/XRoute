@@ -16,35 +16,35 @@ import (
 
 	json "encoding/json/v2"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 // Live tests reach the real gemini.google.com.
 //
 // The site is a third party, so the suite is opt-in: it is skipped unless
-// 9ROUTER_LIVE_TESTS=1 is set, and CI does not set it. The anonymous turn
+// XROUTE_LIVE_TESTS=1 is set, and CI does not set it. The anonymous turn
 // needs no credential; the signed-in ones read one from the environment so it
 // never reaches the repository.
 //
 // Run them with:
 //
-//	9ROUTER_LIVE_TESTS=1 go test ./internal/proxy/executor/ -run TestGeminiWebLive -v
+//	XROUTE_LIVE_TESTS=1 go test ./internal/proxy/executor/ -run TestGeminiWebLive -v
 //
 // The signed-in ones also need:
 //
-//	9ROUTER_LIVE_GEMINI_WEB_COOKIE='__Secure-1PSID=…; SAPISID=…; __Secure-1PSIDTS=…'
+//	XROUTE_LIVE_GEMINI_WEB_COOKIE='__Secure-1PSID=…; SAPISID=…; __Secure-1PSIDTS=…'
 
-// liveUpstreamEnv is the opt-in variable. The 9ROUTER_ prefix keeps it from
+// liveUpstreamEnv is the opt-in variable. The XROUTE_ prefix keeps it from
 // colliding with a real runtime setting and makes it greppable.
-const liveUpstreamEnv = "9ROUTER_LIVE_TESTS"
+const liveUpstreamEnv = "XROUTE_LIVE_TESTS"
 
 // liveCookieEnv names the signed-in credential the live tests use.
-const liveCookieEnv = "9ROUTER_LIVE_GEMINI_WEB_COOKIE"
+const liveCookieEnv = "XROUTE_LIVE_GEMINI_WEB_COOKIE"
 
 // liveUpstreamEnabled reports whether live upstream tests were opted into.
 //
 // Only an explicit opt-in counts, and "1" is the spelling the Makefile uses.
-// A developer who writes 9ROUTER_LIVE_TESTS=true must not silently get a
+// A developer who writes XROUTE_LIVE_TESTS=true must not silently get a
 // skipped run, so the accepted spellings are exactly the ones the chat
 // package's own live guard accepts.
 func liveUpstreamEnabled() bool {

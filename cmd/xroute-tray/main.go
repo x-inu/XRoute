@@ -1,8 +1,8 @@
-// Command 9router-tray parks a system-tray icon that observes and controls the
-// 9router-go gateway.
+// Command xroute-tray parks a system-tray icon that observes and controls the
+// xroute gateway.
 //
 // It is a second binary on purpose. A GUI toolkit cannot be linked into
-// 9router-go without breaking the CGO_ENABLED=0 cross-build for all five
+// xroute without breaking the CGO_ENABLED=0 cross-build for all five
 // release targets, so the tray lives outside the core and the core never learns
 // it exists (docs/specs/tray-companion-architecture.md §X2).
 //
@@ -26,14 +26,14 @@ import (
 
 	"github.com/urfave/cli/v2"
 
-	"9router/proxy/internal/config"
-	"9router/proxy/internal/tray"
+	"xroute/proxy/internal/config"
+	"xroute/proxy/internal/tray"
 )
 
 func main() {
 	app := &cli.App{
-		Name:  "9router-tray",
-		Usage: "System-tray companion for the 9router-go gateway",
+		Name:  "xroute-tray",
+		Usage: "System-tray companion for the xroute gateway",
 		Flags: []cli.Flag{
 			&cli.IntFlag{
 				Name:  "port",

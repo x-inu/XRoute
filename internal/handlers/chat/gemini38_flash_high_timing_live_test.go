@@ -11,7 +11,7 @@ import (
 
 	json "encoding/json/v2"
 
-	"9router/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/proxy/executor"
 )
 
 // Timing-focused live e2e for antigravity gemini-3.8-flash-high. The existing
@@ -20,7 +20,7 @@ import (
 // first byte lands, how the events spread out (a streamed answer or one big
 // dump at the end), and how long the thinking phase holds the stream.
 //
-// Same gate as the other live tests: 9ROUTER_LIVE_TESTS=1, make test-live.
+// Same gate as the other live tests: XROUTE_LIVE_TESTS=1, make test-live.
 func TestLiveE2E_Gemini38_FlashHigh_Timing(t *testing.T) {
 	repo, cleanup := getRealUserDB(t)
 	defer cleanup()

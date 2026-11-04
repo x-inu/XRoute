@@ -10,9 +10,9 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/middleware"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/middleware"
 )
 
 // setupFullStackDB builds a database with the real core schema, so the apiKeys

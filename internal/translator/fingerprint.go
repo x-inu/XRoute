@@ -44,7 +44,7 @@ import (
 // (see openCodeRequiredTools). They are still canonicalised when the client
 // sends them, which is the case the measurements above cover.
 //
-// Ported from the equivalent fix in decolua/9router (opencodeFingerprint.js).
+// Ported from the equivalent fix in decolua/xroute (opencodeFingerprint.js).
 
 // OpenCodeFingerprintTools holds the canonical names the upstream gate looks for.
 var OpenCodeFingerprintTools = []string{"bash", "glob", "grep", "read"}
@@ -68,7 +68,7 @@ var openCodeRequiredTools = []string{"read"}
 // containing "terminal" (case-insensitive substring) is answered 429
 // FreeUsageLimitError regardless of quota, IP, session or payload size, while
 // the same body with only that name changed answers normally
-// (decolua/9router#5319, #5328). Only `tools[]` is inspected — history and
+// (decolua/xroute#5319, #5328). Only `tools[]` is inspected — history and
 // system prompt are not — so the declaration travels under an alias and the
 // caller's name is restored on the way back, like a fingerprint-name collision.
 const (
@@ -174,7 +174,7 @@ func ConcealFingerprintTools(body []byte) ([]byte, map[string]string) {
 		}
 
 		// A declared tool name containing "terminal" (case-insensitive substring) is
-		// answered 429 FreeUsageLimitError by the upstream free gate (decolua/9router#5319, #5328).
+		// answered 429 FreeUsageLimitError by the upstream free gate (decolua/xroute#5319, #5328).
 		// Move the declaration to a gate-free alias (run_command, numbered on collision)
 		// and record in toolNameMap for response restoration and history retargeting.
 		if isOpenCodeGatedTool(current) {

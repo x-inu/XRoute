@@ -7,7 +7,7 @@ import (
 )
 
 // Thinking levels are the selectable values of the dashboard's
-// "Thinking: <level>" picker and the `(level)` suffix 9router accepts on a
+// "Thinking: <level>" picker and the `(level)` suffix xroute accepts on a
 // model id. This is the Go port of open-sse/providers/thinkingLevels.js:
 // the level set is a function of the model's capabilities, refined by a
 // model-name pattern table and by whether thinking can be switched off.
@@ -27,7 +27,7 @@ var (
 	// Opus/Sonnet 4.6 lack xhigh (Anthropic + Kiro docs) — keep the 4-level+max
 	// set for them. This has to stay paired with the claude-adaptive bump to
 	// levelBudgetX: without the exclusions the picker would offer xhigh on
-	// models that answer 400 for it (upstream decolua/9router 7894f3d3).
+	// models that answer 400 for it (upstream decolua/xroute 7894f3d3).
 	levelClaudeNoXHigh = []string{"none", "low", "medium", "high", "max"}
 )
 
@@ -108,7 +108,7 @@ var patternThinking = []thinkingPattern{
 	// ⚠️ The codebuddy-cn exact ids below MUST stay above this unqualified
 	// glob — patternThinking is first-match-wins, so a provider-qualified
 	// entry after it would never fire for a dotted id like
-	// deepseek-v4.1-flash (upstream decolua/9router#4614).
+	// deepseek-v4.1-flash (upstream decolua/xroute#4614).
 	{Provider: "codebuddy-cn", Pattern: "deepseek-v4-pro", Levels: []string{"low", "high", "xhigh"}},
 	{Provider: "codebuddy-cn", Pattern: "deepseek-v4.1-flash", Levels: []string{"low", "high", "max"}},
 	// OpenCode Zen free tier (oc / ocz) — the free id of the same v4.1-flash
@@ -165,7 +165,7 @@ var codexModelThinkingLevels = map[string][]string{
 }
 
 // codexModelLevels returns the registry-declared levels for a Codex model, with
-// any trailing "(level)" override stripped first — the suffix is a 9router
+// any trailing "(level)" override stripped first — the suffix is a xroute
 // request override, not part of the model id.
 func codexModelLevels(provider, model string) []string {
 	if provider != "codex" {

@@ -13,7 +13,7 @@ import (
 func longLivedPID(t *testing.T) int {
 	t.Helper()
 	cmd := exec.Command(os.Args[0], "-test.run=TestProcSleepHelper")
-	cmd.Env = append(os.Environ(), "9ROUTER_PROC_HELPER=1")
+	cmd.Env = append(os.Environ(), "XROUTE_PROC_HELPER=1")
 	if err := cmd.Start(); err != nil {
 		t.Fatalf("start helper: %v", err)
 	}
@@ -28,7 +28,7 @@ func longLivedPID(t *testing.T) int {
 
 // TestProcSleepHelper is the payload longLivedPID spawns.
 func TestProcSleepHelper(t *testing.T) {
-	if os.Getenv("9ROUTER_PROC_HELPER") != "1" {
+	if os.Getenv("XROUTE_PROC_HELPER") != "1" {
 		t.Skip("helper payload, only meaningful as a spawned child")
 	}
 	time.Sleep(60 * time.Second)
@@ -61,7 +61,7 @@ func TestAliveReportsRunningProcess(t *testing.T) {
 	}
 }
 
-// Stop must actually end the process — this is what `9router-go stop` depends
+// Stop must actually end the process — this is what `xroute stop` depends
 // on, and on Windows the graceful path is a forced TerminateProcess, so both
 // platforms are pinned to "process is gone when Terminate returns".
 func TestTerminateEndsProcess(t *testing.T) {

@@ -15,10 +15,10 @@ import (
 	"github.com/urfave/cli/v2"
 	"go.uber.org/fx"
 
-	"9router/proxy/internal/app"
-	"9router/proxy/internal/daemon"
-	"9router/proxy/internal/shutdown"
-	"9router/proxy/internal/updater"
+	"xroute/proxy/internal/app"
+	"xroute/proxy/internal/daemon"
+	"xroute/proxy/internal/shutdown"
+	"xroute/proxy/internal/updater"
 )
 
 // binaryName lets the same executable answer to `opencode-go`, so a renamed
@@ -27,7 +27,7 @@ func binaryName() string {
 	if base := filepath.Base(os.Args[0]); strings.HasPrefix(base, "opencode-go") {
 		return "opencode-go"
 	}
-	return "9router-go"
+	return "xroute"
 }
 
 func main() {
@@ -69,7 +69,7 @@ func main() {
 			&cli.BoolFlag{
 				Name:    daemon.BackgroundName,
 				Aliases: []string{"d"},
-				Usage:   "run as a background daemon: detaches from the terminal and returns (env: 9ROUTER_BACKGROUND)",
+				Usage:   "run as a background daemon: detaches from the terminal and returns (env: XROUTE_BACKGROUND)",
 			},
 		},
 		Commands: []*cli.Command{
@@ -79,13 +79,13 @@ func main() {
 				Action: func(cCtx *cli.Context) error {
 					info, err := updater.CheckUpdate(cCtx.Context)
 					if err != nil {
-						fmt.Printf("9router-go version %s (%s/%s)\nUpdate check failed: %v\n", updater.CurrentVersion, runtime.GOOS, runtime.GOARCH, err)
+						fmt.Printf("xroute version %s (%s/%s)\nUpdate check failed: %v\n", updater.CurrentVersion, runtime.GOOS, runtime.GOARCH, err)
 						return nil
 					}
-					fmt.Printf("9router-go version %s (%s/%s)\n", info.CurrentVersion, info.OS, info.Arch)
+					fmt.Printf("xroute version %s (%s/%s)\n", info.CurrentVersion, info.OS, info.Arch)
 					fmt.Printf("Latest version: %s\n", info.LatestVersion)
 					if info.HasUpdate {
-						fmt.Printf("\n🚀 NEW UPDATE AVAILABLE! (%s)\nNotes: %s\nRun '9router-go update' to install.\n", info.LatestVersion, info.ReleaseNotes)
+						fmt.Printf("\n🚀 NEW UPDATE AVAILABLE! (%s)\nNotes: %s\nRun 'xroute update' to install.\n", info.LatestVersion, info.ReleaseNotes)
 					} else {
 						fmt.Println("App is up to date.")
 					}
@@ -102,14 +102,14 @@ func main() {
 						return fmt.Errorf("update check failed: %w", err)
 					}
 					if !info.HasUpdate {
-						fmt.Printf("9router-go is already on the latest version (%s).\n", info.CurrentVersion)
+						fmt.Printf("xroute is already on the latest version (%s).\n", info.CurrentVersion)
 						return nil
 					}
 					fmt.Printf("Downloading update v%s...\n", info.LatestVersion)
 					if err := updater.PerformSelfUpdate(info.DownloadURL, info.SHA256); err != nil {
 						return fmt.Errorf("update failed: %w", err)
 					}
-					fmt.Println("✅ 9router-go updated successfully!")
+					fmt.Println("✅ xroute updated successfully!")
 					return nil
 				},
 			},
@@ -225,7 +225,7 @@ func foregroundOrBackground(cCtx *cli.Context) error {
 	if cCtx.Bool(daemon.BackgroundName) {
 		return startDetached(cCtx)
 	}
-	// On a terminal, bare `9router-go` offers the interface picker; without one
+	// On a terminal, bare `xroute` offers the interface picker; without one
 	// (service unit, container, pipe) it boots the server as before.
 	if stdinIsTerminal() {
 		return runMenu(cCtx)
@@ -268,7 +268,7 @@ func runServer(cCtx *cli.Context) error {
 	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
 	defer signal.Stop(signals)
 
-	// A daemon records its PID so `9router-go stop|status|restart` can find it
+	// A daemon records its PID so `xroute stop|status|restart` can find it
 	// after the launching terminal is long gone.
 	if daemon.IsBackgroundProcess() {
 		daemon.RegisterPID()

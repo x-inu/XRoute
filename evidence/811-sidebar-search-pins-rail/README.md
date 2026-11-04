@@ -1,6 +1,6 @@
 # Evidence — PR #811 (dashboard sidebar overhaul)
 
-Recorded from real `9router-go` binaries on ports 20198 and 20199 with temporary
+Recorded from real `xroute` binaries on ports 20198 and 20199 with temporary
 `DATA_DIR`s, not from a unit test or a component harness. Date: 2026-10-30.
 
 The **before** shots come from a worktree at `luqman/main` (`35d2c688`), the

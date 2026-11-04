@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Connection status vocabulary, mirroring the upstream Next.js 9router
+// Connection status vocabulary, mirroring the upstream Next.js xroute
 // connection lifecycle (`src/sse/services/auth.js`):
 //
 //	active          -> a request succeeded, or the account recovered

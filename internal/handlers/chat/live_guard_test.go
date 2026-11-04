@@ -8,7 +8,7 @@ import (
 )
 
 // Live tests reach a real provider over the network using the operator's own
-// credentials from ~/.9router/db/data.sqlite. Two things follow, and both are
+// credentials from ~/.xroute/db/data.sqlite. Two things follow, and both are
 // reasons such a test must never run in CI:
 //
 //   - The models are free-tier and shared. oc/space-bunny-free and the
@@ -27,11 +27,11 @@ import (
 //
 //	make test-live
 //
-// which is `9ROUTER_LIVE_TESTS=1 go test ./internal/handlers/chat/ -v -run 'Live|MuseSpark'`.
+// which is `XROUTE_LIVE_TESTS=1 go test ./internal/handlers/chat/ -v -run 'Live|MuseSpark'`.
 
-// liveUpstreamEnv is the opt-in variable. The 9ROUTER_ prefix keeps it from
+// liveUpstreamEnv is the opt-in variable. The XROUTE_ prefix keeps it from
 // colliding with a real runtime setting and makes it greppable.
-const liveUpstreamEnv = "9ROUTER_LIVE_TESTS"
+const liveUpstreamEnv = "XROUTE_LIVE_TESTS"
 
 // liveUpstreamEnabled reports whether live upstream tests were opted into.
 func liveUpstreamEnabled() bool {

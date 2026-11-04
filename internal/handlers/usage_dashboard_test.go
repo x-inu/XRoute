@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 func TestLatencySpeedScoreBands(t *testing.T) {

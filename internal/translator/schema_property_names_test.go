@@ -17,10 +17,10 @@ import (
 // Upstream hit exactly this twice: `ensureObjectType` recursed into the
 // properties map instead of its values, so a parameter named `properties` made
 // the map itself look like an `type:"object"` schema and Google rejected the
-// request (decolua/9router#4620), and `removeUnsupportedKeywords` /
+// request (decolua/xroute#4620), and `removeUnsupportedKeywords` /
 // `convertConstToEnum` walk `Object.values`, which deletes keyword-named
 // parameters and rewrites a parameter named `const` into an enum
-// (decolua/9router#4831).
+// (decolua/xroute#4831).
 //
 // This port already resolves `properties` as a dictionary — the recursion below
 // visits its values, never the map — so the tests exist to pin that invariant

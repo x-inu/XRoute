@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 func TestRouteHeaders_SingleModel(t *testing.T) {
@@ -18,17 +18,17 @@ func TestRouteHeaders_SingleModel(t *testing.T) {
 	injectRouteHeaders(rec, "anthropic", "claude-3.5-sonnet", "", 1)
 
 	resp := rec.Result()
-	if resp.Header.Get("x-9router-provider") != "anthropic" {
-		t.Errorf("expected x-9router-provider=anthropic, got %s", resp.Header.Get("x-9router-provider"))
+	if resp.Header.Get("x-xroute-provider") != "anthropic" {
+		t.Errorf("expected x-xroute-provider=anthropic, got %s", resp.Header.Get("x-xroute-provider"))
 	}
-	if resp.Header.Get("x-9router-model") != "claude-3.5-sonnet" {
-		t.Errorf("expected x-9router-model=claude-3.5-sonnet, got %s", resp.Header.Get("x-9router-model"))
+	if resp.Header.Get("x-xroute-model") != "claude-3.5-sonnet" {
+		t.Errorf("expected x-xroute-model=claude-3.5-sonnet, got %s", resp.Header.Get("x-xroute-model"))
 	}
-	if resp.Header.Get("x-9router-combo") != "" {
-		t.Errorf("expected x-9router-combo to be empty, got %s", resp.Header.Get("x-9router-combo"))
+	if resp.Header.Get("x-xroute-combo") != "" {
+		t.Errorf("expected x-xroute-combo to be empty, got %s", resp.Header.Get("x-xroute-combo"))
 	}
-	if resp.Header.Get("x-9router-attempts") != "1" {
-		t.Errorf("expected x-9router-attempts=1, got %s", resp.Header.Get("x-9router-attempts"))
+	if resp.Header.Get("x-xroute-attempts") != "1" {
+		t.Errorf("expected x-xroute-attempts=1, got %s", resp.Header.Get("x-xroute-attempts"))
 	}
 }
 
@@ -39,17 +39,17 @@ func TestRouteHeaders_ComboAndAttempts(t *testing.T) {
 	injectRouteHeaders(rec, "openai", "gpt-4o", "my-combo", 3)
 
 	resp := rec.Result()
-	if resp.Header.Get("x-9router-provider") != "openai" {
-		t.Errorf("expected x-9router-provider=openai, got %s", resp.Header.Get("x-9router-provider"))
+	if resp.Header.Get("x-xroute-provider") != "openai" {
+		t.Errorf("expected x-xroute-provider=openai, got %s", resp.Header.Get("x-xroute-provider"))
 	}
-	if resp.Header.Get("x-9router-model") != "gpt-4o" {
-		t.Errorf("expected x-9router-model=gpt-4o, got %s", resp.Header.Get("x-9router-model"))
+	if resp.Header.Get("x-xroute-model") != "gpt-4o" {
+		t.Errorf("expected x-xroute-model=gpt-4o, got %s", resp.Header.Get("x-xroute-model"))
 	}
-	if resp.Header.Get("x-9router-combo") != "my-combo" {
-		t.Errorf("expected x-9router-combo=my-combo, got %s", resp.Header.Get("x-9router-combo"))
+	if resp.Header.Get("x-xroute-combo") != "my-combo" {
+		t.Errorf("expected x-xroute-combo=my-combo, got %s", resp.Header.Get("x-xroute-combo"))
 	}
-	if resp.Header.Get("x-9router-attempts") != "3" {
-		t.Errorf("expected x-9router-attempts=3, got %s", resp.Header.Get("x-9router-attempts"))
+	if resp.Header.Get("x-xroute-attempts") != "3" {
+		t.Errorf("expected x-xroute-attempts=3, got %s", resp.Header.Get("x-xroute-attempts"))
 	}
 }
 
@@ -60,8 +60,8 @@ func TestRouteHeaders_Disabled(t *testing.T) {
 	injectRouteHeaders(rec, "anthropic", "claude-3", "combo", 1)
 
 	resp := rec.Result()
-	if resp.Header.Get("x-9router-provider") != "" {
-		t.Errorf("expected headers suppressed when disabled, got x-9router-provider=%s", resp.Header.Get("x-9router-provider"))
+	if resp.Header.Get("x-xroute-provider") != "" {
+		t.Errorf("expected headers suppressed when disabled, got x-xroute-provider=%s", resp.Header.Get("x-xroute-provider"))
 	}
 
 	resetRouteHeadersConfigForTesting()
@@ -69,7 +69,7 @@ func TestRouteHeaders_Disabled(t *testing.T) {
 	rec2 := httptest.NewRecorder()
 	injectRouteHeaders(rec2, "anthropic", "claude-3", "combo", 1)
 	resp2 := rec2.Result()
-	if resp2.Header.Get("x-9router-provider") != "" {
+	if resp2.Header.Get("x-xroute-provider") != "" {
 		t.Errorf("expected headers suppressed when NINEROUTER_ROUTE_HEADERS=false")
 	}
 }
@@ -80,23 +80,23 @@ func TestRouteHeaders_ClearOnFailure(t *testing.T) {
 	rec := httptest.NewRecorder()
 	injectRouteHeaders(rec, "deepseek", "deepseek-chat", "combo-a", 2)
 
-	if rec.Header().Get("x-9router-provider") != "deepseek" {
+	if rec.Header().Get("x-xroute-provider") != "deepseek" {
 		t.Fatalf("expected provider header before clear")
 	}
 
 	clearRouteHeaders(rec)
 	resp := rec.Result()
-	if resp.Header.Get("x-9router-provider") != "" {
-		t.Errorf("expected x-9router-provider cleared, got %s", resp.Header.Get("x-9router-provider"))
+	if resp.Header.Get("x-xroute-provider") != "" {
+		t.Errorf("expected x-xroute-provider cleared, got %s", resp.Header.Get("x-xroute-provider"))
 	}
-	if resp.Header.Get("x-9router-model") != "" {
-		t.Errorf("expected x-9router-model cleared, got %s", resp.Header.Get("x-9router-model"))
+	if resp.Header.Get("x-xroute-model") != "" {
+		t.Errorf("expected x-xroute-model cleared, got %s", resp.Header.Get("x-xroute-model"))
 	}
-	if resp.Header.Get("x-9router-combo") != "" {
-		t.Errorf("expected x-9router-combo cleared, got %s", resp.Header.Get("x-9router-combo"))
+	if resp.Header.Get("x-xroute-combo") != "" {
+		t.Errorf("expected x-xroute-combo cleared, got %s", resp.Header.Get("x-xroute-combo"))
 	}
-	if resp.Header.Get("x-9router-attempts") != "" {
-		t.Errorf("expected x-9router-attempts cleared, got %s", resp.Header.Get("x-9router-attempts"))
+	if resp.Header.Get("x-xroute-attempts") != "" {
+		t.Errorf("expected x-xroute-attempts cleared, got %s", resp.Header.Get("x-xroute-attempts"))
 	}
 }
 
@@ -138,16 +138,16 @@ func TestRouteHeaders_DispatchIntegration(t *testing.T) {
 	}
 
 	resp := rec.Result()
-	if got := resp.Header.Get("x-9router-provider"); got != "openai" {
-		t.Errorf("expected x-9router-provider=openai, got %q", got)
+	if got := resp.Header.Get("x-xroute-provider"); got != "openai" {
+		t.Errorf("expected x-xroute-provider=openai, got %q", got)
 	}
-	if got := resp.Header.Get("x-9router-model"); got != "gpt-4o" {
-		t.Errorf("expected x-9router-model=gpt-4o, got %q", got)
+	if got := resp.Header.Get("x-xroute-model"); got != "gpt-4o" {
+		t.Errorf("expected x-xroute-model=gpt-4o, got %q", got)
 	}
-	if got := resp.Header.Get("x-9router-combo"); got != "test-combo" {
-		t.Errorf("expected x-9router-combo=test-combo, got %q", got)
+	if got := resp.Header.Get("x-xroute-combo"); got != "test-combo" {
+		t.Errorf("expected x-xroute-combo=test-combo, got %q", got)
 	}
-	if got := resp.Header.Get("x-9router-attempts"); got != "2" {
-		t.Errorf("expected x-9router-attempts=2, got %q", got)
+	if got := resp.Header.Get("x-xroute-attempts"); got != "2" {
+		t.Errorf("expected x-xroute-attempts=2, got %q", got)
 	}
 }

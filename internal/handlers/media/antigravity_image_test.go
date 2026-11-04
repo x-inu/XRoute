@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/providers"
 )
 
 func TestHandleImage_Antigravity(t *testing.T) {

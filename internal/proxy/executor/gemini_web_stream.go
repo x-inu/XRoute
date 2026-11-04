@@ -11,8 +11,8 @@ import (
 
 	json "encoding/json/v2"
 
-	"9router/proxy/internal/proxy"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/proxy"
+	"xroute/proxy/internal/translator"
 )
 
 // geminiWebEmitter writes a streaming answer.

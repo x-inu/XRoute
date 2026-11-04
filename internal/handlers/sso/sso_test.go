@@ -17,7 +17,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 func newTestRepo(t *testing.T) (*db.Repo, func()) {
@@ -117,7 +117,7 @@ func TestHandleSamlTest_ValidatesConfiguration(t *testing.T) {
 
 	// Complete configuration passes.
 	cert := selfSignedPEM(t)
-	body := `{"samlEntryPoint":"https://idp.example.com/sso","samlIssuer":"urn:9router:sp","samlCert":` + toJSONString(cert) + `}`
+	body := `{"samlEntryPoint":"https://idp.example.com/sso","samlIssuer":"urn:xroute:sp","samlCert":` + toJSONString(cert) + `}`
 	req = httptest.NewRequest(http.MethodPost, "/api/auth/saml/test", strings.NewReader(body))
 	req.Header.Set("Host", "localhost:20130")
 	rec = httptest.NewRecorder()
@@ -149,7 +149,7 @@ func TestHandleSamlMetadata_ServesServiceProviderXML(t *testing.T) {
 		t.Errorf("expected application/xml, got %q", ct)
 	}
 	body := rec.Body.String()
-	if !strings.Contains(body, `entityID="urn:9router:sp"`) {
+	if !strings.Contains(body, `entityID="urn:xroute:sp"`) {
 		t.Errorf("expected default issuer entityID, got %s", body)
 	}
 	if !strings.Contains(body, "/api/auth/saml/acs") {

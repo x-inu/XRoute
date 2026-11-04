@@ -12,8 +12,8 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlers/chat"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlers/chat"
 	json "encoding/json/v2"
 )
 

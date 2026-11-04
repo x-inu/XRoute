@@ -6,7 +6,7 @@ import { api, type ProviderConnection } from '../../api/client'
  * The stored key never reaches the browser: the server ships a mask
  * (`apiKeyMasked`) instead, and the modal doubles it as the input's
  * placeholder, so an empty field honestly means "keep the key already stored".
- * Upstream parity: decolua/9router EditConnectionModal (same rule, same
+ * Upstream parity: decolua/xroute EditConnectionModal (same rule, same
  * "leave blank" hint).
  */
 

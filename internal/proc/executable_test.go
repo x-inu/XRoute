@@ -56,7 +56,7 @@ func TestSameExecutable(t *testing.T) {
 	}{
 		{name: "identical paths", a: self, b: self, want: true},
 		{name: "trailing separator resolves to the same file", a: self, b: self + string(os.PathSeparator), want: true},
-		{name: "different binaries", a: self, b: "/some/other/9router-go", want: false},
+		{name: "different binaries", a: self, b: "/some/other/xroute", want: false},
 		{name: "an empty path never matches", a: "", b: self, want: false},
 		{name: "two empty paths never match", a: "", b: "", want: false},
 	}
@@ -74,7 +74,7 @@ func TestSameExecutable(t *testing.T) {
 // that as "unverified" rather than trusting a recycled PID.
 func TestExecutable_DeadProcessHasNoPath(t *testing.T) {
 	child := exec.Command(os.Args[0], "-test.run=TestProcSleepHelper")
-	child.Env = append(os.Environ(), "9ROUTER_PROC_HELPER=1")
+	child.Env = append(os.Environ(), "XROUTE_PROC_HELPER=1")
 	if err := child.Start(); err != nil {
 		t.Fatalf("start helper: %v", err)
 	}

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/translator"
 )
 
 func TestCloakAntigravityRequest_WebSearchGetsRenamed(t *testing.T) {
@@ -198,7 +198,7 @@ func TestAntigravityImageModelAndConfig(t *testing.T) {
 }
 
 func TestWrapForAntigravity_OmitsAgentRequestType(t *testing.T) {
-	// Port of decolua/9router#3986: requestType="agent" triggers a false
+	// Port of decolua/xroute#3986: requestType="agent" triggers a false
 	// upstream 429 bucket on OMP harness payloads, so it must be omitted.
 	geminiBody := []byte(`{"contents":[{"role":"user","parts":[{"text":"hi"}]}]}`)
 	wrapped, err := translator.WrapForAntigravity(geminiBody, "proj-1", "gemini-3.8-flash-medium")
@@ -246,7 +246,7 @@ func TestNormalizeAntigravityModel(t *testing.T) {
 		input    string
 		expected string
 	}{
-		// Upstream decolua/9router#24034f69 retired the 3.5 family: these
+		// Upstream decolua/xroute#24034f69 retired the 3.5 family: these
 		// aliases now resolve into the 3.8 tiers rather than gemini-3-flash-agent.
 		{"gemini-3.5-flash-high", "gemini-3.8-flash-high"},
 		{"gemini-3.5-flash-medium", "gemini-3.8-flash-medium"},
@@ -447,7 +447,7 @@ func TestStripCompetitivePrompts_HermesAndBillingHeader(t *testing.T) {
 }
 
 // TestStripCompetitivePrompts_HermesIdentityVariants covers every identity
-// variant upstream decolua/9router rewrites (commit a61fc6a0,
+// variant upstream decolua/xroute rewrites (commit a61fc6a0,
 // open-sse/config/appConstants.js:189). The old rule only matched the exact
 // legacy sentence, so every other variant reached the Antigravity backend
 // with the Hermes fingerprint intact and could trigger the fake 429
@@ -617,7 +617,7 @@ func TestAntigravityUpstreamModel(t *testing.T) {
 		want  string
 	}{
 		// Claude 5.5: the bare catalog id is the thinking tier, and the
-		// registry's own "(high)" preset is 9router notation, not wire.
+		// registry's own "(high)" preset is xroute notation, not wire.
 		{"claude-sonnet-5-5", "claude-sonnet-5-5-high"},
 		{"claude-sonnet-5-5-high", "claude-sonnet-5-5-high"},
 		{"claude-sonnet-5-5-medium", "claude-sonnet-5-5-medium"},
@@ -711,7 +711,7 @@ func TestWrapForAntigravity_CapAndRequestID(t *testing.T) {
 		t.Fatalf("unmarshal wrapper: %v", err)
 	}
 	// The wire id is the family backend: the "(high)" the registry carries is
-	// 9router's thinking notation, not a Google model id, and 404s on the wire.
+	// xroute's thinking notation, not a Google model id, and 404s on the wire.
 	if req.Model != "gemini-3.7-flash-tiered" {
 		t.Errorf("expected model gemini-3.7-flash-tiered, got %s", req.Model)
 	}
@@ -842,7 +842,7 @@ func TestStripCompetitivePrompts_PreservesProviderIdentifiers(t *testing.T) {
 // upstream's fourth rewrite row: the literal `opencode` provider identifier
 // is rewritten in the system instruction only, with upstream's exact
 // capitalisation mapping. Upstream's own rule is unbounded and
-// case-insensitive (decolua/9router open-sse/config/appConstants.js:194), so
+// case-insensitive (decolua/xroute open-sse/config/appConstants.js:194), so
 // `opencode-zen` and `.config/opencode/` are rewritten too.
 func TestStripCompetitivePrompts_RewritesOpenCodeBrandInSystemInstruction(t *testing.T) {
 	tests := []struct {

@@ -1,10 +1,10 @@
 package dashboard
 
 import (
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/models"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/updater"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/models"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/updater"
 	"context"
 	json "encoding/json/v2"
 	"fmt"
@@ -41,7 +41,7 @@ func (h *DashboardHandler) HandleGetConnections(w http.ResponseWriter, r *http.R
 }
 
 // HandleGetProvidersClient handles GET /api/providers and GET /api/providers/client.
-// Mirrors upstream 9router providers/client route: usage-eligible connections
+// Mirrors upstream xroute providers/client route: usage-eligible connections
 // only, with provider/accountStatus filters, priority|provider sort, and
 // page/pageSize pagination plus providerOptions and totals.
 func (h *DashboardHandler) HandleGetProvidersClient(w http.ResponseWriter, r *http.Request) {
@@ -934,7 +934,7 @@ func mergeMapField(target map[string]any, key string, source map[string]any) {
 
 // HandleExportProviderKeys handles GET /api/providers/{id}/export-keys.
 // Returns all stored connections for a given provider with unmasked raw credentials.
-// Matches upstream decolua/9router#4889 exportProviderKeys contract.
+// Matches upstream decolua/xroute#4889 exportProviderKeys contract.
 func (h *DashboardHandler) HandleExportProviderKeys(w http.ResponseWriter, r *http.Request) {
 	providerID := getURLParam(r, "id")
 	if providerID == "" {
@@ -1213,7 +1213,7 @@ func (h *DashboardHandler) writeConnectionModels(w http.ResponseWriter, r *http.
 			handlerutil.WriteJSONError(w, http.StatusUnauthorized, "no valid token found")
 			return
 		}
-		// OAuth connections present the 9Router identity plus the WorkOS
+		// OAuth connections present the XRoute identity plus the WorkOS
 		// bearer (upstream buildModelListHeaders); API-key connections send
 		// only Accept + Authorization.
 		var headers map[string]string

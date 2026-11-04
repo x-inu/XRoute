@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/log"
 )
 
 func TestConsoleLogsLevelGetPut(t *testing.T) {

@@ -1,7 +1,7 @@
 package chat
 
 import (
-	json "9router/proxy/internal/fastjson"
+	json "xroute/proxy/internal/fastjson"
 )
 
 // ApplyCodexFastMode enforces the 5-level precedence hierarchy for Codex Fast Mode,

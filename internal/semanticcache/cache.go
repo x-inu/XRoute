@@ -9,8 +9,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/translator"
 )
 
 // Cache coordinates prompt/response caching with thread-safety and TTL support.

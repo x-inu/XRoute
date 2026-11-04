@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/constants"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/constants"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
 
 	"github.com/google/uuid"
 )

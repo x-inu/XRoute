@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 func TestProxyPoolBindings_CountProviderStrategy(t *testing.T) {

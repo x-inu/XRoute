@@ -4,7 +4,7 @@ Status: draft rencana, belum ada kode. Ditulis 2026-10-23.
 Ruang lingkup: tabel `combos` + halaman Combos di dashboard + jalur tulis model di dashboard API.
 
 Dokumen ini **bukan** port KeiRouter dan **tidak** menyentuh `docs/keirouter-port-plan.md` (F-1…F-15).
-Fitur ini ekstensi Go-only murni: upstream `decolua/9router` tidak punya combo berpola
+Fitur ini ekstensi Go-only murni: upstream `decolua/xroute` tidak punya combo berpola
 (terverifikasi: `src/app/api/combos/route.js` hanya membaca `name`, `models`, `kind`),
 jadi tidak ada tabrakan paritas — cukup ikut aturan `goOnlyColumns` (schema additive).
 
@@ -370,14 +370,14 @@ milik sesi lain. Pakai worktree supaya pekerjaan itu tidak tercampur:
 
 ```bash
 git fetch origin
-git worktree add ../9router-go-smart-combo -b feat/smart-combo-rules origin/main
-cp -r web/dist ../9router-go-smart-combo/web/   # agar //go:embed dan lint tidak gagal
+git worktree add ../xroute-smart-combo -b feat/smart-combo-rules origin/main
+cp -r web/dist ../xroute-smart-combo/web/   # agar //go:embed dan lint tidak gagal
 ```
 
-PR (pull request) ditargetkan ke `luqman-v1/9router-go` cabang `main` (§7.7):
+PR (pull request) ditargetkan ke `x-inu/XRoute` cabang `main` (§7.7):
 
 ```bash
-gh pr create --repo luqman-v1/9router-go --base main --head feat/smart-combo-rules \
+gh pr create --repo x-inu/XRoute --base main --head feat/smart-combo-rules \
   --title "feat(combos): smart select combo via keyword/glob/regex rules" --body "..."
 ```
 

@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/proc"
+	"xroute/proxy/internal/proc"
 )
 
 // isolate points DATA_DIR at a temp directory so the tests never read or write
@@ -207,7 +207,7 @@ func writePIDFile(t *testing.T, content string) {
 func livePID(t *testing.T) int {
 	t.Helper()
 	cmd := exec.Command(os.Args[0], "-test.run=TestDaemonLivePIDHelper")
-	cmd.Env = append(os.Environ(), "9ROUTER_PID_HELPER=1")
+	cmd.Env = append(os.Environ(), "XROUTE_PID_HELPER=1")
 	if err := cmd.Start(); err != nil {
 		t.Fatalf("start helper process: %v", err)
 	}
@@ -221,7 +221,7 @@ func livePID(t *testing.T) int {
 // TestDaemonLivePIDHelper is the payload livePID spawns; it only sleeps when
 // the environment marker says it is the helper rather than a real test run.
 func TestDaemonLivePIDHelper(t *testing.T) {
-	if os.Getenv("9ROUTER_PID_HELPER") != "1" {
+	if os.Getenv("XROUTE_PID_HELPER") != "1" {
 		t.Skip("helper payload, only meaningful as a spawned child")
 	}
 	time.Sleep(30 * time.Second)

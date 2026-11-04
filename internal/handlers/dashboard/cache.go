@@ -6,10 +6,10 @@ import (
 	"strconv"
 	"time"
 
-	"9router/proxy/internal/analyticsrange"
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/semanticcache"
+	"xroute/proxy/internal/analyticsrange"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/semanticcache"
 )
 
 type CacheConfigResponse struct {

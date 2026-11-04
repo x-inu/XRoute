@@ -3,10 +3,10 @@ package chat
 import (
 	"context"
 	"time"
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/handlerutil"
 
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/providers"
 )
 
 // deprecationRecordTTL bounds how long a deprecation is cached in memory after

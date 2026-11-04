@@ -7,7 +7,7 @@ import (
 
 	"golang.org/x/sync/singleflight"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 const (

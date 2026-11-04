@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/handlerutil"
 )
 
 func setupTestDB(t testing.TB) (*sql.DB, func()) {

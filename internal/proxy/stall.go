@@ -9,8 +9,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/shutdown"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/shutdown"
 )
 
 // DefaultStallTimeout is the default maximum idle time (no data) before an SSE

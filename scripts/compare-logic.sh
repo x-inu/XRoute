@@ -1,10 +1,10 @@
 #!/bin/bash
 set -e
 
-GO_DIR="/Users/luqmannul.hakim/gomod/project/9router-go"
-JS_DIR="/Users/luqmannul.hakim/htdocs/9router"
+GO_DIR="/Users/luqmannul.hakim/gomod/project/xroute"
+JS_DIR="/Users/luqmannul.hakim/htdocs/xroute"
 
-echo "=== 9router Logic Comparison (Go vs Next.js) ==="
+echo "=== xroute Logic Comparison (Go vs Next.js) ==="
 
 echo ""
 echo "--- 1. COMBO STRATEGIES ---"

@@ -3,12 +3,12 @@ package dashboard
 import (
 	"net/http"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlers/shared"
-	"9router/proxy/internal/middleware"
-	"9router/proxy/internal/modelhealth"
-	"9router/proxy/internal/observ"
-	"9router/proxy/internal/semanticcache"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlers/shared"
+	"xroute/proxy/internal/middleware"
+	"xroute/proxy/internal/modelhealth"
+	"xroute/proxy/internal/observ"
+	"xroute/proxy/internal/semanticcache"
 	"github.com/go-chi/chi/v5"
 )
 

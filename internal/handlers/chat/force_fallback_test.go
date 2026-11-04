@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 // seedForceFallback writes the dashboard toggle the operator flipped in

@@ -1,7 +1,7 @@
 package chat
 
 import (
-	json "9router/proxy/internal/fastjson"
+	json "xroute/proxy/internal/fastjson"
 	"fmt"
 )
 

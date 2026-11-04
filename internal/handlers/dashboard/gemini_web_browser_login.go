@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"9router/proxy/internal/browserlogin"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/browserlogin"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
 )
 
 // The browser sign-in for Gemini Web.

@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store'
 
-const STORAGE_KEY = '9router_mask_email'
+const STORAGE_KEY = 'xroute_mask_email'
 
 /**
  * Mask an email address for privacy / screen sharing.

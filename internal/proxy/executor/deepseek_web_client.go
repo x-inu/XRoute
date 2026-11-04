@@ -14,9 +14,9 @@ import (
 	"sync"
 	"time"
 
-	"9router/proxy/internal/constants"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/constants"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/proxy"
 )
 
 // chat.deepseek.com's web client API, ported from OmniRoute

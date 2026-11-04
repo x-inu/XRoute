@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy"
 )
 
 // ForwardTrae routes completions through Trae's SOLO remote agent API

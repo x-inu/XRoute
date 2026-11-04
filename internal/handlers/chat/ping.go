@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/handlerutil"
 )
 
 // PingConnection sends one chat request to one provider connection.

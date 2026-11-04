@@ -6,7 +6,7 @@ import (
 	json "encoding/json/v2"
 	"fmt"
 
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/models"
 )
 
 // providerConnectionColumns is the single column list every connection read

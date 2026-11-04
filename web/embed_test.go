@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/web"
+	"xroute/proxy/web"
 )
 
 func TestHandler_PWAAssets(t *testing.T) {

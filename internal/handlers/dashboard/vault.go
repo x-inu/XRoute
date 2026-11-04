@@ -6,8 +6,8 @@ import (
 	"io"
 	"net/http"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/vault"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/vault"
 )
 
 // HandleGetVaultStatus handles GET /api/vault/status.

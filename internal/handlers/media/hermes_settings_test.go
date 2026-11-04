@@ -109,7 +109,7 @@ func TestHermesPost_KeepsForeignConfigInSameFile(t *testing.T) {
 	// Only the default slot is requested: a scoped apply writes what it was
 	// asked to write and leaves every other block in the file alone. Handing
 	// a foreign model to the delegation slot is an explicit request, and the
-	// written block is 9router's to own from then on.
+	// written block is xroute's to own from then on.
 	rec := postSettings(t, h, map[string]any{
 		"profile":    "work",
 		"baseUrl":    "http://127.0.0.1:20130/v1",
@@ -181,7 +181,7 @@ func TestHermesDelete_KeepsBlocksOwnedByOtherProviders(t *testing.T) {
 	}
 	for _, gone := range []string{`model: "deepseek/sub"`, `model: "deepseek/c"`} {
 		if strings.Contains(got, gone) {
-			t.Errorf("9router block %q survived the reset:\n%s", gone, got)
+			t.Errorf("xroute block %q survived the reset:\n%s", gone, got)
 		}
 	}
 }
@@ -204,7 +204,7 @@ func TestHermesDelete_MissingConfigIsNotAnError(t *testing.T) {
 
 func TestHermesPost_ApplyToAllReportsPerProfile(t *testing.T) {
 	root := hermesTestHome(t)
-	// routed: already on 9router, keeps its own model
+	// routed: already on xroute, keeps its own model
 	writeProfile(t, root, "routed", "model:\n  default: \"deepseek/keepme\"\n  provider: \"custom\"\n  base_url: \"https://old.example.com/v1\"\n")
 	// foreign: someone else's provider, must be reported and left alone
 	writeProfile(t, root, "foreign", "model:\n  default: \"openrouter/x\"\n  provider: \"openrouter\"\n  base_url: \"https://openrouter.ai/api/v1\"\n")

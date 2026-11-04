@@ -1,27 +1,27 @@
 <div align="center">
 
-# 9router-go — FREE AI Router & Token Saver (Single Binary)
+# xroute — FREE AI Router & Token Saver (Single Binary)
 
 **Never stop coding. Save 20-40% tokens with RTK + auto-fallback to FREE & cheap AI models.**
 
 **Connect Claude Code, Cursor, Antigravity, Codex, Gemini, OpenCode, Cline, OpenClaw... to 40+ AI providers & 100+ models — no Node.js needed at runtime.**
 
-[![CI](https://github.com/luqman-v1/9router-go/actions/workflows/ci.yml/badge.svg)](https://github.com/luqman-v1/9router-go/actions/workflows/ci.yml)
-[![Release](https://github.com/luqman-v1/9router-go/actions/workflows/release.yml/badge.svg)](https://github.com/luqman-v1/9router-go/actions/workflows/release.yml)
-[![GitHub release](https://img.shields.io/github/v/release/luqman-v1/9router-go)](https://github.com/luqman-v1/9router-go/releases/latest)
-[![License](https://img.shields.io/github/license/luqman-v1/9router-go)](https://github.com/luqman-v1/9router-go/blob/main/LICENSE)
-[![GitHub All Releases](https://img.shields.io/github/downloads/luqman-v1/9router-go/total.svg)](https://github.com/luqman-v1/9router-go/releases)
-[![Telegram](https://img.shields.io/badge/Telegram-Join%20Group-26A5E1?logo=telegram&logoColor=white)](https://luqman-v1.github.io/9router-go/tg)
+[![CI](https://github.com/x-inu/XRoute/actions/workflows/ci.yml/badge.svg)](https://github.com/x-inu/XRoute/actions/workflows/ci.yml)
+[![Release](https://github.com/x-inu/XRoute/actions/workflows/release.yml/badge.svg)](https://github.com/x-inu/XRoute/actions/workflows/release.yml)
+[![GitHub release](https://img.shields.io/github/v/release/x-inu/XRoute)](https://github.com/x-inu/XRoute/releases/latest)
+[![License](https://img.shields.io/github/license/x-inu/XRoute)](https://github.com/x-inu/XRoute/blob/main/LICENSE)
+[![GitHub All Releases](https://img.shields.io/github/downloads/x-inu/XRoute/total.svg)](https://github.com/x-inu/XRoute/releases)
+[![Telegram](https://img.shields.io/badge/Telegram-Join%20Group-26A5E1?logo=telegram&logoColor=white)](https://x-inu.github.io/XRoute/tg)
 
-[🚀 Quick Start](#-quick-start) • [💡 Features](#-key-features) • [⚙️ Setup](#-setup-guide) • [🔄 Share DB with 9Router](#-sharing-a-database-with-9router) • [🌐 Upstream](https://github.com/decolua/9router)
+[🚀 Quick Start](#-quick-start) • [💡 Features](#-key-features) • [⚙️ Setup](#-setup-guide) • [🔄 Share DB with XRoute](#-sharing-a-database-with-xroute) • [🌐 Upstream](https://github.com/decolua/xroute)
 
 </div>
 
 ---
 
-## 🤔 Why 9router-go?
+## 🤔 Why xroute?
 
-Same idea as [9Router](https://github.com/decolua/9router), minus the Node.js runtime: **one Go binary** serves the proxy APIs + an embedded Svelte dashboard.
+Same idea as [XRoute](https://github.com/decolua/xroute), minus the Node.js runtime: **one Go binary** serves the proxy APIs + an embedded Svelte dashboard.
 
 **Stop wasting money, tokens and hitting limits:**
 
@@ -30,7 +30,7 @@ Same idea as [9Router](https://github.com/decolua/9router), minus the Node.js ru
 - ❌ Tool outputs (git diff, grep, ls...) burn tokens fast
 - ❌ Manual switching between providers
 
-**9router-go solves this:**
+**xroute solves this:**
 
 - ✅ **RTK Token Saver** — auto-compress tool_result content, save 20-40% tokens
 - ✅ **Auto fallback** — Subscription → Cheap → Free, zero downtime
@@ -55,7 +55,7 @@ Same idea as [9Router](https://github.com/decolua/9router), minus the Node.js ru
        │ http://localhost:20130/v1
        ↓
 ┌─────────────────────────────────────────────┐
-│         9router-go (Smart Router)           │
+│         xroute (Smart Router)           │
 │  • RTK Token Saver (cut tool_result tokens) │
 │  • Format translation (OpenAI ↔ Claude)     │
 │  • Quota tracking                           │
@@ -79,30 +79,30 @@ Result: Never stop coding, minimal cost + 20-40% token savings via RTK
 
 ```bash
 # macOS / Linux
-curl -fsSL https://raw.githubusercontent.com/luqman-v1/9router-go/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/x-inu/XRoute/main/install.sh | bash
 ```
 
 ```powershell
 # Windows (PowerShell — installer writes to %LOCALAPPDATA% + user PATH, no admin needed)
-irm https://raw.githubusercontent.com/luqman-v1/9router-go/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/x-inu/XRoute/main/install.ps1 | iex
 ```
 
-🎉 Then start it (defaults: port `20130`, data `~/.9router` — no flags needed):
+🎉 Then start it (defaults: port `20130`, data `~/.xroute` — no flags needed):
 
 ```bash
-9router-go
+xroute
 # Dashboard: http://localhost:20130 (Default password: 123456)
 ```
-> **Already using upstream [9Router](https://github.com/decolua/9router)?** Point 9router-go at the same data dir — it opens the **same `DATA_DIR/db/data.sqlite`**. Your providers, connections, combos, API keys, and usage history carry over as-is. No import step, no migration. See [Sharing a database with 9Router](#-sharing-a-database-with-9router) for the caveats.
+> **Already using upstream [XRoute](https://github.com/decolua/xroute)?** Point xroute at the same data dir — it opens the **same `DATA_DIR/db/data.sqlite`**. Your providers, connections, combos, API keys, and usage history carry over as-is. No import step, no migration. See [Sharing a database with XRoute](#-sharing-a-database-with-xroute) for the caveats.
 
 **Keep the terminal free (background mode):**
 
 ```bash
-9router-go start          # same as: 9router-go --background   (or -d)
-9router-go status         # is it running? (pid, dashboard, log)
-9router-go restart        # replace the running daemon
-9router-go logs -n 100    # tail the background log
-9router-go stop           # stop it
+xroute start          # same as: xroute --background   (or -d)
+xroute status         # is it running? (pid, dashboard, log)
+xroute restart        # replace the running daemon
+xroute logs -n 100    # tail the background log
+xroute stop           # stop it
 ```
 
 The detached process records itself in `DATA_DIR/run/gateway.pid` and writes its
@@ -111,17 +111,17 @@ refuses instead of fighting over the port, and a daemon killed from Task Manager
 leaves nothing behind: the stale pid file is cleaned on the next command.
 > Windows stops the process with `TerminateProcess` instead of `SIGTERM`, so
 > stopping skips the graceful drain; use the dashboard's Shutdown button or
-> `9router-go restart` when you want in-flight streams to finish first.
+> `xroute restart` when you want in-flight streams to finish first.
 
 **Start on boot (autostart):**
 
 ```bash
-9router-go service install     # systemd user unit, launchd agent, OpenRC/runit service, cron @reboot, or a Windows logon task
-9router-go service status      # which backend owns the entry, and whether it is enabled/active
-9router-go service start       # start the supervised service now (falls back to the background daemon)
-9router-go service restart     # restart it
-9router-go service stop        # stop it now but keep it enabled for boot
-9router-go service uninstall   # remove the autostart entry
+xroute service install     # systemd user unit, launchd agent, OpenRC/runit service, cron @reboot, or a Windows logon task
+xroute service status      # which backend owns the entry, and whether it is enabled/active
+xroute service start       # start the supervised service now (falls back to the background daemon)
+xroute service restart     # restart it
+xroute service stop        # stop it now but keep it enabled for boot
+xroute service uninstall   # remove the autostart entry
 ```
 
 `install` picks the native backend for the host. systemd, launchd, and cron all
@@ -152,18 +152,18 @@ Claude Code / Codex / OpenClaw / Cursor / Cline Settings:
 
 ```bash
 # Docker — no build needed
-docker run -d --name 9router-go --restart unless-stopped \
-  -p 20130:20130 -v "$HOME/.9router:/data" \
+docker run -d --name xroute --restart unless-stopped \
+  -p 20130:20130 -v "$HOME/.xroute:/data" \
   -e PORT=20130 -e DATA_DIR=/data \
   -e INITIAL_PASSWORD=your-secure-password \
-  luqmenul/9router-go:latest
+  luqmenul/xroute:latest
 
 # Manual download — pick your file, no command line guesswork:
 # Windows → .exe | Mac M1+ → darwin-arm64 | Mac Intel → darwin-amd64
 # Linux VPS → linux-amd64 | Raspberry Pi → linux-arm64
 ```
 
-📦 [All release binaries](https://github.com/luqman-v1/9router-go/releases/latest) • 🔨 [Build from source](#-setup-guide)
+📦 [All release binaries](https://github.com/x-inu/XRoute/releases/latest) • 🔨 [Build from source](#-setup-guide)
 
 ---
 
@@ -197,41 +197,41 @@ milliseconds as `comboStrategies[comboName].firstTokenTimeoutMs`.
 
 ---
 
-## 🔄 Sharing a database with 9Router
+## 🔄 Sharing a database with XRoute
 
-**Already running [9Router](https://github.com/decolua/9router) (the Next.js version)? 9router-go reads that exact database. There is no import, no export, and no migration step.**
+**Already running [XRoute](https://github.com/decolua/xroute) (the Next.js version)? xroute reads that exact database. There is no import, no export, and no migration step.**
 
 Both projects default to the same file and speak the same schema:
 
 | | Path |
 |---|---|
-| macOS / Linux | `~/.9router/db/data.sqlite` |
-| Windows | `%APPDATA%\9router\db\data.sqlite` |
+| macOS / Linux | `~/.xroute/db/data.sqlite` |
+| Windows | `%APPDATA%\xroute\db\data.sqlite` |
 | Docker | `/data/db/data.sqlite` inside the container |
 
-Stop 9Router, start 9router-go, and log in with your existing password. Your provider connections, proxy pools, combos, API keys, model aliases, and usage history are all there — 9router-go's own dashboard renders them, because it *is* the same data.
+Stop XRoute, start xroute, and log in with your existing password. Your provider connections, proxy pools, combos, API keys, model aliases, and usage history are all there — xroute's own dashboard renders them, because it *is* the same data.
 
-**You don't even have to stop 9Router** if you want to keep the Node.js dashboard around. Run 9router-go on a different port against the same `DATA_DIR`:
+**You don't even have to stop XRoute** if you want to keep the Node.js dashboard around. Run xroute on a different port against the same `DATA_DIR`:
 
 ```bash
-# 9Router on :20128 (Next.js)  ·  9router-go on :20130 (Go, same DB)
-PORT=20130 DATA_DIR=/home/you/.9router ./9router-go
+# XRoute on :20128 (Next.js)  ·  xroute on :20130 (Go, same DB)
+PORT=20130 DATA_DIR=/home/you/.xroute ./xroute
 ```
 
 Both read the same tables, so a connection you add in either dashboard shows up in the other. SQLite serialises the writes; the supported setup is one active writer, so avoid editing the same combo or settings entry in both at the same moment.
 
-**Running it the other way round** (9router-go first, then pointing 9Router at the same directory) works the same way. 9router-go will have added two columns to `providerConnections` (`lastUsedAt`, `consecutiveUseCount`) and one extra table (`upstream_leases`). Upstream ignores both — its schema sync is additive and doesn't drop unknown columns — so nothing breaks.
+**Running it the other way round** (xroute first, then pointing XRoute at the same directory) works the same way. xroute will have added two columns to `providerConnections` (`lastUsedAt`, `consecutiveUseCount`) and one extra table (`upstream_leases`). Upstream ignores both — its schema sync is additive and doesn't drop unknown columns — so nothing breaks.
 
-What 9router-go will **not** do:
+What xroute will **not** do:
 
-- **Import a legacy JSON export.** If your 9Router data still lives in old JSON files, start upstream once to convert them, then switch.
+- **Import a legacy JSON export.** If your XRoute data still lives in old JSON files, start upstream once to convert them, then switch.
 - **Run destructive migrations or pre-migration backups.** Its bootstrap only ever *adds* — create missing tables, add missing columns, seed missing rows. It never drops or retypes.
-- **Interpret `_meta.schemaVersion`.** It's upstream's migration bookkeeping. A database written by a much newer 9Router release should be checked before you rely on it.
+- **Interpret `_meta.schemaVersion`.** It's upstream's migration bookkeeping. A database written by a much newer XRoute release should be checked before you rely on it.
 
 Take a backup first if the database matters:
 
 ```bash
-cp -r ~/.9router/db ~/9router-db-backup   # stop the daemon first — see DATABASE.md
+cp -r ~/.xroute/db ~/xroute-db-backup   # stop the daemon first — see DATABASE.md
 ```
 
 Full schema, operator contract, and multi-process limits: [`DATABASE.md`](DATABASE.md). Routing internals: [`ARCHITECTURE.md`](ARCHITECTURE.md).
@@ -240,9 +240,9 @@ Full schema, operator contract, and multi-process limits: [`DATABASE.md`](DATABA
 
 ## 📸 Screenshots
 
-![9router-go dashboard — Providers view](docs/screenshots/providers.png)
+![xroute dashboard — Providers view](docs/screenshots/providers.png)
 
-![9router-go dashboard — Endpoint & API key setup](docs/screenshots/endpoint.png)
+![xroute dashboard — Endpoint & API key setup](docs/screenshots/endpoint.png)
 
 ---
 
@@ -250,7 +250,7 @@ Full schema, operator contract, and multi-process limits: [`DATABASE.md`](DATABA
 
 ### Release binary
 
-Download from [GitHub Releases](https://github.com/luqman-v1/9router-go/releases/latest), verify against `SHA256SUMS.txt`.
+Download from [GitHub Releases](https://github.com/x-inu/XRoute/releases/latest), verify against `SHA256SUMS.txt`.
 
 ### 🧪 Experimental builds
 
@@ -258,16 +258,16 @@ Unreleased work also ships as **experimental** builds. They are published
 separately and are never offered to a normal install:
 
 - GitHub Releases marks them **Pre-release**, so `releases/latest` — the URL
-  `9router-go update` falls back to — keeps pointing at the stable version.
-- Docker Hub tags them `exp` (`luqmenul/9router-go:exp`), never `latest`.
+  `xroute update` falls back to — keeps pointing at the stable version.
+- Docker Hub tags them `exp` (`luqmenul/xroute:exp`), never `latest`.
 
 ```bash
-docker pull luqmenul/9router-go:exp
+docker pull luqmenul/xroute:exp
 ```
 
-Opt in only if you want to help shake out bugs. `9router-go update` will not
+Opt in only if you want to help shake out bugs. `xroute update` will not
 install one over a stable release — grab the asset for your platform from the
-[pre-releases page](https://github.com/luqman-v1/9router-go/releases) and
+[pre-releases page](https://github.com/x-inu/XRoute/releases) and
 replace the running binary with it.
 
 ### Build from source
@@ -275,29 +275,29 @@ replace the running binary with it.
 Prerequisites: Go 1.27 and Bun 1.x (dashboard is embedded into the binary, so build web first):
 
 ```bash
-git clone https://github.com/luqman-v1/9router-go.git
-cd 9router-go
+git clone https://github.com/x-inu/XRoute.git
+cd xroute
 make web-build   # bun install --frozen-lockfile && bun run build
 make build       # embeds VERSION into the Go binary
 ```
 
 ### Run
 
-Defaults are enough for most people — plain `9router-go` listens on port `20130` with data in `~/.9router`:
+Defaults are enough for most people — plain `xroute` listens on port `20130` with data in `~/.xroute`:
 
 ```bash
-9router-go
+xroute
 curl http://localhost:20130/health
-./9router-go version
+./xroute version
 ```
 
 Only override when you need something different (`PORT`, `DATA_DIR`/`DB_PATH` — there are no `--port` flags):
 
 ```bash
-PORT=20129 ./9router-go                        # different port
-DATA_DIR=/srv/9router ./9router-go              # different data dir
-DB_PATH=/srv/9router/data.sqlite ./9router-go   # explicit SQLite file
-HOST=127.0.0.1 ./9router-go                     # localhost only, behind a reverse proxy
+PORT=20129 ./xroute                        # different port
+DATA_DIR=/srv/xroute ./xroute              # different data dir
+DB_PATH=/srv/xroute/data.sqlite ./xroute   # explicit SQLite file
+HOST=127.0.0.1 ./xroute                     # localhost only, behind a reverse proxy
 ```
 
 ### 🔑 Dashboard Login & Fresh Install
@@ -306,7 +306,7 @@ HOST=127.0.0.1 ./9router-go                     # localhost only, behind a rever
 - **Remote / VPS / Docker / LAN**: For security (preventing public takeover of fresh installs with known defaults, CVE-2026-56679), remote access blocks the default `123456` password. You **must** either:
   1. **Set `INITIAL_PASSWORD` on launch (Recommended)**:
      ```bash
-     INITIAL_PASSWORD="your-secure-password" ./9router-go
+     INITIAL_PASSWORD="your-secure-password" ./xroute
      # Or in your .env file:
      # INITIAL_PASSWORD=your-secure-password
      ```
@@ -336,7 +336,7 @@ For Claude Messages clients: `ANTHROPIC_BASE_URL=http://localhost:20130/v1`.
 | --- | --- | --- |
 | `PORT` | `20130` | HTTP port |
 | `HOST` / `BIND_ADDR` | all interfaces | Listener address |
-| `DATA_DIR` | `~/.9router` (`%APPDATA%/9router` on Windows) | Data root |
+| `DATA_DIR` | `~/.xroute` (`%APPDATA%/xroute` on Windows) | Data root |
 | `DB_PATH` | `$DATA_DIR/db/data.sqlite` | SQLite file |
 | `INITIAL_PASSWORD` | unset (fallback `123456` locally) | First dashboard password |
 | `RTK_ENABLED` | `true` | RTK input compression |
@@ -423,7 +423,7 @@ GET  /api/version               Version metadata
 
 ### Database compatibility
 
-Go reads/writes the upstream 9router table/JSON shapes and bootstraps the core schema on startup (creates the 11 tables when absent, backfills missing columns, seeds an empty settings row) — a fresh `DATA_DIR` just works, no upstream install needed. Existing databases are never modified beyond additive backfills. Full contract in [`DATABASE.md`](DATABASE.md), routing internals in [`ARCHITECTURE.md`](ARCHITECTURE.md).
+Go reads/writes the upstream xroute table/JSON shapes and bootstraps the core schema on startup (creates the 11 tables when absent, backfills missing columns, seeds an empty settings row) — a fresh `DATA_DIR` just works, no upstream install needed. Existing databases are never modified beyond additive backfills. Full contract in [`DATABASE.md`](DATABASE.md), routing internals in [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
 </details>
 
@@ -433,9 +433,9 @@ Go reads/writes the upstream 9router table/JSON shapes and bootstraps the core s
 
 Issues and pull requests use templates, so pick the right one rather than opening a blank report:
 
-- **Bug report** — something behaves incorrectly. Include a reproduction, `9router-go version`, OS, and the log excerpt around the failure.
+- **Bug report** — something behaves incorrectly. Include a reproduction, `xroute version`, OS, and the log excerpt around the failure.
 - **Feature request** — the problem you cannot solve today, the surface it touches, and whether upstream already has it.
-- **Upstream parity** — a behaviour `decolua/9router` has and this gateway does not; link the upstream commit or PR.
+- **Upstream parity** — a behaviour `decolua/xroute` has and this gateway does not; link the upstream commit or PR.
 - **Question** — configuration and usage help.
 
 PRs follow the checks CI runs: `go vet ./...`, `go test -count=1 ./...`, `make test-integration`, plus `cd web && bun test` and `make vet-svelte` for anything touching the dashboard. Before writing code, skim [`AGENTS.md`](AGENTS.md) — provider isolation and the Go/Svelte conventions there are enforced by review.
@@ -446,13 +446,13 @@ PRs follow the checks CI runs: `go vet ./...`, `go test -count=1 ./...`, `make t
 - [`ARCHITECTURE.md`](ARCHITECTURE.md) — routing, providers, runtime layout
 - [`DATABASE.md`](DATABASE.md) — SQLite schema & operator contract
 - [`ROADMAP.md`](ROADMAP.md) — proposals only, not current behavior
-- [`CHANGELOG.md`](CHANGELOG.md) — release history (Go **v1.9.9**, upstream baseline `decolua/9router` v0.5.85). Work merged since the last tag lives in [`.changes/`](.changes/) and is folded in at the next release; the dashboard's changelog modal shows both.
+- [`CHANGELOG.md`](CHANGELOG.md) — release history (Go **v1.9.9**, upstream baseline `decolua/xroute` v0.5.85). Work merged since the last tag lives in [`.changes/`](.changes/) and is folded in at the next release; the dashboard's changelog modal shows both.
 - [`docs/TELEGRAM_RELEASE_NOTIFICATIONS.md`](docs/TELEGRAM_RELEASE_NOTIFICATIONS.md) — one-time setup for the release notice posted to Telegram
 
 ## Credits
 
-- [9Router](https://github.com/decolua/9router) — original Next.js gateway & dashboard this Go port preserves compatibility with
+- [XRoute](https://github.com/decolua/xroute) — original Next.js gateway & dashboard this Go port preserves compatibility with
 
 ## 📄 License
 
-MIT License — lihat [`LICENSE`](https://github.com/luqman-v1/9router-go/blob/main/LICENSE).
+MIT License — lihat [`LICENSE`](https://github.com/x-inu/XRoute/blob/main/LICENSE).

@@ -182,8 +182,8 @@
         // When login is required, only the server-verified session cookie is authoritative.
         isAuthenticatedState = !!authStatus.authenticated
         if (!isAuthenticatedState) {
-          sessionStorage.removeItem('9router_auth')
-          localStorage.removeItem('9router_auth')
+          sessionStorage.removeItem('xroute_auth')
+          localStorage.removeItem('xroute_auth')
         }
       } else {
         isAuthenticatedState = true
@@ -314,7 +314,7 @@
     }
   })
   const pageMeta: Record<ActiveTab, { title: string; description: string }> = {
-    login: { title: 'Login', description: 'Authenticate to access 9router-go' },
+    login: { title: 'Login', description: 'Authenticate to access xroute' },
     endpoint: { title: 'Endpoint & Key', description: 'API endpoint and key configuration' },
     connections: { title: 'Providers & Endpoints', description: 'Manage your AI provider connections' },
     combos: { title: 'Combo & Routing', description: 'Model combos and failover strategies' },
@@ -333,7 +333,7 @@
     'media-systemone': { title: 'System One', description: 'Structured state evaluation models' },
     'media-web': { title: 'Web Fetch & Search', description: 'Configure web search and scrape tools' },
     'proxy-pools': { title: 'Proxy Pools', description: 'Manage your proxy pool configurations' },
-    skills: { title: 'Agent Skills', description: 'Copy a link and paste to your AI to use 9router-go — no install needed' },
+    skills: { title: 'Agent Skills', description: 'Copy a link and paste to your AI to use xroute — no install needed' },
     'console-log': { title: 'Console Log', description: 'Live server console output' },
     terminal: { title: 'Console Log', description: 'Live server console output' },
     settings: { title: 'Settings', description: 'Manage your preferences and configuration' },
@@ -466,7 +466,7 @@
           {#if isLoading}
             <div class="flex flex-col items-center justify-center h-[70vh] gap-3 text-text-muted">
               <Loader2 class="w-7 h-7 animate-spin text-brand-500" />
-              <span class="font-code text-xs">Connecting to 9router-go Localhost Gateway (:20130)...</span>
+              <span class="font-code text-xs">Connecting to xroute Localhost Gateway (:20130)...</span>
             </div>
           {:else}
             {#if activeTab === 'endpoint'}

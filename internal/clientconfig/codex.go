@@ -15,7 +15,7 @@ import (
 
 // codexProviderKey is the model_providers entry name; `model_provider` selects
 // it and must hold the same string.
-const codexProviderKey = "9router"
+const codexProviderKey = "xroute"
 
 type codexAdapter struct{ baseAdapter }
 
@@ -46,7 +46,7 @@ func (a codexAdapter) Reset(opts Options) (Result, error) {
 	}
 	// Order matters in one place only: the provider table is removed after the
 	// keys that reference it, so a half-finished reset never leaves
-	// `model_provider = "9router"` pointing at a table that is already gone.
+	// `model_provider = "xroute"` pointing at a table that is already gone.
 	// The limit keys are removed unconditionally: they are global in codex's
 	// config, so one left behind would silently describe this gateway's
 	// window to whatever provider the user configures next.
@@ -79,13 +79,13 @@ func (a codexAdapter) Reset(opts Options) (Result, error) {
 //
 // Every key is CreateIfMissing, which for TOML also appends the [table] header
 // when the table does not exist yet — so the first edit creates
-// [model_providers.9router] and the rest land inside it, in the order listed.
+// [model_providers.xroute] and the rest land inside it, in the order listed.
 func codexApplyEdits(opts Options) []Edit {
 	model := opts.Model
 	// A codex model id carries no routing prefix on this path: the gateway is
 	// selected by model_provider, not by the model string.
 	edits := []Edit{
-		{KeyPath: []string{"model_providers", codexProviderKey, "name"}, Value: "9Router", CreateIfMissing: true},
+		{KeyPath: []string{"model_providers", codexProviderKey, "name"}, Value: "XRoute", CreateIfMissing: true},
 		{KeyPath: []string{"model_providers", codexProviderKey, "base_url"}, Value: withV1(opts.BaseURL), CreateIfMissing: true},
 		// The wire protocol is pinned rather than guessed: the gateway serves
 		// /v1/responses for codex and /v1/chat/completions for everything else,

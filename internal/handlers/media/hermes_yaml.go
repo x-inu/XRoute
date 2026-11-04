@@ -287,20 +287,20 @@ func removeEnvVar(envText, key string) string {
 	return re.ReplaceAllString(envText, "")
 }
 
-// hermesLocalEndpointRE matches the loopback hosts 9router itself binds.
+// hermesLocalEndpointRE matches the loopback hosts xroute itself binds.
 var hermesLocalEndpointRE = regexp.MustCompile(`localhost|127\.0\.0\.1|0\.0\.0\.0`)
 
-// has9RouterConfig reports a block pointing at a local 9router endpoint.
+// hasXRouteConfig reports a block pointing at a local xroute endpoint.
 // Detection only: a tunnel endpoint reads false here and surfaces as "other"
 // in the UI, exactly like it does upstream.
-func has9RouterConfig(provider, baseURL *string) bool {
+func hasXRouteConfig(provider, baseURL *string) bool {
 	if baseURL == nil || *baseURL == "" {
 		return false
 	}
 	return provider != nil && *provider == "custom" && hermesLocalEndpointRE.MatchString(*baseURL)
 }
 
-// isCustomBlock reports a block 9router wrote (provider "custom") regardless of
+// isCustomBlock reports a block xroute wrote (provider "custom") regardless of
 // endpoint — covers tunnel URLs, so reset and bulk-apply can still find them.
 func isCustomBlock(provider *string) bool {
 	return provider != nil && *provider == "custom"

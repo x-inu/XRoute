@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy"
 )
 
 // A Codex turn that fails with no content must not be served as an empty

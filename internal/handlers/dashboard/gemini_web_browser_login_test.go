@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/browserlogin"
+	"xroute/proxy/internal/browserlogin"
 )
 
 // TestGeminiWebBrowserLoginAnswersTheCapturedSession proves the endpoint

@@ -16,7 +16,7 @@ import (
 	"net/http"
 	"time"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 // probeZed walks the Zed auth chain and reports what it found.

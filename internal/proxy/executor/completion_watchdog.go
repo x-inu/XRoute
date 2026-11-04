@@ -7,7 +7,7 @@ import (
 
 // PendingCompletionFlushTimeout bounds how long a translated stream may wait
 // for the usage trailer its deferred terminal event needs. Mirrors upstream's
-// PENDING_COMPLETION_FLUSH_MS (decolua/9router fbcaa282 + 7111db35); a package
+// PENDING_COMPLETION_FLUSH_MS (decolua/xroute fbcaa282 + 7111db35); a package
 // var so a test can drive the bound instead of sleeping through it, and
 // exported because the forwarder has to size the upstream read to match.
 var PendingCompletionFlushTimeout = 3 * time.Second

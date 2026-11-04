@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/service"
+	"xroute/proxy/internal/service"
 )
 
 // TestDecideStop_SupervisedSendsNoToken is C3's positive half: the four

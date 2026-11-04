@@ -11,7 +11,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/handlerutil"
 )
 
 // ProxyPool represents a pool of proxy URLs for routing requests.

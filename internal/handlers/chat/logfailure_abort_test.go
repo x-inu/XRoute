@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/translator"
 )
 
 // A client that hung up is not an upstream failure. The request log has to

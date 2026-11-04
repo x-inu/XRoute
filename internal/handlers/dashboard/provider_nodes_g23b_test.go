@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"testing"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 // The G23b spec (docs/superpowers/specs/2026-10-19-mmf-selfhosted-spec.md §7)

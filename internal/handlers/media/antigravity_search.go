@@ -9,13 +9,13 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/constants"
-	"9router/proxy/internal/handlers/chat"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/models"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/constants"
+	"xroute/proxy/internal/handlers/chat"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/models"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/translator"
 )
 
 const (
@@ -66,7 +66,7 @@ func joinDeduped(items []string, sep string) string {
 	return strings.Join(filtered, sep)
 }
 
-// SearchResponse is the standardized envelope for /v1/search matching upstream 9router.
+// SearchResponse is the standardized envelope for /v1/search matching upstream xroute.
 type SearchResponse struct {
 	Provider string         `json:"provider"`
 	Query    string         `json:"query"`

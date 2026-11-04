@@ -18,7 +18,7 @@ import (
 // MiniMax Code account usage — credits balance, plan tier, and M Plan rate
 // windows, read the way MiniMax Code itself reads them (its signed account
 // API). Port of upstream open-sse/services/minimaxCodeUsage.js
-// (decolua/9router 85bc33ce); the protocol itself is the one magpie's
+// (decolua/xroute 85bc33ce); the protocol itself is the one magpie's
 // opencode-minimax-auth plugin speaks.
 //
 // Signing (account API only — the coding_plan/remains endpoint is plain

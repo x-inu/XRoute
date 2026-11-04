@@ -12,16 +12,16 @@ import (
 	"sync/atomic"
 	"time"
 
-	"9router/proxy/internal/constants"
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/models"
-	"9router/proxy/internal/providers"
-	internalproxy "9router/proxy/internal/proxy"
-	"9router/proxy/internal/proxy/oauth"
-	"9router/proxy/internal/translator"
-	"9router/proxy/internal/updater"
+	"xroute/proxy/internal/constants"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/models"
+	"xroute/proxy/internal/providers"
+	internalproxy "xroute/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy/oauth"
+	"xroute/proxy/internal/translator"
+	"xroute/proxy/internal/updater"
 )
 
 // CredentialFallbacks maps search/tool providers to the primary chat provider whose API key can be reused.
@@ -447,7 +447,7 @@ func (h *ChatHandler) getBestConnectionWithContext(ctx context.Context, provider
 			// The operator asked for traffic to keep flowing while every
 			// account is cooling down, so take the account that frees up
 			// first instead of failing the client turn outright
-			// (upstream decolua/9router PR #130).
+			// (upstream decolua/xroute PR #130).
 			forced, until, ok := h.forceMinCooldownConnection(provider, inCooldown, excludeSet, model, settings)
 			if ok {
 				conn = forced
@@ -783,7 +783,7 @@ func (h *ChatHandler) resolveEdgeRelay(connData *ConnectionData) (relayURL, noPr
 	return relayURL, noProxy
 }
 
-// withClineIdentity stamps the 9Router client identity onto cline/clinepass
+// withClineIdentity stamps the XRoute client identity onto cline/clinepass
 // configs (upstream buildClineHeaders). The version comes from the linked
 // binary; the registry literal cannot carry it (import cycle), so it is
 // applied here per request on the already-cloned config.

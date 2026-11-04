@@ -65,7 +65,7 @@ func TestRestrictedKeyDeniedOnEveryMediaEndpoint(t *testing.T) {
 				t.Fatalf("POST %s = %d, want 403 (body: %s)", ep.path, res.Status, truncate(res.Body))
 			}
 			// The wire contract is upstream's whole body, not just the
-			// status: upstream decolua/9router refuses with
+			// status: upstream decolua/xroute refuses with
 			// errorResponse(FORBIDDEN, keyAccessDeniedMessage(requested)),
 			// so the message is that exact sentence with the model quoted.
 			want := `This API key is not allowed to use model "denied-model"`

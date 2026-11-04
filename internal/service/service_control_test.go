@@ -25,7 +25,7 @@ func TestControlDispatchesToTheInstalledBackend(t *testing.T) {
 		setHome(t)
 		redirectInitPaths(t)
 		stubHost(t, hostStub{goos: "linux", euid: 1000})
-		stubCrontab(t, renderCronLine("/usr/local/bin/9router-go", nil)+"\n")
+		stubCrontab(t, renderCronLine("/usr/local/bin/xroute", nil)+"\n")
 		stubRun(t)
 
 		if _, err := Start(); !errors.Is(err, ErrNoSupervisor) {
@@ -87,7 +87,7 @@ func TestControlDispatchesToTheInstalledBackend(t *testing.T) {
 		stubHost(t, hostStub{goos: "linux", euid: 1000})
 		stubCrontab(t, "")
 		calls := stubRun(t)
-		writeFile(t, filepath.Join(home, "service", "9router-go", "run"), "#!/bin/sh\n")
+		writeFile(t, filepath.Join(home, "service", "xroute", "run"), "#!/bin/sh\n")
 
 		if _, err := Start(); err != nil {
 			t.Fatalf("Start() error = %v", err)
@@ -134,9 +134,9 @@ func TestCommandLineQuotesEveryPart(t *testing.T) {
 		args []string
 		want string
 	}{
-		{"plain", "/usr/local/bin/9router-go", []string{"--rtk=true"}, "/usr/local/bin/9router-go --rtk=true"},
-		{"spaced executable", "/opt/my apps/9router-go", nil, `"/opt/my apps/9router-go"`},
-		{"empty arg", "/bin/9router-go", []string{""}, "/bin/9router-go ''"},
+		{"plain", "/usr/local/bin/xroute", []string{"--rtk=true"}, "/usr/local/bin/xroute --rtk=true"},
+		{"spaced executable", "/opt/my apps/xroute", nil, `"/opt/my apps/xroute"`},
+		{"empty arg", "/bin/xroute", []string{""}, "/bin/xroute ''"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

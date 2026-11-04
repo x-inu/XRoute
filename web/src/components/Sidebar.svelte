@@ -50,9 +50,9 @@
   // The white-label branding card in Settings writes these two; an empty value
   // falls back to the project's own name and favicon, so an operator who never
   // opens that card sees exactly what the sidebar showed before.
-  const displayBrandName = $derived(brandName || '9router-go')
+  const displayBrandName = $derived(brandName || 'xroute')
   const displayBrandLogo = $derived(brandLogo || '/favicon.svg')
-  const INSTALL_CMD = '9router-go update'
+  const INSTALL_CMD = 'xroute update'
   let copied = $state(false)
 
   // Which accordions are open, by id, and which labelled groups are collapsed.
@@ -64,8 +64,8 @@
   //
   // Both are persisted because an operator who folds Media Providers once means
   // it — the sidebar is the surface they arrange, not a dialog they dismiss.
-  const ACCORDION_STATE_KEY = '9router-nav-accordions'
-  const GROUP_STATE_KEY = '9router-nav-groups'
+  const ACCORDION_STATE_KEY = 'xroute-nav-accordions'
+  const GROUP_STATE_KEY = 'xroute-nav-groups'
   let openAccordions = $state<Set<string>>(new Set())
   let collapsedGroups = $state<Set<string>>(new Set())
   $effect(() => {
@@ -225,7 +225,7 @@
     </div>
   {/if}
 
-  <!-- Brand header: 9router-go with official favicon.svg logo -->
+  <!-- Brand header: xroute with official favicon.svg logo -->
   <div class="{iconRail ? 'px-2 py-4' : 'px-6 py-4'} flex flex-col gap-2 shrink-0">
     <a
       href={TAB_ROUTES.endpoint}
@@ -254,7 +254,7 @@
       {/if}
     </a>
 
-    <!-- Update notification banner below version (matches upstream 9router) -->
+    <!-- Update notification banner below version (matches upstream xroute) -->
     {#if updateInfo && updateInfo.hasUpdate}
       <div
         class="flex flex-col gap-1.5 rounded-lg p-2 bg-green-500/10 dark:bg-amber-500/10 border border-green-500/30 dark:border-amber-500/30 text-green-700 dark:text-amber-400 mt-0.5 animate-in fade-in duration-200"

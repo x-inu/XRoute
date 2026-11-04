@@ -1,5 +1,5 @@
 BINARY_SUFFIX := $(if $(findstring Windows_NT,$(OS)),.exe,)
-BINARY_NAME := 9router-go$(BINARY_SUFFIX)
+BINARY_NAME := xroute$(BINARY_SUFFIX)
 # A bare `make` builds the binary and stops there — it never runs the server.
 # `run`/`dev` are explicit, separate goals on purpose.
 .DEFAULT_GOAL := build
@@ -17,7 +17,7 @@ ifeq ($(VERSION),)
 VERSION := $(strip $(shell git describe --tags --always 2>/dev/null))
 endif
 ifeq ($(VERSION),)
-VERSION := 1.0.0
+VERSION := 0.1.0
 endif
 # On Windows (cmd.exe), invoking `./$(BINARY_NAME)` fails with "'.' is not recognized".
 # On macOS/Linux, `.` is not on PATH, so a bare command fails with "command not found".
@@ -28,9 +28,9 @@ BINARY := ./$(BINARY_NAME)
 endif
 
 # DATA_DIR stays empty unless the caller overrides it, so the binary applies its
-# own per-platform default (%APPDATA%\9router on Windows, ~/.9router elsewhere).
-# Do NOT default to $(HOME)/.9router: GNU Make on native Windows expands $(HOME)
-# to empty, which resolved to a literal "/.9router" -> C:/Program Files/Git/.9router,
+# own per-platform default (%APPDATA%\xroute on Windows, ~/.xroute elsewhere).
+# Do NOT default to $(HOME)/.xroute: GNU Make on native Windows expands $(HOME)
+# to empty, which resolved to a literal "/.xroute" -> C:/Program Files/Git/.xroute,
 # so every launch wrote a throwaway DB and 401'd on every dashboard call.
 DATA_DIR ?=
 RTK ?=
@@ -40,7 +40,7 @@ AUTO_UPDATE ?= false
 
 # Double quotes, not single: cmd.exe treats ' as a literal character, so the
 # single-quoted form passed a quoted symbol name straight to the linker.
-LDFLAGS := -s -w -X "9router/proxy/internal/updater.CurrentVersion=$(VERSION)"
+LDFLAGS := -s -w -X "xroute/proxy/internal/updater.CurrentVersion=$(VERSION)"
 
 .PHONY: build run dev version update test test-short test-live test-integration vet vet-integration bench bench-go cross mitm-enable mitm-disable mitm-status docker docker-build clean help web-build web-dev changelog-merge
 
@@ -62,10 +62,10 @@ web-build:
 
 ## build — compile binary with version embedding
 build: web-build
-	go build -ldflags="$(LDFLAGS)" -o $(BINARY_NAME) ./cmd/9router-go/
-	go build -ldflags="$(LDFLAGS)" -o opencode-go$(BINARY_SUFFIX) ./cmd/9router-go/
+	go build -ldflags="$(LDFLAGS)" -o $(BINARY_NAME) ./cmd/xroute/
+	go build -ldflags="$(LDFLAGS)" -o opencode-go$(BINARY_SUFFIX) ./cmd/xroute/
 
-# `PORT=20130 ./9router-go` is POSIX env-assignment prefix syntax. cmd.exe does
+# `PORT=20130 ./xroute` is POSIX env-assignment prefix syntax. cmd.exe does
 # not parse it: it tried to execute a program literally named "PORT" and failed
 # with "'PORT' is not recognized as an internal or external command". GNU Make's
 # export directive is portable, so use it and drop the prefix entirely.
@@ -97,7 +97,7 @@ run: build
 
 ## dev — start with go run (auto-rebuild)
 dev:
-	go run -ldflags="$(LDFLAGS)" ./cmd/9router-go/ $(if $(RTK),--rtk=$(RTK)) $(if $(CAVEMAN),--caveman=$(CAVEMAN)) $(if $(PONYTAIL),--ponytail=$(PONYTAIL)) --auto-update=$(AUTO_UPDATE)
+	go run -ldflags="$(LDFLAGS)" ./cmd/xroute/ $(if $(RTK),--rtk=$(RTK)) $(if $(CAVEMAN),--caveman=$(CAVEMAN)) $(if $(PONYTAIL),--ponytail=$(PONYTAIL)) --auto-update=$(AUTO_UPDATE)
 
 ## web-dev — Vite dev server (HMR) on :5173, API proxied to Go :20130. FE changes hot-reload without rebuilding the binary.
 web-dev:
@@ -145,7 +145,7 @@ test-race:
 	go test -race -count=1 -timeout 10m ./...
 
 # Live upstream tests hit real providers with your own credentials from
-# ~/.9router/db/data.sqlite. They are skipped everywhere else on purpose: the
+# ~/.xroute/db/data.sqlite. They are skipped everywhere else on purpose: the
 # free-tier models these cover (oc/space-bunny-free, muse-spark-*-contributor-free)
 # are rate limited per IP and shared with other users, so a run that passes today
 # can fail tomorrow for reasons unrelated to this gateway. CI never sets the
@@ -159,7 +159,7 @@ test-race:
 # left inactive will make every test skip for the wrong reason.
 ## test-live — run the live upstream tests against real providers (local only)
 test-live:
-	9ROUTER_LIVE_TESTS=1 go test -count=1 -v ./internal/handlers/chat/ -run 'Live|MuseSpark'
+	XROUTE_LIVE_TESTS=1 go test -count=1 -v ./internal/handlers/chat/ -run 'Live|MuseSpark'
 
 ## vet-svelte — svelte-check ratchet: blocks unresolved identifiers, pins type debt
 vet-svelte:
@@ -191,7 +191,7 @@ bench-go:
 ## cross — cross-compile Linux/macOS/Windows release binaries
 #
 # `GOOS=linux GOARCH=amd64 go build` is a POSIX env-assignment prefix, and
-# cmd.exe chokes on it the same way it choked on `PORT=20130 ./9router-go`.
+# cmd.exe chokes on it the same way it choked on `PORT=20130 ./xroute`.
 # Instead the per-target OS/ARCH go through `export`, which is a Make directive
 # and therefore identical under sh and cmd. The export is scoped to cross-one
 # so an empty GOARCH can never leak into the normal build target.
@@ -202,7 +202,7 @@ export GOOS := $(CROSS_OS)
 export GOARCH := $(CROSS_ARCH)
 endif
 
-CROSS_BIN := 9router-go
+CROSS_BIN := xroute
 
 cross-linux-amd64:
 	@$(MAKE) --no-print-directory cross-one CROSS_OS=linux CROSS_ARCH=amd64 OUT=$(CROSS_BIN)-linux-amd64
@@ -228,7 +228,7 @@ cross: web-build
 	@cat SHA256SUMS.txt
 .PHONY: cross-one $(CROSS_BUILD_TARGETS)
 cross-one:
-	go build -ldflags="$(LDFLAGS)" -o $(OUT) ./cmd/9router-go/
+	go build -ldflags="$(LDFLAGS)" -o $(OUT) ./cmd/xroute/
 ## mitm-enable — start MITM proxy
 mitm-enable: build
 	$(BINARY) mitm enable
@@ -256,7 +256,7 @@ clean:
 
 ## help — show targets
 help:
-	@echo "9router-go — Makefile targets:"
+	@echo "xroute — Makefile targets:"
 	@grep -E '^## ' Makefile | sed 's/## /  make /' | sed 's/ — /  /'
 	@echo ""
 	@echo "Options:"

@@ -8,7 +8,7 @@ import (
 )
 
 // The 403 a client receives when its key may not use the requested model is a
-// WIRE CONTRACT, and upstream decolua/9router defines it in exactly one place:
+// WIRE CONTRACT, and upstream decolua/xroute defines it in exactly one place:
 // errorResponse(FORBIDDEN, keyAccessDeniedMessage(requested)) ->
 // buildErrorBody(403, ...) -> ERROR_TYPES[403] = {permission_error,
 // insufficient_quota}. The port wrote its own literal envelope for this branch

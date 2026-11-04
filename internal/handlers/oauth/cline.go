@@ -1,10 +1,10 @@
 package oauth
 
 import (
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/updater"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/updater"
 	"bytes"
 	"context"
 	"encoding/base64"
@@ -46,7 +46,7 @@ func clineProvider(p string) (string, bool) {
 
 // HandleClineAuthorize returns the Cline (api.cline.bot) authorization URL with PKCE challenge.
 // GET /api/oauth/cline/authorize?provider=cline|clinepass
-// Mirrors upstream 9router: client_type=extension; the callback follows the
+// Mirrors upstream xroute: client_type=extension; the callback follows the
 // dashboard host (override via ?redirect_uri=).
 func (h *OAuthHandler) HandleClineAuthorize(w http.ResponseWriter, r *http.Request) {
 	provider, ok := clineProvider(r.URL.Query().Get("provider"))

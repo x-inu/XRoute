@@ -1,6 +1,6 @@
 # Evidence — issue #473 (the narrow after-state capture for #432)
 
-Recorded from a real `9router-go` binary on port 20999 with a temporary
+Recorded from a real `xroute` binary on port 20999 with a temporary
 `DATA_DIR`, not from a unit test or a component harness. Date: 2026-10-20.
 
 The node under test carries the same policy the issue quotes, seeded through the

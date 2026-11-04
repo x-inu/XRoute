@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlers/shared"
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlers/shared"
+	"xroute/proxy/internal/models"
 )
 
 // TestLiveCatalogFlightSurvivesLeaderCancellation pins that the shared catalog

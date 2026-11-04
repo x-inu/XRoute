@@ -1,7 +1,7 @@
-# 9router-go — Agent & Developer Guide
+# xroute — Agent & Developer Guide
 
-> **Upstream Source of Truth**: This repository (`9router-go`) is the high-performance Go implementation of [**decolua/9router**](https://github.com/decolua/9router).
-> The upstream reference implementation is cloned locally at `/Users/luqmannul.hakim/htdocs/9router`.
+> **Upstream Source of Truth**: This repository (`xroute`) is the high-performance Go implementation of [**decolua/xroute**](https://github.com/decolua/xroute).
+> The upstream reference implementation is cloned locally at `/Users/luqmannul.hakim/htdocs/xroute`.
 > For complete codebase mapping, Golang optimization standards, Svelte 5 frontend standards, standard Go unit testing conventions, and upstream sync protocols, **ALWAYS READ `AGENTS.md`**.
 
 ## graphify

@@ -19,11 +19,11 @@ import (
 
 	"go.uber.org/fx"
 
-	"9router/proxy/internal/app"
-	"9router/proxy/internal/config"
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/shutdown"
-	"9router/proxy/internal/updater"
+	"xroute/proxy/internal/app"
+	"xroute/proxy/internal/config"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/shutdown"
+	"xroute/proxy/internal/updater"
 )
 
 // The whole package shares ONE application instance, started by TestMain and
@@ -77,7 +77,7 @@ func TestMain(m *testing.M) {
 	defer os.RemoveAll(dataDir)
 
 	// These keep config.LoadConfigFromViper and auth.CLIToken's file
-	// derivation off the developer's real ~/.9router.
+	// derivation off the developer's real ~/.xroute.
 	env := map[string]string{
 		"DATA_DIR":         dataDir,
 		"JWT_SECRET":       "bootfx-jwt-secret",

@@ -1,7 +1,7 @@
 package proxy_test
 
 import (
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy"
 	"testing"
 )
 

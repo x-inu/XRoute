@@ -13,8 +13,8 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
 )
 
 // A streaming request whose upstream answers 200 with a body that is not an

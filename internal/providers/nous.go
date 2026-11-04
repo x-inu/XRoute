@@ -27,12 +27,12 @@ const (
 )
 
 var NousAttributionTags = []string{
-	"product=9router",
-	"client=9router",
-	"user=9router",
+	"product=xroute",
+	"client=xroute",
+	"user=xroute",
 }
 
-// NousCatalogModel matches the normalized catalogue shape expected by 9router.
+// NousCatalogModel matches the normalized catalogue shape expected by xroute.
 type NousCatalogModel struct {
 	ID              string  `json:"id"`
 	Name            string  `json:"name"`
@@ -386,7 +386,7 @@ func ApplyNousThinking(body []byte, provider string) []byte {
 	return updated
 }
 
-// ApplyNousAttribution tags API-key requests with 9router attribution tags,
+// ApplyNousAttribution tags API-key requests with xroute attribution tags,
 // preserving any caller-provided tags and removing empty tags.
 func ApplyNousAttribution(body []byte) []byte {
 	var req map[string]any

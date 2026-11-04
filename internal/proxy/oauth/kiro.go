@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 func init() {

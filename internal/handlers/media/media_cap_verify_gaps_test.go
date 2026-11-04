@@ -10,7 +10,7 @@ import (
 	"strings"
 	"sync/atomic"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 	"testing"
 )
 

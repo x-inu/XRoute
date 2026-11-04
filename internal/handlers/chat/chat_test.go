@@ -10,10 +10,10 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/dbtest"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/dbtest"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/translator"
 	"os"
 )
 

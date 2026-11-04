@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 // The ?views= parameter exists so the dashboard's five-second poll can ask for

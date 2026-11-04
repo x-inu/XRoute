@@ -1,5 +1,5 @@
 name: Pull request
-description: Send a change to 9router-go for review
+description: Send a change to xroute for review
 title: ""
 labels: []
 body:

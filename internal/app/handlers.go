@@ -8,10 +8,10 @@ import (
 	chiMiddleware "github.com/go-chi/chi/v5/middleware"
 	"go.uber.org/fx"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlers"
-	"9router/proxy/internal/handlers/chat"
-	"9router/proxy/internal/middleware"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlers"
+	"xroute/proxy/internal/handlers/chat"
+	"xroute/proxy/internal/middleware"
 )
 
 // HandlersModule provides TokenSaverConfig and sets up the server router.

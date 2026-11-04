@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/shutdown"
-	"9router/proxy/internal/usagetracker"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/shutdown"
+	"xroute/proxy/internal/usagetracker"
 )
 
 const usagePingInterval = 25 * time.Second

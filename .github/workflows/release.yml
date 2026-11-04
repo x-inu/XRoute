@@ -11,7 +11,7 @@ permissions:
   packages: write
 
 env:
-  REGISTRY_IMAGE: luqmenul/9router-go
+  REGISTRY_IMAGE: luqmenul/xroute
 
 jobs:
   # The release channel is derived from the tag and nothing else — not the
@@ -72,7 +72,7 @@ jobs:
             *-*)
               CHANNEL=experimental
               PRERELEASE=true
-              # version.json is the manifest `9router-go update` polls from the
+              # version.json is the manifest `xroute update` polls from the
               # main branch, and checkManifest offers whatever it names. An
               # experimental version sitting in it is pushed to every install,
               # so this has to fail the release rather than warn.
@@ -240,7 +240,7 @@ jobs:
             # the whole script. The heredoc terminator only looks unindented
             # after GitHub removes the common prefix.
             cat > /tmp/notes.md <<BANNER
-          > **Experimental build.** Not published to \`latest\`, and \`9router-go update\`
+          > **Experimental build.** Not published to \`latest\`, and \`xroute update\`
           > will not offer it to an install running a stable release. Track it
           > explicitly:
           >
@@ -281,11 +281,11 @@ jobs:
           # string output of the channel job.
           prerelease: ${{ needs.channel.outputs.prerelease == 'true' }}
           files: |
-            9router-go-linux-amd64
-            9router-go-linux-arm64
-            9router-go-darwin-amd64
-            9router-go-darwin-arm64
-            9router-go-windows-amd64.exe
+            xroute-linux-amd64
+            xroute-linux-arm64
+            xroute-darwin-amd64
+            xroute-darwin-arm64
+            xroute-windows-amd64.exe
             SHA256SUMS.txt
           body_path: /tmp/notes.md
           generate_release_notes: false

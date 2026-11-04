@@ -42,18 +42,18 @@ func injectRouteHeaders(w http.ResponseWriter, provider, model, combo string, at
 		return
 	}
 	if provider != "" {
-		w.Header().Set("x-9router-provider", provider)
+		w.Header().Set("x-xroute-provider", provider)
 	}
 	if model != "" {
-		w.Header().Set("x-9router-model", model)
+		w.Header().Set("x-xroute-model", model)
 	}
 	if combo != "" {
-		w.Header().Set("x-9router-combo", combo)
+		w.Header().Set("x-xroute-combo", combo)
 	}
 	if attempts <= 0 {
 		attempts = 1
 	}
-	w.Header().Set("x-9router-attempts", strconv.Itoa(attempts))
+	w.Header().Set("x-xroute-attempts", strconv.Itoa(attempts))
 }
 
 // clearRouteHeaders removes route metadata headers from w. Used when a dispatch
@@ -63,10 +63,10 @@ func clearRouteHeaders(w http.ResponseWriter) {
 		return
 	}
 	h := w.Header()
-	h.Del("x-9router-provider")
-	h.Del("x-9router-model")
-	h.Del("x-9router-combo")
-	h.Del("x-9router-attempts")
+	h.Del("x-xroute-provider")
+	h.Del("x-xroute-model")
+	h.Del("x-xroute-combo")
+	h.Del("x-xroute-attempts")
 }
 
 // attemptCount returns the number of fallback attempts recorded so far on ctx,

@@ -10,9 +10,9 @@ import (
 
 	"github.com/google/uuid"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/guardrails"
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/guardrails"
+	"xroute/proxy/internal/handlerutil"
 )
 
 // maxGuardrailLogLimit bounds the audit page so a query cannot ask for every

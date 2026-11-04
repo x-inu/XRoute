@@ -1,7 +1,7 @@
 package thinking
 
 import (
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 	"bytes"
 	json "encoding/json/v2"
 	"strings"

@@ -1,7 +1,7 @@
 package chat
 
 import (
-	json "9router/proxy/internal/fastjson"
+	json "xroute/proxy/internal/fastjson"
 	"bytes"
 	"context"
 	"fmt"
@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/shutdown"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/shutdown"
 )
 
 type fusionAnswer struct {

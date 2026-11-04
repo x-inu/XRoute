@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
 )
 
 // deviceProviders lists providers supporting the device-code family.
@@ -354,7 +354,7 @@ func kimiHeaders(deviceID string) map[string]string {
 		deviceID = randomUUID()
 	}
 	return map[string]string{
-		"X-Msh-Platform": "9router", "X-Msh-Version": "1.0",
+		"X-Msh-Platform": "xroute", "X-Msh-Version": "1.0",
 		"X-Msh-Device-Name": "unknown", "X-Msh-Device-Model": "server",
 		"X-Msh-Device-Id": strings.TrimSpace(deviceID),
 	}

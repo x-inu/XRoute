@@ -8,11 +8,11 @@ import (
 
 	json "encoding/json/v2"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlers/shared"
-	"9router/proxy/internal/models"
-	"9router/proxy/internal/pricing"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlers/shared"
+	"xroute/proxy/internal/models"
+	"xroute/proxy/internal/pricing"
+	"xroute/proxy/internal/providers"
 )
 
 // ModelInfoObject represents a model entry in the /v1/models response. The

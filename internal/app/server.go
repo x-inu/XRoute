@@ -13,15 +13,15 @@ import (
 
 	"go.uber.org/fx"
 
-	"9router/proxy/internal/config"
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlers/chat"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy/executor"
-	"9router/proxy/internal/proxy/oauth"
-	"9router/proxy/internal/schedule"
-	"9router/proxy/internal/shutdown"
-	"9router/proxy/internal/updater"
+	"xroute/proxy/internal/config"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlers/chat"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/proxy/oauth"
+	"xroute/proxy/internal/schedule"
+	"xroute/proxy/internal/shutdown"
+	"xroute/proxy/internal/updater"
 )
 
 // ServerModule provides *http.Server and manages its lifecycle and background tasks.
@@ -118,7 +118,7 @@ func ProvideServer(p ServerParams) *http.Server {
 			startAutoPingScheduler(shutdown.Context(), p.Repo, p.ChatHandler)
 			startModelHealthScheduler(shutdown.Context(), p.Repo, p.ChatHandler)
 
-			log.Printf("9router-go Proxy (%s) starting on port %d", updater.CurrentVersion, p.Config.Port)
+			log.Printf("xroute Proxy (%s) starting on port %d", updater.CurrentVersion, p.Config.Port)
 
 			go func() {
 				if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -126,7 +126,7 @@ func ProvideServer(p ServerParams) *http.Server {
 				}
 			}()
 
-			fmt.Fprintf(os.Stdout, "\n  🚀 9router-go Proxy (%s) on %s\n\n", updater.CurrentVersion, addr)
+			fmt.Fprintf(os.Stdout, "\n  🚀 xroute Proxy (%s) on %s\n\n", updater.CurrentVersion, addr)
 			log.Printf("Server is ready to handle requests at %s", addr)
 			return nil
 		},

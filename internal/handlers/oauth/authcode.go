@@ -10,12 +10,12 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
 )
 
 // authcodeConfig describes a plain OAuth2 authorization_code provider
-// (no PKCE). Mirrors upstream 9router provider modules.
+// (no PKCE). Mirrors upstream xroute provider modules.
 type authcodeConfig struct {
 	providers    []string
 	clientID     string

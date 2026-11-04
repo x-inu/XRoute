@@ -12,9 +12,9 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlers/shared"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlers/shared"
+	"xroute/proxy/internal/translator"
 )
 
 func TestRTKCompressionMetricsCalculationAndLog(t *testing.T) {

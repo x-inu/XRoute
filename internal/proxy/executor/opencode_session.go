@@ -1,6 +1,6 @@
 package executor
 
-import "9router/proxy/internal/proxy"
+import "xroute/proxy/internal/proxy"
 
 // opencodeSessionHint resolves the upstream session a free-lane request
 // travels with.
@@ -10,7 +10,7 @@ import "9router/proxy/internal/proxy"
 // upstream session, and the free tier accounts its quota per session: a fresh
 // id per request burns through that budget and surfaces as 429
 // FreeUsageLimitError with a growing retry-after, while the official CLI
-// reuses one long-lived session per conversation (decolua/9router
+// reuses one long-lived session per conversation (decolua/xroute
 // stableSessionId; dsh-our-free-model sessionForConversation). A hint-less
 // request therefore falls back to one stable session per connection,
 // recycled after an idle TTL.

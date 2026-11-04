@@ -97,7 +97,7 @@ func TestTranslateClaudeChunkToOpenAI(t *testing.T) {
 }
 
 func TestTranslateClaudeChunkToOpenAI_Refusal(t *testing.T) {
-	// Port of decolua/9router#4210: a refusal (zero output tokens, no content
+	// Port of decolua/xroute#4210: a refusal (zero output tokens, no content
 	// blocks) must surface as finish_reason "content_filter" carrying
 	// Anthropic's explanation — not a clean, empty "stop".
 	const explanation = "This request was blocked as it seems to violate Anthropic's Terms of Service restrictions."

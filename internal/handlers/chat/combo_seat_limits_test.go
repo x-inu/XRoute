@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 // comboSeatLeaf is the /v1/models entry shape these tests read: the top-level

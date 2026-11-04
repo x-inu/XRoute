@@ -92,7 +92,7 @@ func TestClientIdentityHeadersAreInternallyConsistent(t *testing.T) {
 
 // TestCodexStaticHeadersCarryVersion is the client-visible half: the codex
 // backend reads the `version` header next to the User-Agent, and omitting it
-// is what leaves newer models gated (upstream decolua/9router ca6e8407).
+// is what leaves newer models gated (upstream decolua/xroute ca6e8407).
 func TestCodexStaticHeadersCarryVersion(t *testing.T) {
 	cfg, ok := KnownProviders["codex"]
 	if !ok {

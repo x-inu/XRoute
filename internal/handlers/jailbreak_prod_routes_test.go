@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/auth"
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/auth"
+	"xroute/proxy/internal/db"
 
 	"github.com/go-chi/chi/v5"
 )

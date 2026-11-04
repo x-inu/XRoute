@@ -3,8 +3,8 @@ package chat
 import (
 	"context"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/translator"
 )
 
 // inlineImageTargets are the providers whose wire format cannot fetch a remote

@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/thinking"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/thinking"
 )
 
 // wireHandler returns a ChatHandler with no repo: providerThinkingMode is ""

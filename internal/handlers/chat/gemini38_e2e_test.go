@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/translator"
 )
 
 // TestE2E_Gemini38_FlashHigh_NonStream_ToolCall verifies end-to-end handling of

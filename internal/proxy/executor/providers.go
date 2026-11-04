@@ -1,7 +1,7 @@
 package executor
 
 import (
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/log"
 	"bytes"
 	"context"
 	"crypto/hmac"
@@ -20,10 +20,10 @@ import (
 
 	"github.com/google/uuid"
 
-	"9router/proxy/internal/constants"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/constants"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
+	"xroute/proxy/internal/translator"
 )
 
 // jsonErrorBody renders an error payload as JSON.
@@ -294,7 +294,7 @@ func kiroUpstreamBody(req *Request) ([]byte, error) {
 	if _, after, ok := strings.Cut(model, "/"); ok {
 		model = after
 	}
-	// -thinking / -agentic are 9router fictions, stripped before upstream.
+	// -thinking / -agentic are xroute fictions, stripped before upstream.
 	model = strings.TrimSuffix(model, "-thinking")
 	model = strings.TrimSuffix(model, "-agentic")
 	if idx := strings.IndexByte(model, '('); idx > 0 {
@@ -1112,7 +1112,7 @@ func convertOpenAIToolsToClaude(tools []any) []any {
 
 // toolStrict resolves an explicit tool strict mode, preferring the flat
 // Responses/Codex shape and falling back to the Chat-Completions `function`
-// shape (parity with decolua/9router#4543/#4573). An absent or non-boolean
+// shape (parity with decolua/xroute#4543/#4573). An absent or non-boolean
 // strict stays absent — the flag must never be invented.
 func toolStrict(tool, fn map[string]any) (bool, bool) {
 	if strict, ok := tool["strict"].(bool); ok {
@@ -1534,7 +1534,7 @@ func outputBudgetOf(v any) (int64, bool) {
 }
 
 // museSparkEffortSuffix returns the reasoning effort a caller encoded in the
-// model id, e.g. "muse-spark-1.3(high)". The parenthesised level is 9router
+// model id, e.g. "muse-spark-1.3(high)". The parenthesised level is xroute
 // request notation and never part of the wire id — which is why the callers
 // strip it before dispatch — but the intent it carried is still the caller's.
 func museSparkEffortSuffix(rawModel string) string {

@@ -22,7 +22,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy"
 )
 
 const qoderRSAPublicKeyPEM = `-----BEGIN PUBLIC KEY-----

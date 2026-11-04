@@ -1,21 +1,21 @@
 package chat
 
 import (
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlers/shared"
-	"9router/proxy/internal/middleware"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
-	"9router/proxy/internal/proxy/executor"
-	"9router/proxy/internal/proxy/oauth"
-	"9router/proxy/internal/thinking"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlers/shared"
+	"xroute/proxy/internal/middleware"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/proxy/oauth"
+	"xroute/proxy/internal/thinking"
 	json "encoding/json/v2"
 	"fmt"
 	"net/http"
 	"strings"
 	"time"
 
-	"9router/proxy/internal/semanticcache"
+	"xroute/proxy/internal/semanticcache"
 )
 
 // NewChatHandler creates a ChatHandler with the given repository and a streaming-capable HTTP client.
@@ -213,7 +213,7 @@ func (h *ChatHandler) flattenComboModels(models []string) ([]string, error) {
 }
 
 // stripModelContextMarker strips trailing [1m] marker that Claude Code appends for 1M context beta.
-// Port of decolua/9router PR #3691 (open-sse/utils/modelMarkers.js).
+// Port of decolua/xroute PR #3691 (open-sse/utils/modelMarkers.js).
 // Claude Code sends model: "claude-opus-5[1m]" — the marker is client-side annotation, not a real model.
 // It must be stripped before combo/alias/provider lookup, while anthropic-beta header still carries the capability.
 func stripModelContextMarker(modelStr string) string {

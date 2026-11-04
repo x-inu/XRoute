@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"9router/proxy/internal/pricing"
+	"xroute/proxy/internal/pricing"
 )
 
 // Upstream 2026-10-26 batch ports:

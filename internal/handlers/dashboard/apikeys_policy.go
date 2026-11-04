@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/keikey"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/keikey"
 )
 
 // HandleUpdateApiKey handles PUT /api/keys/{id}.

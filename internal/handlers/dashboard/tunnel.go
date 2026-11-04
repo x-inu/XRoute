@@ -15,10 +15,10 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/config"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/tunnel"
+	"xroute/proxy/internal/config"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/tunnel"
 )
 
 var unixTailscaleCandidates = []string{

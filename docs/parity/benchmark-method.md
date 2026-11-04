@@ -8,7 +8,7 @@ Tài liệu này ghi **cách đo**, không ghi kết quả. Số liệu thuộc
 `benchmark/runner.go` bản trước boot một `startProxyServer` tự viết — một
 reverse proxy HTTP vài chục dòng chuyển tiếp sang mock. Nó không đi qua
 handler, translator, executor, auth, DB hay bất kỳ đường nào của gateway thật.
-Mọi số RPS/p50/p99 từ nó là số của `net/http` stdlib, không phải của 9Router Go.
+Mọi số RPS/p50/p99 từ nó là số của `net/http` stdlib, không phải của XRoute Go.
 
 Nay runner **không**:
 
@@ -144,7 +144,7 @@ Mỗi bên một gateway thật, state synthetic riêng, không chung DB:
 
 | | Node | Go |
 | --- | --- | --- |
-| artifact | bản standalone đã publish (`0.5.99-local.4`), không build lại trong lúc đo | `go build ./cmd/9router-go` |
+| artifact | bản standalone đã publish (`0.5.99-local.4`), không build lại trong lúc đo | `go build ./cmd/xroute` |
 | port | 20928 | 20130 |
 | `DATA_DIR` | thư mục riêng, ngoài home thật | thư mục riêng, ngoài home thật |
 | state | `POST /api/provider-nodes` → `POST /api/providers` → `POST /api/keys` → `PUT /api/models/alias` | `POST /api/provider-nodes` → `POST /api/connections` → `POST /api/keys` → `PUT /api/models/alias` |

@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"9router/proxy/internal/service"
+	"xroute/proxy/internal/service"
 )
 
 // TestResolve_UnknownIsNotStopped is C5: an unanswered question must never

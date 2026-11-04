@@ -364,14 +364,14 @@ func TestLoadConfig_DBPathDirResolution(t *testing.T) {
 		t.Errorf("expected data.sqlite resolution, got %s", cfg1.DatabasePath)
 	}
 
-	// Test case 3: DB_PATH directory with 9router.db
+	// Test case 3: DB_PATH directory with xroute.db
 	dbDir2 := filepath.Join(tempDir, "db2")
 	_ = os.MkdirAll(dbDir2, 0755)
-	_ = os.WriteFile(filepath.Join(dbDir2, "9router.db"), []byte(""), 0600)
+	_ = os.WriteFile(filepath.Join(dbDir2, "xroute.db"), []byte(""), 0600)
 	t.Setenv("DB_PATH", dbDir2)
 	cfg2 := LoadConfig()
-	if cfg2.DatabasePath != filepath.Join(dbDir2, "9router.db") {
-		t.Errorf("expected 9router.db resolution, got %s", cfg2.DatabasePath)
+	if cfg2.DatabasePath != filepath.Join(dbDir2, "xroute.db") {
+		t.Errorf("expected xroute.db resolution, got %s", cfg2.DatabasePath)
 	}
 
 	// Test case 4: DB_PATH directory without known files falls back to db/data.sqlite

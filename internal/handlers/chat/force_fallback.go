@@ -5,12 +5,12 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/models"
 )
 
 // forceFallbackEnv is the deployment-level override upstream reads from the
-// process environment (decolua/9router PR #130, .env.example). It forces the
+// process environment (decolua/xroute PR #130, .env.example). It forces the
 // strategy on without a dashboard write, so a deployment can keep serving
 // traffic through a temporary provider outage before anyone opens the UI.
 const forceFallbackEnv = "FORCE_FALLBACK_ON_ALL_UNAVAILABLE"
@@ -28,7 +28,7 @@ func forceFallbackEnabled(settings *db.SettingsData) bool {
 
 // forceMinCooldownConnection returns the account whose cooldown expires first
 // among the candidates the selector just rejected, so a provider outage costs a
-// client turn instead of an error (upstream decolua/9router PR #130: sort the
+// client turn instead of an error (upstream decolua/xroute PR #130: sort the
 // forced candidates by rateLimitedUntil and take the head).
 //
 // Only accounts that really are in account cooldown are eligible. A candidate

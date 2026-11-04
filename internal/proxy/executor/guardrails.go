@@ -5,8 +5,8 @@ import (
 	"errors"
 	"net/http"
 
-	"9router/proxy/internal/guardrails"
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/guardrails"
+	"xroute/proxy/internal/proxy"
 )
 
 // guardrailBlockFailure converts a policy refusal into the failure the routing

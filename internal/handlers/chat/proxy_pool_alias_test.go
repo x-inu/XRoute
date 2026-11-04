@@ -4,7 +4,7 @@ import (
 	json "encoding/json/v2"
 	"testing"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 // The dashboard stores a provider-level pool under the provider's short alias

@@ -13,8 +13,8 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
 )
 
 const (
@@ -391,7 +391,7 @@ func (h *MediaHandler) HandleDenoDeploy(w http.ResponseWriter, r *http.Request) 
 
 	createBody, _ := json.Marshal(map[string]any{
 		"slug":   projectName,
-		"labels": map[string]any{"custom.kind": "9router-relay"},
+		"labels": map[string]any{"custom.kind": "xroute-relay"},
 		"config": map[string]any{
 			"install": "deno install",
 			"runtime": map[string]any{"type": "dynamic", "entrypoint": "main.ts"},

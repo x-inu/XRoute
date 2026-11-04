@@ -3,10 +3,10 @@
 // checkout, so the parity fixture is a capture of the real implementation
 // rather than a hand-written subset.
 //
-//   git clone --branch v0.5.95 https://github.com/decolua/9router /tmp/9router
+//   git clone --branch v0.5.95 https://github.com/decolua/xroute /tmp/xroute
 //   DUMP_CATALOG_PAIRS=testdata/catalog_pairs.json \
 //     go test ./internal/providers/ -run TestDumpCatalogPairs -count=1
-//   node scripts/gen-thinking-levels.mjs /tmp/9router v0.5.95 \
+//   node scripts/gen-thinking-levels.mjs /tmp/xroute v0.5.95 \
 //     internal/providers/testdata/catalog_pairs.json
 //
 // The pair list is the Go catalog (providers.ProviderModels) dumped by

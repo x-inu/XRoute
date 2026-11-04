@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/dbtest"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/dbtest"
 )
 
 // piTestHome points the home directory at a scratch directory and empties the
@@ -62,16 +62,16 @@ func TestPiSettingsGet(t *testing.T) {
 		}
 	})
 
-	t.Run("an agent-scoped models.json is reported with its 9router state", func(t *testing.T) {
+	t.Run("an agent-scoped models.json is reported with its xroute state", func(t *testing.T) {
 		piTestHome(t)
 		piWriteConfig(t, filepath.Join(".pi", "agent", "models.json"),
-			`{"providers":{"9router":{"baseUrl":"http://localhost:20130/v1"}},"other":1}`)
+			`{"providers":{"xroute":{"baseUrl":"http://localhost:20130/v1"}},"other":1}`)
 		rec := httptest.NewRecorder()
 		NewPiHandler(nil).HandleGet(rec, httptest.NewRequest(http.MethodGet, "/api/cli-tools/pi-settings", nil))
 
 		body := piBody(t, rec)
-		if body["installed"] != true || body["has9Router"] != true {
-			t.Fatalf("expected installed+has9Router, got %v", body)
+		if body["installed"] != true || body["hasXRoute"] != true {
+			t.Fatalf("expected installed+hasXRoute, got %v", body)
 		}
 		config, _ := body["config"].(map[string]any)
 		if _, ok := config["other"]; !ok {
@@ -82,15 +82,15 @@ func TestPiSettingsGet(t *testing.T) {
 		}
 	})
 
-	t.Run("has9Router also reads the upstream default port", func(t *testing.T) {
+	t.Run("hasXRoute also reads the upstream default port", func(t *testing.T) {
 		piTestHome(t)
 		piWriteConfig(t, filepath.Join(".pi", "models.json"),
 			`{"providers":{"custom":{"baseUrl":"http://127.0.0.1:20128/v1"}}}`)
 		rec := httptest.NewRecorder()
 		NewPiHandler(nil).HandleGet(rec, httptest.NewRequest(http.MethodGet, "/api/cli-tools/pi-settings", nil))
 
-		if body := piBody(t, rec); body["has9Router"] != true {
-			t.Fatalf("expected has9Router via the 20128 fallback, got %v", body)
+		if body := piBody(t, rec); body["hasXRoute"] != true {
+			t.Fatalf("expected hasXRoute via the 20128 fallback, got %v", body)
 		}
 	})
 }
@@ -124,7 +124,7 @@ func TestPiSettingsPost(t *testing.T) {
 			t.Fatalf("written config is not JSON: %v\n%s", err, raw)
 		}
 		providers := config["providers"].(map[string]any)
-		block := providers["9router"].(map[string]any)
+		block := providers["xroute"].(map[string]any)
 		if block["baseUrl"] != "http://localhost:20130/v1" {
 			t.Errorf("expected /v1 appended, got %v", block["baseUrl"])
 		}
@@ -142,7 +142,7 @@ func TestPiSettingsPost(t *testing.T) {
 		piTestHome(t)
 		piWriteConfig(t, filepath.Join(".pi", "agent", "models.json"), `{
 			"providers": {
-				"9router": {"baseUrl":"http://old:1/v1","apiKey":"sk-stored","api":"openai-responses","custom":"keep"},
+				"xroute": {"baseUrl":"http://old:1/v1","apiKey":"sk-stored","api":"openai-responses","custom":"keep"},
 				"other": {"baseUrl":"http://elsewhere/v1"}
 			}
 		}`)
@@ -162,7 +162,7 @@ func TestPiSettingsPost(t *testing.T) {
 		if _, ok := providers["other"]; !ok {
 			t.Errorf("foreign provider block was dropped: %v", providers)
 		}
-		block := providers["9router"].(map[string]any)
+		block := providers["xroute"].(map[string]any)
 		if block["baseUrl"] != "http://new:20130/v1" {
 			t.Errorf("baseUrl not updated: %v", block)
 		}
@@ -190,7 +190,7 @@ func TestPiSettingsPost(t *testing.T) {
 		if err := json.Unmarshal(raw, &config); err != nil {
 			t.Fatalf("parse: %v", err)
 		}
-		models := config["providers"].(map[string]any)["9router"].(map[string]any)["models"].([]any)
+		models := config["providers"].(map[string]any)["xroute"].(map[string]any)["models"].([]any)
 		if len(models) != 3 {
 			t.Fatalf("expected every entry kept with upstream defaults, got %v", models)
 		}
@@ -224,7 +224,7 @@ func TestPiSettingsPost(t *testing.T) {
 		if err := json.Unmarshal(raw, &config); err != nil {
 			t.Fatalf("parse: %v", err)
 		}
-		if got := config["providers"].(map[string]any)["9router"].(map[string]any)["apiKey"]; got != "sk-active" {
+		if got := config["providers"].(map[string]any)["xroute"].(map[string]any)["apiKey"]; got != "sk-active" {
 			t.Errorf("expected the active dashboard key, got %v", got)
 		}
 	})
@@ -240,14 +240,14 @@ func TestPiSettingsDelete(t *testing.T) {
 		}
 	})
 
-	t.Run("only the 9router block is removed", func(t *testing.T) {
+	t.Run("only the xroute block is removed", func(t *testing.T) {
 		piTestHome(t)
 		path := piWriteConfig(t, filepath.Join(".pi", "models.json"),
-			`{"providers":{"9router":{"baseUrl":"http://x/v1"},"other":{"baseUrl":"http://y/v1"}}}`)
+			`{"providers":{"xroute":{"baseUrl":"http://x/v1"},"other":{"baseUrl":"http://y/v1"}}}`)
 		rec := httptest.NewRecorder()
 		NewPiHandler(nil).HandleDelete(rec, httptest.NewRequest(http.MethodDelete, "/api/cli-tools/pi-settings", nil))
 
-		if body := piBody(t, rec); body["message"] != "9Router removed from Pi" {
+		if body := piBody(t, rec); body["message"] != "XRoute removed from Pi" {
 			t.Fatalf("expected removal message, got %v", body)
 		}
 		raw, err := os.ReadFile(path)
@@ -259,8 +259,8 @@ func TestPiSettingsDelete(t *testing.T) {
 			t.Fatalf("parse: %v", err)
 		}
 		providers := config["providers"].(map[string]any)
-		if _, ok := providers["9router"]; ok {
-			t.Errorf("9router block survived: %v", providers)
+		if _, ok := providers["xroute"]; ok {
+			t.Errorf("xroute block survived: %v", providers)
 		}
 		if _, ok := providers["other"]; !ok {
 			t.Errorf("foreign block was dropped: %v", providers)
@@ -270,11 +270,11 @@ func TestPiSettingsDelete(t *testing.T) {
 	t.Run("an emptied providers map is removed with the block", func(t *testing.T) {
 		piTestHome(t)
 		path := piWriteConfig(t, filepath.Join(".pi", "models.json"),
-			`{"providers":{"9router":{"baseUrl":"http://x/v1"}},"extra":true}`)
+			`{"providers":{"xroute":{"baseUrl":"http://x/v1"}},"extra":true}`)
 		rec := httptest.NewRecorder()
 		NewPiHandler(nil).HandleDelete(rec, httptest.NewRequest(http.MethodDelete, "/api/cli-tools/pi-settings", nil))
 
-		if body := piBody(t, rec); body["message"] != "9Router removed from Pi" {
+		if body := piBody(t, rec); body["message"] != "XRoute removed from Pi" {
 			t.Fatalf("expected removal message, got %v", body)
 		}
 		raw, err := os.ReadFile(path)

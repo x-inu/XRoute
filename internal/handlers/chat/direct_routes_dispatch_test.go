@@ -6,8 +6,8 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/translator"
 )
 
 // This file pins what can be pinned about the G06–G08 pre-pivot routes today.
@@ -54,7 +54,7 @@ const claudeFixture = `{
 				{
 					"type": "thinking",
 					"thinking": "Calculating 1/0 which triggers division by zero.",
-					"signature": "sig_thought_9router_123"
+					"signature": "sig_thought_xroute_123"
 				},
 				{
 					"type": "tool_use",
@@ -142,7 +142,7 @@ func TestDirectRoutes_PivotLosesToolErrorState(t *testing.T) {
 
 	// The thinking signature is the other property the pivot cannot carry: the
 	// Chat lane has one reasoning_content string and no field for a signature.
-	if strings.Contains(string(openaiJSON), "sig_thought_9router_123") {
+	if strings.Contains(string(openaiJSON), "sig_thought_xroute_123") {
 		t.Errorf("the pivot now preserves the thought signature:\n%s", openaiJSON)
 	}
 }

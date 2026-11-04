@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"9router/proxy/internal/browserlogin"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/browserlogin"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/proxy/executor"
 )
 
 // The renewal of a DeepSeek Web credential.

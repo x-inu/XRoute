@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy"
 )
 
 // Stealth mode is the set of behaviours that keeps a browser-login account from

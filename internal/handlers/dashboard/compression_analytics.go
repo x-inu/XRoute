@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"time"
 
-	"9router/proxy/internal/analyticsrange"
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/analyticsrange"
+	"xroute/proxy/internal/handlerutil"
 )
 
 // HandleGetCompressionAnalytics handles GET /api/analytics/compression.

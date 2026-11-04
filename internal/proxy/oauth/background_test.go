@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/models"
 )
 
 func TestSelectConnectionsNeedingRefresh(t *testing.T) {

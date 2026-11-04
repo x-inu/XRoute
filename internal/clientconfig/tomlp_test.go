@@ -10,7 +10,7 @@ import (
 // T1–T12: the TOML half of §7.2.
 
 const tomlCodex = `# head comment
-[model_providers.9router]
+[model_providers.xroute]
 base_url = "https://api.example.com/v1" # keep me
 name = "keep"
 `
@@ -25,23 +25,23 @@ func TestPatchTOMLValues(t *testing.T) {
 		{
 			name: "T1 splice the value of an existing key",
 			src:  tomlCodex,
-			edit: Edit{KeyPath: []string{"model_providers", "9router", "base_url"}, Value: "http://localhost:20128/v1"},
-			want: "# head comment\n[model_providers.9router]\n" +
+			edit: Edit{KeyPath: []string{"model_providers", "xroute", "base_url"}, Value: "http://localhost:20128/v1"},
+			want: "# head comment\n[model_providers.xroute]\n" +
 				"base_url = \"http://localhost:20128/v1\" # keep me\nname = \"keep\"\n",
 		},
 		{
 			name: "T3 add a key inside an existing section",
 			src:  tomlCodex,
-			edit: Edit{KeyPath: []string{"model_providers", "9router", "wire_api"}, Value: "responses", CreateIfMissing: true},
-			want: "# head comment\n[model_providers.9router]\n" +
+			edit: Edit{KeyPath: []string{"model_providers", "xroute", "wire_api"}, Value: "responses", CreateIfMissing: true},
+			want: "# head comment\n[model_providers.xroute]\n" +
 				"base_url = \"https://api.example.com/v1\" # keep me\nname = \"keep\"\n" +
 				"wire_api = \"responses\"\n",
 		},
 		{
 			name: "T4 append a new section",
 			src:  "name = \"keep\"\n",
-			edit: Edit{KeyPath: []string{"model_providers", "9router", "base_url"}, Value: "http://x", CreateIfMissing: true},
-			want: "name = \"keep\"\n\n[model_providers.9router]\nbase_url = \"http://x\"\n",
+			edit: Edit{KeyPath: []string{"model_providers", "xroute", "base_url"}, Value: "http://x", CreateIfMissing: true},
+			want: "name = \"keep\"\n\n[model_providers.xroute]\nbase_url = \"http://x\"\n",
 		},
 		{
 			name: "root key goes above the first header",
@@ -78,7 +78,7 @@ func TestPatchTOMLValues(t *testing.T) {
 
 func TestPatchTOMLPreservesCommentsAndTail(t *testing.T) {
 	// T2: head and line comments survive, and the suffix is byte-identical.
-	edit := Edit{KeyPath: []string{"model_providers", "9router", "base_url"}, Value: "http://localhost:20128/v1"}
+	edit := Edit{KeyPath: []string{"model_providers", "xroute", "base_url"}, Value: "http://localhost:20128/v1"}
 	out, err := Patch([]byte(tomlCodex), FormatTOML, []Edit{edit})
 	if err != nil {
 		t.Fatalf("Patch() error = %v", err)
@@ -97,14 +97,14 @@ func TestPatchTOMLPreservesCommentsAndTail(t *testing.T) {
 func TestPatchTOMLDoesNotDuplicateSection(t *testing.T) {
 	// T3 and T5: three patches of the same new key leave exactly one header and
 	// go quiet after the first.
-	edit := Edit{KeyPath: []string{"model_providers", "9router", "wire_api"}, Value: "responses", CreateIfMissing: true}
+	edit := Edit{KeyPath: []string{"model_providers", "xroute", "wire_api"}, Value: "responses", CreateIfMissing: true}
 	src := []byte(tomlCodex)
 
 	first, err := Patch(src, FormatTOML, []Edit{edit})
 	if err != nil {
 		t.Fatalf("first patch: %v", err)
 	}
-	if got := strings.Count(string(first), "[model_providers.9router]"); got != 1 {
+	if got := strings.Count(string(first), "[model_providers.xroute]"); got != 1 {
 		t.Fatalf("header count after first patch = %d, want 1", got)
 	}
 	cur := first
@@ -118,7 +118,7 @@ func TestPatchTOMLDoesNotDuplicateSection(t *testing.T) {
 		}
 		cur = next
 	}
-	if got := strings.Count(string(cur), "[model_providers.9router]"); got != 1 {
+	if got := strings.Count(string(cur), "[model_providers.xroute]"); got != 1 {
 		t.Fatalf("header count = %d, want 1", got)
 	}
 }
@@ -189,14 +189,14 @@ func TestPatchTOMLURLNotTruncated(t *testing.T) {
 
 func TestPatchTOMLHeaderWithIndentAndComment(t *testing.T) {
 	// T11: the header is not rewritten, and the new key lands inside it.
-	src := "  [model_providers.9router]  # hdr cmt\nbase_url = \"x\"\n"
+	src := "  [model_providers.xroute]  # hdr cmt\nbase_url = \"x\"\n"
 	out, err := Patch([]byte(src), FormatTOML, []Edit{{
-		KeyPath: []string{"model_providers", "9router", "wire_api"}, Value: "responses", CreateIfMissing: true,
+		KeyPath: []string{"model_providers", "xroute", "wire_api"}, Value: "responses", CreateIfMissing: true,
 	}})
 	if err != nil {
 		t.Fatalf("Patch() error = %v", err)
 	}
-	want := "  [model_providers.9router]  # hdr cmt\nbase_url = \"x\"\nwire_api = \"responses\"\n"
+	want := "  [model_providers.xroute]  # hdr cmt\nbase_url = \"x\"\nwire_api = \"responses\"\n"
 	if string(out) != want {
 		t.Fatalf("Patch() =\n%q\nwant\n%q", out, want)
 	}

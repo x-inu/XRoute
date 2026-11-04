@@ -8,9 +8,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/dbtest"
-	"9router/proxy/internal/modelhealth"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/dbtest"
+	"xroute/proxy/internal/modelhealth"
 )
 
 // The disabled-models write must tell the model-health loop what the operator

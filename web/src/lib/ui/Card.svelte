@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Port of decolua/9router src/shared/components/Card.js
+  // Port of decolua/xroute src/shared/components/Card.js
   import type { Snippet } from 'svelte'
 
   let {

@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/analyticsrange"
+	"xroute/proxy/internal/analyticsrange"
 )
 
 // The window is the contract these analytics report against: every card, every

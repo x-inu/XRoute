@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/handlerutil"
 )
 
 // cliStatus is the per-tool installed/version shape the dashboard expects
@@ -20,7 +20,7 @@ import (
 type cliStatus struct {
 	Installed  bool    `json:"installed"`
 	Version    *string `json:"version"`
-	Has9Router bool    `json:"has9Router"`
+	HasXRoute bool    `json:"hasXRoute"`
 }
 
 // cliVersionTimeout bounds each `--version` probe; install detection via
@@ -41,16 +41,16 @@ type toolDef struct {
 	hasVer     bool
 	dirCheck   func() bool
 	alwaysOn   bool
-	has9Router func() bool
+	hasXRoute func() bool
 }
 
 var cliTools = []toolDef{
-	{id: "claude", bin: "claude", has9Router: claudeHas9Router},
-	{id: "codex", bin: "codex", has9Router: codexHas9Router},
-	{id: "opencode", bin: "opencode", has9Router: opencodeHas9Router},
-	{id: "droid", bin: "droid", has9Router: droidHas9Router},
+	{id: "claude", bin: "claude", hasXRoute: claudeHasXRoute},
+	{id: "codex", bin: "codex", hasXRoute: codexHasXRoute},
+	{id: "opencode", bin: "opencode", hasXRoute: opencodeHasXRoute},
+	{id: "droid", bin: "droid", hasXRoute: droidHasXRoute},
 	{id: "openclaw", bin: "openclaw"},
-	{id: "hermes", bin: "hermes", has9Router: hermesHas9Router},
+	{id: "hermes", bin: "hermes", hasXRoute: hermesHasXRoute},
 	{id: "cowork", dirCheck: coworkDirOK},
 	{id: "copilot", alwaysOn: true}, // VS Code config tool; reference returns installed:true
 	{id: "cline", bin: "cline"},
@@ -59,9 +59,9 @@ var cliTools = []toolDef{
 	{id: "jcode", bin: "jcode"},
 	{id: "grok-build", bin: "grok"},
 	{id: "devin", bin: "devin", hasVer: true},
-	{id: "pi", bin: "pi", has9Router: piHas9Router},
-	{id: "omp", bin: "omp", hasVer: true, has9Router: ompHas9Router},
-	{id: "crush", bin: "crush", has9Router: crushHas9Router},
+	{id: "pi", bin: "pi", hasXRoute: piHasXRoute},
+	{id: "omp", bin: "omp", hasVer: true, hasXRoute: ompHasXRoute},
+	{id: "crush", bin: "crush", hasXRoute: crushHasXRoute},
 	{id: "forge", bin: "forge"},
 	{id: "smelt", bin: "smelt"},
 	{id: "codewhale", bin: "codewhale"},
@@ -104,16 +104,16 @@ func (t toolDef) detector() toolDetector {
 	case t.alwaysOn:
 		return func(context.Context) (*cliStatus, error) {
 			s := &cliStatus{Installed: true}
-			if t.has9Router != nil {
-				s.Has9Router = t.has9Router()
+			if t.hasXRoute != nil {
+				s.HasXRoute = t.hasXRoute()
 			}
 			return s, nil
 		}
 	case t.dirCheck != nil:
 		return func(context.Context) (*cliStatus, error) {
 			s := &cliStatus{Installed: t.dirCheck()}
-			if s.Installed && t.has9Router != nil {
-				s.Has9Router = t.has9Router()
+			if s.Installed && t.hasXRoute != nil {
+				s.HasXRoute = t.hasXRoute()
 			}
 			return s, nil
 		}
@@ -124,8 +124,8 @@ func (t toolDef) detector() toolDetector {
 				installed = true
 			}
 			has9 := false
-			if t.has9Router != nil {
-				has9 = t.has9Router()
+			if t.hasXRoute != nil {
+				has9 = t.hasXRoute()
 				if has9 {
 					installed = true
 				}
@@ -134,7 +134,7 @@ func (t toolDef) detector() toolDetector {
 				// Not installed is a value, not an error (tool ≠ null).
 				return &cliStatus{Installed: false}, nil
 			}
-			s := &cliStatus{Installed: true, Has9Router: has9}
+			s := &cliStatus{Installed: true, HasXRoute: has9}
 			if t.hasVer {
 				if v, err := binVersion(ctx, t.bin); err == nil && v != "" {
 					s.Version = &v
@@ -205,12 +205,12 @@ func coworkDirOK() bool {
 
 var claudeREHasBaseURL = regexp.MustCompile(`"(ANTHROPIC_BASE_URL|NINEROUTER_URL)"\s*:\s*"[^"]+"`)
 
-// ToolHas9Router reports whether the named tool has 9router configured.
-func ToolHas9Router(id string) bool {
+// ToolHasXRoute reports whether the named tool has xroute configured.
+func ToolHasXRoute(id string) bool {
 	for _, t := range cliTools {
 		if t.id == id {
-			if t.has9Router != nil {
-				return t.has9Router()
+			if t.hasXRoute != nil {
+				return t.hasXRoute()
 			}
 			return false
 		}
@@ -218,8 +218,8 @@ func ToolHas9Router(id string) bool {
 	return false
 }
 
-// claudeHas9Router reports whether Claude Code is configured to use 9router.
-func claudeHas9Router() bool {
+// claudeHasXRoute reports whether Claude Code is configured to use xroute.
+func claudeHasXRoute() bool {
 	if u := os.Getenv("ANTHROPIC_BASE_URL"); strings.TrimSpace(u) != "" {
 		return true
 	}
@@ -239,14 +239,14 @@ func claudeHas9Router() bool {
 		if err != nil {
 			continue
 		}
-		if claudeConfigBytesHas9Router(raw) {
+		if claudeConfigBytesHasXRoute(raw) {
 			return true
 		}
 	}
 	return false
 }
 
-func claudeConfigBytesHas9Router(raw []byte) bool {
+func claudeConfigBytesHasXRoute(raw []byte) bool {
 	var cfg struct {
 		Env map[string]any `json:"env"`
 	}
@@ -261,7 +261,7 @@ func claudeConfigBytesHas9Router(raw []byte) bool {
 	return claudeREHasBaseURL.Match(raw)
 }
 
-func codexHas9Router() bool {
+func codexHasXRoute() bool {
 	home, err := os.UserHomeDir()
 	if err != nil || home == "" {
 		return false
@@ -271,10 +271,10 @@ func codexHas9Router() bool {
 		return false
 	}
 	s := string(raw)
-	return strings.Contains(s, `model_provider = "9router"`) || strings.Contains(s, `[model_providers.9router]`)
+	return strings.Contains(s, `model_provider = "xroute"`) || strings.Contains(s, `[model_providers.xroute]`)
 }
 
-func opencodeHas9Router() bool {
+func opencodeHasXRoute() bool {
 	home, err := os.UserHomeDir()
 	if err != nil || home == "" {
 		return false
@@ -283,10 +283,10 @@ func opencodeHas9Router() bool {
 	if err != nil {
 		return false
 	}
-	return bytes.Contains(raw, []byte(`"9router"`))
+	return bytes.Contains(raw, []byte(`"xroute"`))
 }
 
-func droidHas9Router() bool {
+func droidHasXRoute() bool {
 	home, err := os.UserHomeDir()
 	if err != nil || home == "" {
 		return false
@@ -295,10 +295,10 @@ func droidHas9Router() bool {
 	if err != nil {
 		return false
 	}
-	return bytes.Contains(raw, []byte(`"custom:9Router`))
+	return bytes.Contains(raw, []byte(`"custom:XRoute`))
 }
 
-func crushHas9Router() bool {
+func crushHasXRoute() bool {
 	home, err := os.UserHomeDir()
 	if err != nil || home == "" {
 		return false
@@ -307,10 +307,10 @@ func crushHas9Router() bool {
 	if err != nil {
 		return false
 	}
-	return bytes.Contains(raw, []byte(`"9router"`))
+	return bytes.Contains(raw, []byte(`"xroute"`))
 }
 
-func ompHas9Router() bool {
+func ompHasXRoute() bool {
 	home, err := os.UserHomeDir()
 	if err != nil || home == "" {
 		return false
@@ -319,10 +319,10 @@ func ompHas9Router() bool {
 	if err != nil {
 		return false
 	}
-	return bytes.Contains(raw, []byte("9router"))
+	return bytes.Contains(raw, []byte("xroute"))
 }
 
-func hermesHas9Router() bool {
+func hermesHasXRoute() bool {
 	home, err := resolveHermesHome("")
 	if err != nil {
 		return false
@@ -331,9 +331,9 @@ func hermesHas9Router() bool {
 	if err != nil || yaml == "" {
 		return false
 	}
-	return parseHermesSettings(yaml).has9RouterConfig()
+	return parseHermesSettings(yaml).hasXRouteConfig()
 }
 
-func piHas9Router() bool {
-	return piHas9RouterConfig(readPiConfig())
+func piHasXRoute() bool {
+	return piHasXRouteConfig(readPiConfig())
 }

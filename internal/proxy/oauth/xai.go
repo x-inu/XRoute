@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"strings"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 // xaiClientID is the public OAuth client ID for xAI.

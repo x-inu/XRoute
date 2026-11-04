@@ -78,7 +78,7 @@ func Read(ctx context.Context, dbPath string) (*Result, error) {
 // session in the process's memory, which is more exposure than the task
 // needs.
 func ReadDomain(ctx context.Context, dbPath, domain string) (*Result, error) {
-	tmpDir, err := os.MkdirTemp("", "9router-cookies-")
+	tmpDir, err := os.MkdirTemp("", "xroute-cookies-")
 	if err != nil {
 		return nil, fmt.Errorf("browsercookies.Read: make a work directory: %w", err)
 	}

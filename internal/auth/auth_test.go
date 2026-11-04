@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/handlerutil"
 )
 
 func TestGetString(t *testing.T) {

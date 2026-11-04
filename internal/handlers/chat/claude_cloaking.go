@@ -4,11 +4,11 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
-	json "9router/proxy/internal/fastjson"
+	json "xroute/proxy/internal/fastjson"
 	"fmt"
 	"strings"
 
-	"9router/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/proxy/executor"
 )
 
 // Claude OAuth cloaking — ports the Next.js dashboard's

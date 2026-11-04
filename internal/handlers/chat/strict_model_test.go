@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/models"
 )
 
 func TestFilterConnectionsForModel_Conditions(t *testing.T) {

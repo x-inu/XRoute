@@ -2,8 +2,8 @@
 
 **Mã phân hệ:** G14 (Headroom In-Flight Chat Compression), G18 (SafeTransport / SSRF Protection), G03 (Downstream Lifecycle / Context Cancellation)  
 **Trạng thái:** CONDITIONAL Discovery Gate (Task 2)  
-**Vị trí tài liệu:** `internal/headroom/headroom_discovery.md` (repo `D:/Code/9router-go`)  
-**Tài liệu tham chiếu:** `.superpowers/sdd/2026-10-19-9router-go-optimizations/task-2-brief.md`, `internal/db/settings.go`, `internal/headroom/detect.go`
+**Vị trí tài liệu:** `internal/headroom/headroom_discovery.md` (repo `D:/Code/xroute`)  
+**Tài liệu tham chiếu:** `.superpowers/sdd/2026-10-19-xroute-optimizations/task-2-brief.md`, `internal/db/settings.go`, `internal/headroom/detect.go`
 
 ---
 
@@ -15,11 +15,11 @@ Trong các phiên làm việc kéo dài của AI Agent (như Cline, Roo Code, Cl
 2. **Nguy cơ tràn cửa sổ ngữ cảnh (Context Window Exhaustion)**: Khi lịch sử vượt quá giới hạn mô hình, yêu cầu bị từ chối với lỗi HTTP 400.
 3. **Độ trễ gia tăng (TTFT - Time To First Token)**: Kích thước prompt càng lớn, thời gian xử lý pre-fill của LLM upstream càng lâu.
 
-### 1.2. Vai trò của Headroom Proxy trong 9Router
+### 1.2. Vai trò của Headroom Proxy trong XRoute
 Headroom là một tiến trình proxy ngoài (external compression proxy), hỗ trợ các thuật toán nén ngữ cảnh thông minh (lossy semantic compression, AST tree-sitter compression, Kompress-v2 ML model).
-9Router tích hợp Headroom theo luồng:
+XRoute tích hợp Headroom theo luồng:
 ```
-Client ──► 9Router Gateway ──► Headroom (/v1/compress) ──► 9Router Gateway ──► Upstream Provider (LLM)
+Client ──► XRoute Gateway ──► Headroom (/v1/compress) ──► XRoute Gateway ──► Upstream Provider (LLM)
                                        │
                                 [Fail-Open Gate]
 ```
@@ -28,7 +28,7 @@ Client ──► 9Router Gateway ──► Headroom (/v1/compress) ──► 9Ro
 
 ### 1.3. Mục tiêu của CONDITIONAL Discovery Gate G14
 CONDITIONAL Discovery Gate G14 thiết lập:
-1. **Hợp đồng chuẩn hóa** cho endpoint `/v1/compress` giữa 9Router Go và Headroom proxy.
+1. **Hợp đồng chuẩn hóa** cho endpoint `/v1/compress` giữa XRoute Go và Headroom proxy.
 2. **Quy chuẩn kiểm định vùng cho phép (Permitted-Region Diff)**: Bảo vệ bất khả xâm phạm cấu trúc tin nhắn, định danh công cụ, chữ ký tư duy và khối đa phương tiện.
 3. **Cơ chế chống CCR Phantom**: Ngăn chặn hoàn toàn việc nhận dạng token nén CCR mà gateway không thể phục hồi.
 4. **Vòng đời Downstream & Fail-Open an toàn**: Đảm bảo fail-open khi compressor gặp sự cố, nhưng ngắt tức thì khi client hủy kết nối (G03).
@@ -46,7 +46,7 @@ CONDITIONAL Discovery Gate G14 thiết lập:
   - `Authorization: Bearer <HEADROOM_API_KEY>` (nếu có cấu hình API key; nếu không có thì bỏ qua).
 
 ### 2.2. Cấu trúc Request Payload
-9Router Go gửi lên Headroom payload theo định dạng JSON chuẩn:
+XRoute Go gửi lên Headroom payload theo định dạng JSON chuẩn:
 ```json
 {
   "messages": [
@@ -77,7 +77,7 @@ CONDITIONAL Discovery Gate G14 thiết lập:
 ```
 **Quy tắc cấu hình**:
 - `mode`: Bắt buộc là `"lossy_inline"`.
-- Không sử dụng chế độ CCR (`mode: "ccr"`) vì 9Router không hỗ trợ endpoint `headroom_retrieve`.
+- Không sử dụng chế độ CCR (`mode: "ccr"`) vì XRoute không hỗ trợ endpoint `headroom_retrieve`.
 - Không gửi trường `frozen_message_count` tùy tiện.
 
 ### 2.3. Cấu trúc Response Payload từ Headroom
@@ -140,7 +140,7 @@ Khi xảy ra một trong các sự cố sau từ phía compressor:
 
 ## 4. Quy tắc Kiểm định Vùng cho phép (Permitted-Region Diff)
 
-Một rủi ro lớn của các thuật toán nén LLM bên ngoài là việc vô tình làm thay đổi cấu trúc dữ liệu, cắt mất tham số công cụ, hoặc làm đảo lộn ngữ cảnh đối thoại. 9Router Go áp dụng bộ lọc kiểm định cấu trúc nghiêm ngặt (Strict Structural Guard).
+Một rủi ro lớn của các thuật toán nén LLM bên ngoài là việc vô tình làm thay đổi cấu trúc dữ liệu, cắt mất tham số công cụ, hoặc làm đảo lộn ngữ cảnh đối thoại. XRoute Go áp dụng bộ lọc kiểm định cấu trúc nghiêm ngặt (Strict Structural Guard).
 
 ### 4.1. Vùng Được phép Nén (Permitted Regions)
 Chỉ duy nhất nội dung text thông thường được phép rút gọn:
@@ -166,7 +166,7 @@ Bất kỳ sự thay đổi nào đối với các thành phần sau đều bị
 
 ### 5.1. Cấm Tuyệt đối CCR (Context Compression Retrieval)
 Headroom hỗ trợ chế độ CCR (thay thế văn bản bằng mã hash và lưu blob trong kho riêng để truy xuất lại sau). Tuy nhiên:
-- 9Router là một stateless gateway, không triển khai endpoint hoặc bộ đệm lưu trữ `headroom_retrieve`.
+- XRoute là một stateless gateway, không triển khai endpoint hoặc bộ đệm lưu trữ `headroom_retrieve`.
 - Nếu mô hình LLM nhận được tin nhắn chứa mã hash CCR mà không có nội dung thực, LLM sẽ sinh kết quả rác hoặc từ chối xử lý.
 
 **Các tầng phòng thủ chống CCR**:
@@ -182,7 +182,7 @@ Headroom hỗ trợ chế độ CCR (thay thế văn bản bằng mã hash và l
 ## 6. Quản lý Vòng đời Downstream & Hủy Bỏ Tức thì (G03)
 
 ### 6.1. Hủy bỏ Tức thì từ Downstream (Downstream Cancellation)
-Tuân thủ nghiêm ngặt tiêu chuẩn vòng đời tài nguyên G03 của 9Router:
+Tuân thủ nghiêm ngặt tiêu chuẩn vòng đời tài nguyên G03 của XRoute:
 ```go
 if ctx.Err() != nil {
     return nil, false, ctx.Err()

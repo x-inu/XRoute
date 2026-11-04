@@ -11,8 +11,8 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy/executor"
 )
 
 func buildEventStreamFrame(headers map[string]string, payload []byte) []byte {

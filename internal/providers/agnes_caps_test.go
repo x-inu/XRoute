@@ -2,7 +2,7 @@ package providers
 
 import "testing"
 
-// Port of upstream tests/unit/agnes30-pro-model.test.js (decolua/9router#4587),
+// Port of upstream tests/unit/agnes30-pro-model.test.js (decolua/xroute#4587),
 // minus the registry assertions that live in registry_models.go and the pricing
 // half that lives in internal/pricing.
 //

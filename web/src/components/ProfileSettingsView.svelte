@@ -629,7 +629,7 @@
       const a = document.createElement('a')
       const stamp = new Date().toISOString().replace(/[.:]/g, '-')
       a.href = url
-      a.download = `9router-backup-${stamp}.json`
+      a.download = `xroute-backup-${stamp}.json`
       document.body.appendChild(a)
       a.click()
       setTimeout(() => {
@@ -831,7 +831,7 @@
             Default Database Location
           </div>
           <div class="font-mono text-xs text-text-main font-semibold">
-            ~/.9router/db/data.sqlite
+            ~/.xroute/db/data.sqlite
           </div>
           <div class="text-[11px] text-text-muted pt-1">
             The Go server opens the configured SQLite database in WAL mode. DB_PATH or DATA_DIR may select a different location.
@@ -1061,7 +1061,7 @@
                 id="saml-issuer"
                 type="text"
                 bind:value={samlIssuer}
-                placeholder="https://9router.local"
+                placeholder="https://xroute.local"
                 class="w-full px-3 py-1.5 rounded-lg bg-bg border border-border text-xs font-mono text-text-main"
               />
             </div>
@@ -1372,11 +1372,11 @@
         <h2 class="text-sm font-bold text-text-main">White-label branding</h2>
       </div>
       <p class="text-xs text-text-muted">
-        Customize the name and logo shown in the dashboard sidebar. Leave blank to use the 9router-go defaults.
+        Customize the name and logo shown in the dashboard sidebar. Leave blank to use the xroute defaults.
       </p>
       <label class="block space-y-1">
         <span class="text-xs font-medium text-text-main">Application name</span>
-        <Input bind:value={appName} placeholder="9router-go" />
+        <Input bind:value={appName} placeholder="xroute" />
       </label>
       <label class="block space-y-1">
         <span class="text-xs font-medium text-text-main">Logo URL</span>

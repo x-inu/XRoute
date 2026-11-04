@@ -7,8 +7,8 @@ import (
 
 	"github.com/urfave/cli/v2"
 
-	"9router/proxy/internal/config"
-	"9router/proxy/internal/daemon"
+	"xroute/proxy/internal/config"
+	"xroute/proxy/internal/daemon"
 )
 
 // daemonURL is the address the background daemon is expected to answer on.
@@ -56,16 +56,16 @@ func startDetached(cCtx *cli.Context) error {
 	url := daemonURL()
 	res, err := daemon.Start(url, forwardArgs(cCtx))
 	if err == daemon.ErrAlreadyRunning {
-		fmt.Printf("9router-go already running (pid %d) → %s\n", res.PID, res.URL)
+		fmt.Printf("xroute already running (pid %d) → %s\n", res.PID, res.URL)
 		return nil
 	}
 	if err != nil {
 		return err
 	}
-	fmt.Printf("9router-go started in background (pid %d)\n", res.PID)
+	fmt.Printf("xroute started in background (pid %d)\n", res.PID)
 	fmt.Printf("  Dashboard: %s\n", res.URL)
 	fmt.Printf("  Log:       %s\n", daemon.LogPath())
-	fmt.Println("  Stop with: 9router-go stop")
+	fmt.Println("  Stop with: xroute stop")
 	return nil
 }
 
@@ -76,10 +76,10 @@ func stopDetached(_ *cli.Context) error {
 		return err
 	}
 	if !res.Stopped {
-		fmt.Println("9router-go is not running in background.")
+		fmt.Println("xroute is not running in background.")
 		return nil
 	}
-	fmt.Printf("9router-go stopped (pid %d).\n", res.PID)
+	fmt.Printf("xroute stopped (pid %d).\n", res.PID)
 	return nil
 }
 
@@ -90,7 +90,7 @@ func restartDetached(cCtx *cli.Context) error {
 	if err != nil {
 		return err
 	}
-	fmt.Printf("9router-go restarted in background (pid %d)\n", res.PID)
+	fmt.Printf("xroute restarted in background (pid %d)\n", res.PID)
 	fmt.Printf("  Dashboard: %s\n", res.URL)
 	fmt.Printf("  Log:       %s\n", daemon.LogPath())
 	return nil
@@ -100,10 +100,10 @@ func restartDetached(cCtx *cli.Context) error {
 func statusDetached(_ *cli.Context) error {
 	pid := daemon.RunningPID()
 	if pid == 0 {
-		fmt.Println("9router-go is not running in background.")
+		fmt.Println("xroute is not running in background.")
 		return nil
 	}
-	fmt.Printf("9router-go is running in background (pid %d)\n", pid)
+	fmt.Printf("xroute is running in background (pid %d)\n", pid)
 	fmt.Printf("  Dashboard: %s\n", daemonURL())
 	fmt.Printf("  Log:       %s\n", daemon.LogPath())
 	return nil

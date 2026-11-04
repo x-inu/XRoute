@@ -4,7 +4,7 @@ import {
   hermesConfigYaml,
   hermesEnvContent,
   hermesHomeDir,
-  isKnown9RouterEndpoint,
+  isKnownXRouteEndpoint,
   normalizeHermesEndpoint,
   profileStatus,
   type HermesProfileSummary,
@@ -46,25 +46,25 @@ describe('normalizeHermesEndpoint', () => {
   })
 })
 
-describe('isKnown9RouterEndpoint', () => {
+describe('isKnownXRouteEndpoint', () => {
   it('accepts the local origin, with or without /v1', () => {
-    expect(isKnown9RouterEndpoint(LOCAL, ctx)).toBe(true)
-    expect(isKnown9RouterEndpoint(`${LOCAL}/v1`, ctx)).toBe(true)
+    expect(isKnownXRouteEndpoint(LOCAL, ctx)).toBe(true)
+    expect(isKnownXRouteEndpoint(`${LOCAL}/v1`, ctx)).toBe(true)
   })
 
   it('accepts the tunnel, Tailscale and configured public endpoints', () => {
-    expect(isKnown9RouterEndpoint('https://abc.trycloudflare.com', ctx)).toBe(true)
-    expect(isKnown9RouterEndpoint('http://box.tail1234.ts.net', ctx)).toBe(true)
-    expect(isKnown9RouterEndpoint('https://gw.example.com', { ...ctx, publicEndpoints: ['https://gw.example.com'] })).toBe(true)
+    expect(isKnownXRouteEndpoint('https://abc.trycloudflare.com', ctx)).toBe(true)
+    expect(isKnownXRouteEndpoint('http://box.tail1234.ts.net', ctx)).toBe(true)
+    expect(isKnownXRouteEndpoint('https://gw.example.com', { ...ctx, publicEndpoints: ['https://gw.example.com'] })).toBe(true)
   })
 
   it('rejects a foreign provider URL — applying it everywhere would leak the key', () => {
-    expect(isKnown9RouterEndpoint('https://openrouter.ai/api/v1', ctx)).toBe(false)
-    expect(isKnown9RouterEndpoint('http://10.0.0.9:20130', ctx)).toBe(false)
+    expect(isKnownXRouteEndpoint('https://openrouter.ai/api/v1', ctx)).toBe(false)
+    expect(isKnownXRouteEndpoint('http://10.0.0.9:20130', ctx)).toBe(false)
   })
 
   it('rejects an empty endpoint', () => {
-    expect(isKnown9RouterEndpoint('  ', ctx)).toBe(false)
+    expect(isKnownXRouteEndpoint('  ', ctx)).toBe(false)
   })
 })
 
@@ -74,16 +74,16 @@ const profile = (over: Partial<HermesProfileSummary> = {}): HermesProfileSummary
   displayName: null,
   command: 'hermes -p work',
   baseUrl: null,
-  has9Router: false,
+  hasXRoute: false,
   ...over,
 })
 
 describe('profileStatus', () => {
-  it('is configured when the backend flagged it as 9router-wired', () => {
-    expect(profileStatus(profile({ has9Router: true }), ctx)).toBe('configured')
+  it('is configured when the backend flagged it as xroute-wired', () => {
+    expect(profileStatus(profile({ hasXRoute: true }), ctx)).toBe('configured')
   })
 
-  it('is configured when its base_url points at a known 9router endpoint', () => {
+  it('is configured when its base_url points at a known xroute endpoint', () => {
     expect(profileStatus(profile({ baseUrl: `${LOCAL}/v1` }), ctx)).toBe('configured')
   })
 
@@ -134,6 +134,6 @@ describe('hermesConfigYaml', () => {
 
 describe('hermesEnvContent', () => {
   it('exports the key the yaml references by name', () => {
-    expect(hermesEnvContent('sk-9router-local-token')).toBe('OPENAI_API_KEY=sk-9router-local-token\n')
+    expect(hermesEnvContent('sk-xroute-local-token')).toBe('OPENAI_API_KEY=sk-xroute-local-token\n')
   })
 })

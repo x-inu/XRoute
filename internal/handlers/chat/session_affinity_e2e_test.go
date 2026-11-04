@@ -9,8 +9,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
 )
 
 func TestSessionAffinity_MultiTerminalSimulation(t *testing.T) {

@@ -10,9 +10,9 @@ import (
 
 	json "encoding/json/v2"
 
-	"9router/proxy/internal/clientconfig"
-	chathandlers "9router/proxy/internal/handlers/chat"
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/clientconfig"
+	chathandlers "xroute/proxy/internal/handlers/chat"
+	"xroute/proxy/internal/handlerutil"
 )
 
 // Handler for the nine CLI-client config adapters.
@@ -151,7 +151,7 @@ func (h *CLIToolHandler) HandleCLIToolGet(w http.ResponseWriter, r *http.Request
 	handlerutil.WriteJSON(w, http.StatusOK, map[string]any{
 		"tool":       adapter.ID(),
 		"installed":  installedFor(adapter),
-		"has9Router": ToolHas9Router(adapter.ID()),
+		"hasXRoute": ToolHasXRoute(adapter.ID()),
 		"files":      files,
 		"plan":       planFiles(plan),
 	})

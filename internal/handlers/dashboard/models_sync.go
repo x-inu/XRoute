@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"strings"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/models"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/models"
+	"xroute/proxy/internal/providers"
 )
 
 // HandleSyncProviderModels handles POST /api/models/sync.

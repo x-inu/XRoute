@@ -14,7 +14,7 @@ import {
 
 let pinned = $state<string[]>([])
 
-const PINNED_KEY = '9router-nav-pinned'
+const PINNED_KEY = 'xroute-nav-pinned'
 
 function read(): unknown {
   if (typeof localStorage === 'undefined') return []

@@ -209,7 +209,7 @@ func TestAntigravityWeeklyQuota_ParseAndFetch(t *testing.T) {
 }
 
 // TestAntigravityWeeklyQuota_SessionBuckets is the Go port of
-// decolua/9router#4209: 5h-session buckets parse separately from weekly
+// decolua/xroute#4209: 5h-session buckets parse separately from weekly
 // buckets, disabled sessions pin to 0, and session exhaustion blocks routing.
 func TestAntigravityWeeklyQuota_SessionBuckets(t *testing.T) {
 	rawSummary := []byte(`{
@@ -291,7 +291,7 @@ func TestAntigravityWeeklyQuota_SessionBuckets(t *testing.T) {
 }
 
 // TestAntigravityQuota_Generic429NoStrike is the Go port of the
-// decolua/9router#4197 regression test: generic/content-triggered 429s must
+// decolua/xroute#4197 regression test: generic/content-triggered 429s must
 // not feed the strike-breaker while quota reads optimistic, while explicit
 // quota 429s still block on the third strike.
 func TestAntigravityQuota_Generic429NoStrike(t *testing.T) {

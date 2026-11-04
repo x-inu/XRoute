@@ -10,8 +10,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlers/chat"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlers/chat"
 )
 
 func TestHandleComboTestModels(t *testing.T) {

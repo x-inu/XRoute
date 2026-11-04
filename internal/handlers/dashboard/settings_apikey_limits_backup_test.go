@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"9router/proxy/internal/auth"
+	"xroute/proxy/internal/auth"
 )
 
 // TestBackupPreservesApiKeyLimits proves a database backup carries every

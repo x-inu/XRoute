@@ -10,7 +10,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/usagetracker"
+	"xroute/proxy/internal/usagetracker"
 )
 
 func TestHandleUsageStream(t *testing.T) {

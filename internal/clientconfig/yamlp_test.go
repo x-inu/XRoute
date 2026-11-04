@@ -121,7 +121,7 @@ func TestPatchYAMLRefusals(t *testing.T) {
 		{"anchored target", "k: &ank \"old\"\n",
 			Edit{KeyPath: []string{"k"}, Value: "x"}, ErrUnsupportedStructure},
 		// Nested creation used to be refused here. omp needs it: writing
-		// providers["9router"] into a file with no providers object is the
+		// providers["xroute"] into a file with no providers object is the
 		// normal first run, and the two-level form is now written with one
 		// indent stop per element. The case moved to the success tests below
 		// rather than being deleted, so the behaviour stays pinned.

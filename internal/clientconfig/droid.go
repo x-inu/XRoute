@@ -17,7 +17,7 @@ import (
 // droidMarker prefixes the `id` of every entry this adapter owns. Ownership is
 // keyed on the id rather than the model, so a user whose model has the same
 // name keeps their own entry.
-const droidMarker = "custom:9Router"
+const droidMarker = "custom:XRoute"
 
 // droidMaxOutputTokens is the ceiling the schema matrix records for Droid. It
 // is fixed there rather than derived because Droid reads it to decide how much
@@ -83,7 +83,7 @@ func droidEntryJSON(opts Options) json.RawMessage {
 		Index:           0,
 		BaseURL:         withV1(opts.BaseURL),
 		APIKey:          opts.APIKey,
-		DisplayName:     "9Router",
+		DisplayName:     "XRoute",
 		MaxOutputTokens: droidMaxOutputTokens,
 		Provider:        "openai",
 	})

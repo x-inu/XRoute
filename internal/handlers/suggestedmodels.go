@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/pricing"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/pricing"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
 )
 
 // suggestedModel mirrors the shape returned by the Next.js
@@ -23,7 +23,7 @@ type suggestedModel struct {
 }
 
 // Port of the FILTERS map in
-// src/app/api/providers/suggested-models/filters.js (upstream 9router).
+// src/app/api/providers/suggested-models/filters.js (upstream xroute).
 var (
 	knownFreeOpencodeModels = pricing.KnownFreeModels
 	deadFreeOpencodeModels  = map[string]bool{"deepseek-v4-flash-free": true}

@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/models"
-	"9router/proxy/internal/proxy/oauth"
+	"xroute/proxy/internal/models"
+	"xroute/proxy/internal/proxy/oauth"
 )
 
 // errRefreshRefused stands in for a refresh token the provider will not honour.

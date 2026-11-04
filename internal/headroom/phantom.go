@@ -27,7 +27,7 @@ const (
 	DefaultMinShrinkRatio = 0.05
 
 	// HeadroomPhantomWarningText is the upstream warning message emitted when phantom savings is detected.
-	// Updated from "reported token delta, but outbound JSON shrank <5%" in decolua/9router#4855.
+	// Updated from "reported token delta, but outbound JSON shrank <5%" in decolua/xroute#4855.
 	HeadroomPhantomWarningText = "reported token delta, but messages and outbound JSON shrank <5%"
 )
 

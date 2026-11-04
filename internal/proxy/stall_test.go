@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/shutdown"
+	"xroute/proxy/internal/shutdown"
 )
 
 // TestStallReaderAbortsOnShutdown verifies that starting shutdown closes the

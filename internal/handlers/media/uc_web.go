@@ -14,9 +14,9 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/handlers/chat"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/handlers/chat"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
 )
 
 // UC web (uncensored.com persona) media provider, ported from upstream

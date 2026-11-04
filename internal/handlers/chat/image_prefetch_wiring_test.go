@@ -7,9 +7,9 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/translator"
 )
 
 // TestDispatch_PrefetchesRemoteImagesForBase64OnlyTargets is the G11 wiring

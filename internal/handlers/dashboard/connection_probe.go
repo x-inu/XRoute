@@ -11,12 +11,12 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/models"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
-	"9router/proxy/internal/proxy/executor"
-	"9router/proxy/internal/proxy/oauth"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/models"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/proxy/oauth"
 )
 
 // Port of upstream src/app/api/providers/[id]/test/testUtils.js: a real probe
@@ -189,7 +189,7 @@ var oauthProbeConfigs = map[string]oauthProbeConfig{
 	"github": {
 		url: "https://api.github.com/user", method: http.MethodGet,
 		authHeader: "Authorization", authPrefix: "Bearer ",
-		extraHeaders: map[string]string{"User-Agent": "9Router", "Accept": "application/vnd.github+json"},
+		extraHeaders: map[string]string{"User-Agent": "XRoute", "Accept": "application/vnd.github+json"},
 	},
 	"iflow": {
 		buildURL: func(token string) string {

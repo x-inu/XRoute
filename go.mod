@@ -1,4 +1,4 @@
-module 9router/proxy
+module xroute/proxy
 
 go 1.27
 

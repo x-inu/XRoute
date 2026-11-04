@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 func TestE2E_FitToolNames_OpenAI_NonStreaming(t *testing.T) {

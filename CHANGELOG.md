@@ -357,7 +357,7 @@ uniqueness and map restore, the glm-5.3-flash-free outbound wire shapes, and a
 strict-proxy assertion that a dead proxy dials no upstream directly.
 
 ### Added
-- **Zai GLM Coding (dual-auth) & GLM China parity (upstream decolua/9router#068ce87d, #9dbdca0e)**:
+- **Zai GLM Coding (dual-auth) & GLM China parity (upstream decolua/xroute#068ce87d, #9dbdca0e)**:
   - Added ZCode CLI polling OAuth flow for `glm` (`Zai GLM Coding`): `glmStart` mints the poll token and browser authorize URL; `glmPoll` polls `https://zcode.z.ai/api/v1/oauth/cli/poll`, exchanges the Z.AI token for a platform business JWT at `https://api.z.ai/api/auth/z/login`, queries customer info/projects, and automatically creates/copies the coding-plan API key (`zcode-api-key`).
   - Stored minted coding-plan key in both `apiKey` and `accessToken` with `authMethod: "cli_poll"`, `zcodeJwtToken`, and `zaiBusinessToken`. No refresh grant upstream (expiry requires re-login, identical to official ZCode CLI).
   - Wired dual-auth buttons (`OAuth` and `API Key`) on the dashboard for `glm` (`authModes: ["oauth", "apikey"]`, category `oauth`).
@@ -457,9 +457,9 @@ a ban-avoidance requirement.
 
 ### Fix CLI Tools status reporting "Not configured" for Claude Code
 
-- Fixed `GET /api/cli-tools/all-statuses` omits `has9Router` detection in `cliStatus`, causing installed CLI tools (including Claude Code) to always display "Not configured" in the dashboard even when already configured with 9router.
-- Added `has9Router` probe in `internal/handlers/media/clitools.go` detecting Claude Code configuration from environment variables (`ANTHROPIC_BASE_URL`, `NINEROUTER_URL`) and `~/.claude/settings.json` (or `~/.claude.json`), as well as other CLI tools (Codex, OpenCode, Droid, Crush, OMP, Hermes, Pi).
-- Added `has9Router` to `GET /api/cli-tools/{tool}-settings` response in `cli_tool_settings.go`.
+- Fixed `GET /api/cli-tools/all-statuses` omits `hasXRoute` detection in `cliStatus`, causing installed CLI tools (including Claude Code) to always display "Not configured" in the dashboard even when already configured with xroute.
+- Added `hasXRoute` probe in `internal/handlers/media/clitools.go` detecting Claude Code configuration from environment variables (`ANTHROPIC_BASE_URL`, `NINEROUTER_URL`) and `~/.claude/settings.json` (or `~/.claude.json`), as well as other CLI tools (Codex, OpenCode, Droid, Crush, OMP, Hermes, Pi).
+- Added `hasXRoute` to `GET /api/cli-tools/{tool}-settings` response in `cli_tool_settings.go`.
 - Avoid duplicated tool name in `CliToolsView.svelte` accessibility and selection by setting `alt=""` on the decorative tool icon.
 
 ### feat(cli-tools): write the nine CLI clients' own config files, and serve them over HTTP
@@ -562,8 +562,8 @@ Fixes applied:
   - Ensures reasoning models (Claude, DeepSeek, Kimi) continue thinking when synthesizing responses after tool calls.
 
 ### Fixed
-- Command Code: send the official CLI 1.88.0 identity headers (`User-Agent: cli`, `x-command-code-version: 1.88.0`, `x-cli-environment: production`, `x-cli-surface: cli`, `x-taste-learning: false`) instead of the stale 0.25.7 set, and reuse the body `threadId` as `x-session-id` (upstream decolua/9router b1effa03 parity). Verified with `go test` on executor and chat handler packages.
-- Command Code: send `x-project-slug` (slugified gateway working dir, `9router-go` fallback when the dir slugifies empty — upstream rejects empty with 400) and derive `threadId` from the client session so one conversation keeps one id. Note: as with the official CLI, `x-project-slug`/`config.workingDir` disclose the gateway's working-directory path to Command Code upstream.
+- Command Code: send the official CLI 1.88.0 identity headers (`User-Agent: cli`, `x-command-code-version: 1.88.0`, `x-cli-environment: production`, `x-cli-surface: cli`, `x-taste-learning: false`) instead of the stale 0.25.7 set, and reuse the body `threadId` as `x-session-id` (upstream decolua/xroute b1effa03 parity). Verified with `go test` on executor and chat handler packages.
+- Command Code: send `x-project-slug` (slugified gateway working dir, `xroute` fallback when the dir slugifies empty — upstream rejects empty with 400) and derive `threadId` from the client session so one conversation keeps one id. Note: as with the official CLI, `x-project-slug`/`config.workingDir` disclose the gateway's working-directory path to Command Code upstream.
 - Command Code: retry 502/503/504 twice (1s/2s backoff, context-aware) when no byte was written yet (upstream 092c84ea parity).
 - Command Code: map AI SDK finish reasons to OpenAI values (`tool-calls`/`tool_use` → `tool_calls`, `content-filter` → `content_filter`, `error`/empty → `stop`); a raw `tool-calls` made OpenAI clients abort with "unexpected finish reason 'tool-calls'".
 - Command Code: forward real token usage — `totalUsage.inputTokens`/`outputTokens` (the old code read nonexistent `promptTokens`/`completionTokens`, so nothing was ever forwarded), `cachedInputTokens` and `reasoningTokens` as `prompt_tokens_details.cached_tokens` / `completion_tokens_details.reasoning_tokens`, with `finish-step` usage fallback and `total_tokens`; the gateway usage history now records the upstream counts instead of an `OutputLength/4` estimate.
@@ -571,7 +571,7 @@ Fixes applied:
 
 ### fix(codebuddy-cn): replicate official device identity and telemetry to prevent bans
 
-Port of upstream `decolua/9router` PR #3257 (`feat(codebuddy-cn): anti-ban device
+Port of upstream `decolua/xroute` PR #3257 (`feat(codebuddy-cn): anti-ban device
 fingerprint + telemetry replication`), resolving issue #819.
 
 Tencent cross-references device fingerprints sent in `/v2/report` telemetry. A
@@ -643,8 +643,8 @@ now per-platform, so the assertion is about the lookup list rather than about
 which spelling the platform happens to use. The rewrite also drops a shadowed
 loop variable that compared a string against a slice.
 
-`TestCLIDetectors_ClaudeHas9Router` set only `HOME` before calling
-`claudeHas9Router`, which reads the home directory through `os.UserHomeDir()`.
+`TestCLIDetectors_ClaudeHasXRoute` set only `HOME` before calling
+`claudeHasXRoute`, which reads the home directory through `os.UserHomeDir()`.
 On Windows that resolves `USERPROFILE` first and falls back to `HOME`, so the
 temp directory the test wrote `settings.json` into was never read and the
 function looked at the real profile instead. Both affected subtests now set
@@ -669,7 +669,7 @@ Freebuff upstream (`codebuff.com`) now requires the `x-freebuff-sse-gzip-recover
 
 ### Effective connection status, orphan-model cleanup, and race-free OAuth refresh
 
-Four fixes ported from `arewedaks/9router-go`, each one closing a class of
+Four fixes ported from `arewedaks/xroute`, each one closing a class of
 bug that a live deployment had already hit.
 
 **A toggle is not a connection.** The dashboard counted a connection as active
@@ -787,7 +787,7 @@ normalisation.
 
 **Verified.** `bun run ratchet:svelte` reports 0 unresolved identifiers and 76
 errors against a baseline of 77 — one fewer than before, and no new ones.
-`bun run build` and `go build ./cmd/9router-go/` pass. Measured in a browser: the
+`bun run build` and `go build ./cmd/xroute/` pass. Measured in a browser: the
 three tabs each render only their own content, the Local menu toggles the mask
 round-trip, and Settings from Local lands on Global while Settings from Tunnel
 still lands on Cloudflare.
@@ -809,7 +809,7 @@ Fixes applied:
 ### feat(tunnel): implement Cloudflare Tunnel, and expose repair-origin
 
 - `HandleTunnelEnable` answered `400 "Cloudflare Tunnel service is not yet
-  supported in 9router-go"`, so the dashboard offered a Start Tunnel button that
+  supported in xroute"`, so the dashboard offered a Start Tunnel button that
   could only ever fail. This ports the tunnel package and the handlers that
   drive it.
 - `internal/tunnel` gains cloudflared process management (quick, named and
@@ -957,11 +957,11 @@ multi-byte rune.
 
 ### Added
 
-- **Combo-to-Combo fallback chain & nested combo expansion** (implements upstream issue decolua/9router#5307):
+- **Combo-to-Combo fallback chain & nested combo expansion** (implements upstream issue decolua/xroute#5307):
   - Support `fallbackCombos` in `ComboStrategy` to chain secondary combos in order when all members of a primary combo fail or time out on retryable errors.
   - Recursively expand nested combo members up to depth 5 with cycle detection.
   - Ensure multi-hop fallback chains (`A -> [B, C]`) continue to subsequent fallback combos when an intermediate fallback combo fails retryably without writing premature terminal errors.
-  - Accurately report winning combo in `x-9router-combo` response headers.
+  - Accurately report winning combo in `x-xroute-combo` response headers.
   - Short-circuit on non-retryable 4xx client errors.
 
 ### fix(analytics): resolve custom provider node names on usage topology and breakdown table
@@ -1028,14 +1028,14 @@ An empty or content-less stream (no delta) correctly returns a 502
   — 2377 + 481 = 2958 passed.
 
 ---
-"9router-go": patch
+"xroute": patch
 ---
 
 fix(opencode): alias declared tool names containing "terminal" on the free tier
 
 - The free tier answers 429 FreeUsageLimitError whenever tools[] declares a function whose name contains "terminal" (case-insensitive substring)
 - ConcealFingerprintTools moves gated declarations to alias run_command (numbered on collision), retargets tool_choice and history tool_calls, and restores the caller's original tool names on response payloads
-- Ported from upstream decolua/9router#5328 (fixing #5319)
+- Ported from upstream decolua/xroute#5328 (fixing #5319)
 
 ### Dashboard UI (web/src)
 
@@ -1202,7 +1202,7 @@ inline base64 media are not estimated.
 
 ### Added
 
-- **Route response headers** (`x-9router-provider`, `x-9router-model`, `x-9router-combo`, `x-9router-attempts`): every successful upstream dispatch now sets informational headers so clients and debugging tools can see which provider, model, combo name, and attempt count served the request. Enabled by default; disable with `NINEROUTER_ROUTE_HEADERS=0`. Wired into single-provider fallback, combo (Chat Completions + Messages lanes), and fusion dispatch paths.
+- **Route response headers** (`x-xroute-provider`, `x-xroute-model`, `x-xroute-combo`, `x-xroute-attempts`): every successful upstream dispatch now sets informational headers so clients and debugging tools can see which provider, model, combo name, and attempt count served the request. Enabled by default; disable with `NINEROUTER_ROUTE_HEADERS=0`. Wired into single-provider fallback, combo (Chat Completions + Messages lanes), and fusion dispatch paths.
 
 ### Proxy pool: universal edge-relay support for every provider
 
@@ -1541,7 +1541,7 @@ drains the queue so the last turns are not billed into nothing. Measured
 response-path cost after a busy day: p50 78 ns / p95 97 ns.
 
 Comes with a live timing e2e for antigravity `gemini-3.8-flash-high` (behind
-the usual `9ROUTER_LIVE_TESTS=1` gate) and a per-request
+the usual `XROUTE_LIVE_TESTS=1` gate) and a per-request
 `upstream response headers` log on the gemini-native path — the number that
 separates "the model was thinking" from "the gateway was slow".
 
@@ -1560,7 +1560,7 @@ separates "the model was thinking" from "the gateway was slow".
   pass, and the zero-content probe and stream peeker use it too, so they share
   the same blind spot fix.
 - The setting still only *advances* a combo, never makes one fail sooner
-  (#744, upstream `decolua/9router#5214`): a candidate that will be tried last
+  (#744, upstream `decolua/xroute#5214`): a candidate that will be tried last
   keeps the gateway's normal deadline.
 - Verified: `TestComboTimeoutSparesLastTriedCandidate` (three members, third
   model-locked, second slow but healthy) fails on the pre-fix tree with
@@ -1600,7 +1600,7 @@ separates "the model was thinking" from "the gateway was slow".
   live GitHub Copilot run (11 upstream calls → 2, ~2.7 s → ~0.85 s).
 
 ### Features
-- **usage**: Add GLM reset cards inventory and redemption for Z.ai international accounts (upstream decolua/9router#5269 parity). Adds `GET` and `POST /api/usage/{connectionId}/glm-reset-cards`, integrates reset card counts into GLM usage responses, and adds the reset cards modal in Quota Tracker.
+- **usage**: Add GLM reset cards inventory and redemption for Z.ai international accounts (upstream decolua/xroute#5269 parity). Adds `GET` and `POST /api/usage/{connectionId}/glm-reset-cards`, integrates reset card counts into GLM usage responses, and adds the reset cards modal in Quota Tracker.
 
 ### feat(chat): session affinity sticky round-robin for multi-account prompt caching
 
@@ -1666,7 +1666,7 @@ wrong path when the rule is reverted. `go test ./internal/handlers/chat/
 is green.
 
 ---
-"9router-go": patch
+"xroute": patch
 ---
 
 fix(codex): add session_id header, prompt_cache_key injection, reasoning continuity, and responses allowlist
@@ -1769,7 +1769,7 @@ End to end through the real router and a combo:
 `go test -tags=integration ./internal/integration/` green.
 
 ---
-"9router-go": patch
+"xroute": patch
 ---
 
 fix(analytics): fix hourly trend tooltip clipping and responsive text overlapping
@@ -1781,10 +1781,10 @@ fix(analytics): fix hourly trend tooltip clipping and responsive text overlappin
 - Add flex-wrap and gap to breakdown items and legends to avoid text overlapping on narrow viewports
 
 ### Bug Fixes
-- **responses**: Preserve GitHub Copilot context overflow errors as `response.failed` event for streaming `/v1/responses` clients. Normalizes Copilot HTTP 400 `invalid_request_body` with `"Your input exceeds the context window..."` to standard `context_length_exceeded` error code and emits a terminal `response.failed` SSE event (upstream decolua/9router#5280 parity).
+- **responses**: Preserve GitHub Copilot context overflow errors as `response.failed` event for streaming `/v1/responses` clients. Normalizes Copilot HTTP 400 `invalid_request_body` with `"Your input exceeds the context window..."` to standard `context_length_exceeded` error code and emits a terminal `response.failed` SSE event (upstream decolua/xroute#5280 parity).
 
 ### Features
-- **Combos Batch Model Testing**: Added dead/alive batch model testing for combos (upstream `decolua/9router#5246` parity, resolving #759). Exposes `POST /api/combos/{id}/test-models` for sequential model probing without socket exhaustion across persisted and draft combos, and adds real-time visual status pills (alive/dead/spinner), latency badges, and `X/Y Alive` summary to combo cards on the dashboard.
+- **Combos Batch Model Testing**: Added dead/alive batch model testing for combos (upstream `decolua/xroute#5246` parity, resolving #759). Exposes `POST /api/combos/{id}/test-models` for sequential model probing without socket exhaustion across persisted and draft combos, and adds real-time visual status pills (alive/dead/spinner), latency badges, and `X/Y Alive` summary to combo cards on the dashboard.
 
 ### fix(tokensaver): use deterministic JSON marshaling to preserve prompt prefix caching
 
@@ -1839,7 +1839,7 @@ Verified: Added regression tests to `TestWireBodiesAreDeterministic` and `TestFi
   account, and the next candidate is tried. A stream that has started is never
   cut off. Fusion panel timing is unchanged. Resolves #744.
 - **The last candidate keeps the gateway's normal deadline**, as specified in
-  #744 and the upstream proposal (decolua/9router#5214): the setting only
+  #744 and the upstream proposal (decolua/xroute#5214): the setting only
   advances a combo, it never makes one fail sooner than it would without it.
 - **Replaces the #745 first-token timer.** #745 armed a second, streaming-only
   timer on the same `firstTokenTimeoutMs` key; it is removed so one timeout
@@ -1863,7 +1863,7 @@ Verified: Added regression tests to `TestWireBodiesAreDeterministic` and `TestFi
 ### Fixed — `GET /v1/models` publishes the provider-node prefix
 
 - **Compatible-node connections without `providerSpecificData.prefix` no longer leak the internal node row id.** A connection created for `openai-compatible-*`, `anthropic-compatible-*` or `custom-embedding-*` was stored without the node's prefix, so `/v1/models` rendered every model as `openai-compatible-chat-<uuid>/<model>`. Discovery clients registered ids that resolve nowhere; the configured alias (`wus/<model>`) was missing from the list even though it routes. `appendConnectionModels` now falls back to the node's registered prefix when neither the connection nor its top-level data carries one. A connection-level prefix still wins, and the disabled-model gate still consults the node-id spelling so lists written before this change stay effective (follow-up to #3 §2, alongside #5).
-- **`POST /api/connections` rebuilds `providerSpecificData` from the node row** for those provider ids, mirroring upstream `decolua/9router` `POST /api/providers`: `prefix`, `baseUrl` and `nodeName` come from the node, `apiType` is set only for `openai-compatible` and removed otherwise, and unrelated keys such as `assignedModel` are preserved. A missing node answers 404 and writes no row. `PUT /api/connections/{id}` keeps upstream's merge semantics and does not rehydrate, so an operator edit is never silently overwritten.
+- **`POST /api/connections` rebuilds `providerSpecificData` from the node row** for those provider ids, mirroring upstream `decolua/xroute` `POST /api/providers`: `prefix`, `baseUrl` and `nodeName` come from the node, `apiType` is set only for `openai-compatible` and removed otherwise, and unrelated keys such as `assignedModel` are preserved. A missing node answers 404 and writes no row. `PUT /api/connections/{id}` keeps upstream's merge semantics and does not rehydrate, so an operator edit is never silently overwritten.
 - Verified with `go vet ./...` and `go test -count=1 ./...`; the only failing packages (`internal/browserlogin`, `internal/handlers/media`) fail identically on a clean `main` worktree on Windows and are untouched by this change.
 
 ### fix(combo): recognize Zed's 403 context-window refusal as a model-fit error
@@ -1925,7 +1925,7 @@ unprefixed ids, foreign prefixes, a longer prefix sharing the same text,
 registry providers, and nodes without a registered prefix.
 
 ### Features
-- **Combo First Token Timeout**: Added per-combo `firstTokenTimeoutMs` strategy setting (upstream `decolua/9router#5214` parity, resolving #744). When configured on a streaming combo, intermediate candidate attempts that fail to emit a content-bearing token within the deadline are cancelled and automatically fail over to the next candidate member, preventing stalled upstreams from holding connections.
+- **Combo First Token Timeout**: Added per-combo `firstTokenTimeoutMs` strategy setting (upstream `decolua/xroute#5214` parity, resolving #744). When configured on a streaming combo, intermediate candidate attempts that fail to emit a content-bearing token within the deadline are cancelled and automatically fail over to the next candidate member, preventing stalled upstreams from holding connections.
 
 ### fix(chat): strip unservable legacy media from history before forwarding
 
@@ -1972,10 +1972,10 @@ when upstream prompt caching was active and returning `cached_tokens`.
   `prompt_tokens_details` cached token envelopes.
 
 ### Fixes
-- **Claude Passthrough**: Preserved blank-text `thinking` and `redacted_thinking` blocks on Claude native passthrough (upstream `decolua/9router#5233` parity, resolving #738). Prevents silent loss of reasoning context across multi-turn Claude Code sessions and ensures Anthropic thinking responses are recognized as contentful in zero-content checks.
+- **Claude Passthrough**: Preserved blank-text `thinking` and `redacted_thinking` blocks on Claude native passthrough (upstream `decolua/xroute#5233` parity, resolving #738). Prevents silent loss of reasoning context across multi-turn Claude Code sessions and ensures Anthropic thinking responses are recognized as contentful in zero-content checks.
 
 ### Fixes
-- **NVIDIA NIM**: Normalized assistant-message `reasoning` aliases to `reasoning_content` and removed `reasoning` before forwarding (upstream `decolua/9router#5247` parity, resolving #736), avoiding NIM's duplicate-field HTTP 400 error when clients send both.
+- **NVIDIA NIM**: Normalized assistant-message `reasoning` aliases to `reasoning_content` and removed `reasoning` before forwarding (upstream `decolua/xroute#5247` parity, resolving #736), avoiding NIM's duplicate-field HTTP 400 error when clients send both.
 
 ### fix(dashboard): keep the request-payload dialog above the sidebar
 
@@ -2005,7 +2005,7 @@ previous build with the sidebar label as the hit target, and passes with the
 fix. Full e2e suite (51 tests) green.
 
 ### Features
-- **Export Keys Modal**: Added per-provider Export Keys action and modal in dashboard (upstream `decolua/9router#4889` parity, resolving #733). Exposes `GET /api/providers/{id}/export-keys` behind dashboard authorization to list unmasked credentials for account backup and migration, with per-row copy and Copy All actions.
+- **Export Keys Modal**: Added per-provider Export Keys action and modal in dashboard (upstream `decolua/xroute#4889` parity, resolving #733). Exposes `GET /api/providers/{id}/export-keys` behind dashboard authorization to list unmasked credentials for account backup and migration, with per-row copy and Copy All actions.
 
 ### Fix: DeepSeek Web DSML markup no longer leaks into no-tools answers
 
@@ -2035,7 +2035,7 @@ chat.deepseek.com with a real credential — including one- and two-call tool
 turns.
 
 ### Features
-- **AtmoRouter & Runcrate Providers**: Added two new built-in API-key providers (upstream `decolua/9router#5208` & `decolua/9router#5207` parity, resolving #726):
+- **AtmoRouter & Runcrate Providers**: Added two new built-in API-key providers (upstream `decolua/xroute#5208` & `decolua/xroute#5207` parity, resolving #726):
   - **AtmoRouter** (`atmorouter`, alias `atmo`): OpenAI-compatible gateway (`https://atmorouter.dev/v1/chat/completions`) for Claude, GPT, Gemini, GLM, Kimi, Qwen, and DeepSeek family-prefixed models.
   - **Runcrate** (`runcrate`, alias `rc`): Open-weights provider (`https://api.runcrate.ai/v1/chat/completions`) for DeepSeek, GLM, Qwen, and gpt-oss models, with a dedicated billing balance key validation probe (`https://www.runcrate.ai/api/v1/billing/balance`).
 
@@ -2057,7 +2057,7 @@ turns.
 
 ### Inject OpenCode v2 environment marker into agent system prompts
 
-- Port `applyFingerprintSystemPrompt` from serenhope/9router PR #17.
+- Port `applyFingerprintSystemPrompt` from serenhope/xroute PR #17.
 - OpenCode v2 free tier checks for the `<env>` working directory/workspace block
   in the system prompt, instructions, or first system message. Non-agent or
   incomplete payloads trigger synthetic `429 FreeUsageLimitError` responses.
@@ -2066,11 +2066,11 @@ turns.
   mirror the captured CLI harness preamble, the only env shape measured to pass
   the gate.
 - Upstream divergence: this marker and the `/inference/openai/v1` endpoint come
-  from serenhope/9router #17 / zen-proxy; the decolua/9router registry this fork
+  from serenhope/xroute #17 / zen-proxy; the decolua/xroute registry this fork
   tracks still serves `/zen/v1` with no `<env>` marker.
 
 ### Features
-- **Images Edits Endpoint**: Added OpenAI-compatible `POST /v1/images/edits` (and `/images/edits`) supporting `multipart/form-data` image-to-image uploads (upstream `decolua/9router#5220` parity, resolving #722). Form fields `image` and optional `mask` are converted to base64 Data URIs, combined with `prompt` and scalar fields into JSON, and forwarded through the existing image generation and provider routing pipeline.
+- **Images Edits Endpoint**: Added OpenAI-compatible `POST /v1/images/edits` (and `/images/edits`) supporting `multipart/form-data` image-to-image uploads (upstream `decolua/xroute#5220` parity, resolving #722). Form fields `image` and optional `mask` are converted to base64 Data URIs, combined with `prompt` and scalar fields into JSON, and forwarded through the existing image generation and provider routing pipeline.
 
 ### Fixed
 
@@ -2089,16 +2089,16 @@ Verified: `go build ./...`; `go test ./internal/browserlogin/` green, including 
 
 - **opencode-go**: added `kimi-k3.1-pro` (Kimi K3.1 Pro) to the catalog, with
   vision/video capabilities, always-on Kimi thinking and the $2/$10 pricing
-  tier (upstream decolua/9router#5cd4a75). The id is visible in `/v1/models`
+  tier (upstream decolua/xroute#5cd4a75). The id is visible in `/v1/models`
   and the dashboard picker without affecting the generic `opencode` lane.
 - **commandcode**: added `moonshotai/Kimi-K3.1-Pro` to the catalog so the
   model is routable (`cmc/<id>`) and shown in the dashboard (upstream
-  decolua/9router#a3bdaf6d), keeping the upstream registry order the
+  decolua/xroute#a3bdaf6d), keeping the upstream registry order the
   dashboard tests pin.
 - **opencode free lane**: pinned the `oc/deepseek-v4.1-flash-free` context
   window to 330k (max output 128k) because the free backend rejects prompts
   above ~330k tokens; clients now compact instead of hard-failing mid-session
-  (upstream decolua/9router#1da5b0d7, issue #5097).
+  (upstream decolua/xroute#1da5b0d7, issue #5097).
 
 **Verified**: new `internal/providers/upstream_20261026_models_test.go` pins
 the catalog, capability and pricing entries; the counted lists updated in
@@ -2136,7 +2136,7 @@ reported request body: 200.
 ### feat(dashboard): white-label the sidebar with an operator-set product name and logo
 
 The dashboard sidebar rendered the project's own name and favicon as literals:
-`Sidebar.svelte` hardcoded `9router-go` in the `<h1>`, the `alt` text and the
+`Sidebar.svelte` hardcoded `xroute` in the `<h1>`, the `alt` text and the
 `<img src="/favicon.svg">`, so an operator reselling the gateway under their own
 product had no way to rebrand it without rebuilding the bundle.
 
@@ -2194,7 +2194,7 @@ an explicit null rather than deleted, because `UpdateSettingsRaw` merges into
 the stored row and dropping the map entry would leave the previous branding in
 place.
 
-This ports the white-label half of `luqman-v1/9router-go`#431
+This ports the white-label half of `x-inu/XRoute`#431
 (`feat/dashboard-i18n-whitelabel`), which bundles three unrelated pieces. The
 i18n layer, the `/proc`-based system-metrics endpoint and the default
 landing-page move from `/dashboard/endpoint` to `/dashboard` are deliberately
@@ -2211,7 +2211,7 @@ the extension allowlist, the size cap, the single-slot replacement, the
 traversal rejection and the missing-logo 404), and end-to-end against a real
 gateway binary: a fresh install shows the defaults, a written brand reaches the
 sidebar, an insecure or protocol-relative logo is cleared rather than kept,
-clearing both fields restores `9router-go` + `/favicon.svg`, and an SVG picked
+clearing both fields restores `xroute` + `/favicon.svg`, and an SVG picked
 through the Settings card's own upload button lands in `DATA_DIR/uploads` and is
 served back with its media type. The Settings card was exercised in a real
 browser, including a save through the page's own Save Changes button.
@@ -2238,10 +2238,10 @@ sends only the auth header and lets `fetch` set the content type.
 - ElevenLabs sound effects generation endpoint `POST /v1/audio/sound-generation` (and `/audio/sound-generation`) to generate audio from text prompts (fixes #694, upstream `OmniRoute#17287` parity).
 
 ### Added
-- Interactive controls in Claude Code CLI Tools card for configuring `CLAUDE_CODE_AUTO_COMPACT_WINDOW` presets and toggling 1M context model hints (fixes #692, upstream `decolua/9router#17c4cc76` parity).
+- Interactive controls in Claude Code CLI Tools card for configuring `CLAUDE_CODE_AUTO_COMPACT_WINDOW` presets and toggling 1M context model hints (fixes #692, upstream `decolua/xroute#17c4cc76` parity).
 
 ### Added
-- Status detection and configuration guide cards in CLI Tools view for Crush, ForgeCode, Smelt, and CodeWhale terminal agents (fixes #690, upstream `decolua/9router#6c9fe6f7` parity).
+- Status detection and configuration guide cards in CLI Tools view for Crush, ForgeCode, Smelt, and CodeWhale terminal agents (fixes #690, upstream `decolua/xroute#6c9fe6f7` parity).
 
 ### Changed
 - Released captured executor request buffers (`Body`, `ConnData`, `ToolNameMap`) immediately post-dispatch and reset `ResponseBuf` after usage/failure logging to bound RSS memory on low-spec hardware (fixes #688, upstream `OmniRoute#17269` parity).
@@ -2371,10 +2371,10 @@ the disabled model leaves `/v1/models` while its siblings stay.
 - Settings > Display gains an **Animation level** selector (`Full` / `Default` / `Minimal` / `Off`) that controls how much of the dashboard animates. `Full`/`Default` keep every animation and backdrop blur; `Minimal` removes blur and transitions but keeps loading spinners; `Off` stops everything so nothing moves. The level is stored in `localStorage` (`displayAnimationLevel`, default `Default`) and applied through a `data-anim-level` attribute on `<html>`, with the global overrides in `src/index.css` — no per-component class is needed.
 
 ### Added
-- Configurable `RequireClaudeToolType` on `providers.ProviderConfig` so strict Anthropic-compatible endpoints (such as MiniMax gateways) automatically inject `type: "custom"` on tool declarations without hardcoded provider name checks (fixes #682, upstream `decolua/9router#998bb3d9` parity).
+- Configurable `RequireClaudeToolType` on `providers.ProviderConfig` so strict Anthropic-compatible endpoints (such as MiniMax gateways) automatically inject `type: "custom"` on tool declarations without hardcoded provider name checks (fixes #682, upstream `decolua/xroute#998bb3d9` parity).
 
 ### Fixed
-- Excluded registry providers marked `Hidden: true` from the `GET /api/usage/providers` list so internal/system providers (like `mimo-free`) do not appear in the analytics provider dropdown (fixes #680, upstream `decolua/9router#dcc6a205` parity).
+- Excluded registry providers marked `Hidden: true` from the `GET /api/usage/providers` list so internal/system providers (like `mimo-free`) do not appear in the analytics provider dropdown (fixes #680, upstream `decolua/xroute#dcc6a205` parity).
 
 ### fix(glm): mint the ZCode OAuth poll token as hex
 
@@ -2387,7 +2387,7 @@ is now 32 crypto/rand bytes hex-encoded, and the test mock enforces the
 same charset the live endpoint does so a non-hex token cannot pass again.
 
 ---
-"9router @ 2026-10-25": grok-web chat executor, Imagine media and the client-tool bridge
+"xroute @ 2026-10-25": grok-web chat executor, Imagine media and the client-tool bridge
 ---
 
 grok.com's web client now runs end to end: chat completions post to conversations/new through a Chrome-fingerprint TLS transport with the full grok.com Cookie header, mapping the NDJSON reply onto OpenAI streaming or a single completion, with Cloudflare challenges, expired SSO cookies and rate limits each surfacing as their own failure. Declared OpenAI tools are bridged both ways — a CLIENT_TOOLS manifest lets Grok call caller-runtime tools via `<tool_call>` markup, and Grok's native bash/readFile/webSearch/browsePage cards map onto the best-matching declared tool. Grok Imagine joins as `grok-image` and `grok-video` (video never loops — quota is ~1/day), and `grok-4.20`/`grok-4.20-beta` join the catalog.
@@ -2465,13 +2465,13 @@ select-all indeterminate, batch disable/enable/delete round-trips, and the
 Add Custom Model dialog end to end.
 
 ---
-"9router @ 2026-10-25": park perplexity-web behind Hidden
+"xroute @ 2026-10-25": park perplexity-web behind Hidden
 ---
 
 Parked the perplexity-web provider the way upstream does (`serviceKinds: []`): with no executor behind the entry it now stays out of the provider pickers while the cookie probe, saved connections and `pplx-*` model resolution keep working.
 
 ---
-"9router @ 2026-10-25": veoaifree.com free image + video provider
+"xroute @ 2026-10-25": veoaifree.com free image + video provider
 ---
 
 Added the `veoaifree-web` provider (alias `veo-free`): the veoaifree.com free generator, a WordPress AJAX API with no credentials (rate limited to ~6 requests/hour per IP). Video models `veo` and `seedance` submit a generation, poll for results and download the mp4 artifact; the `nano-banana` image model maps the generator's URL/base64 answers onto the OpenAI images response. Artifact downloads are https-only, refuse private-range hosts on every redirect hop, and verify the mp4 magic.
@@ -2511,13 +2511,13 @@ carries real double newlines, no literal backslash-n escape, and a
 three. `go vet ./...` is clean and `go test ./internal/handlers/chat/
 ./internal/proxy/...` passes.
 
-Also verified against luqman-v1/9router-go#665 (combo streaming
+Also verified against x-inu/XRoute#665 (combo streaming
 zero-content failover) applied on top: both suites pass with no
 overlapping lines, so the two changes are independent.
 
 ### feat(media): uc-web provider (uncensored.com persona image + video)
 
-upstream decolua/9router 38a0c449 parity, uc-web scope (part of #624). Image
+upstream decolua/xroute 38a0c449 parity, uc-web scope (part of #624). Image
 and video generation over the un-metered internal API, where the credential is
 the full uncensored.com Cookie header: every request mints a 60s Clerk
 `__session` JWT from the durable `__client` cookie (legacy `sid` claim first,
@@ -2551,7 +2551,7 @@ their own PRs.
 
 ### feat(combos): Smart Router (System One) strategy with adaptive session stickiness
 
-upstream decolua/9router f3f86fdd parity (#623, upstream #4975). The `smart`
+upstream decolua/xroute f3f86fdd parity (#623, upstream #4975). The `smart`
 combo strategy asks a System One decision model which member should serve the
 request before dispatch, and pins the chosen model per client session so later
 turns reuse the provider holding the warm prompt cache. Turn 1 evaluates and
@@ -2584,14 +2584,14 @@ live gateway (policy modal round-trip, badge and router chip rendering, no
 console errors).
 
 ### Fixed
-- **Combo Fallback**: Fall through to the next candidate model on empty-content streaming responses (`internal/proxy/stream_peeker.go`, `internal/handlers/chat/combo.go`) when an upstream model returns HTTP 200 SSE but terminates without producing content (closes #664, upstream `decolua/9router` commit `ca7b5401` parity).
+- **Combo Fallback**: Fall through to the next candidate model on empty-content streaming responses (`internal/proxy/stream_peeker.go`, `internal/handlers/chat/combo.go`) when an upstream model returns HTTP 200 SSE but terminates without producing content (closes #664, upstream `decolua/xroute` commit `ca7b5401` parity).
 
 ### Added
 - **Model Catalog**: Expose OpenRouter-format model pricing metadata in `/v1/models` (`internal/pricing/format.go`, `internal/handlers/chat/models_list.go`) with per-token decimal strings (`prompt`, `completion`, `input_cache_read`, `input_cache_write`) and per-1M numeric rates (`input`, `output`) (closes #662, upstream `OmniRoute` commit `2319a84a` / PR #17259 parity).
 
 ### feat(stt): Codex OAuth transcription provider
 
-upstream decolua/9router 421f2262 parity (#625, upstream #5074). `cx/transcribe`
+upstream decolua/xroute 421f2262 parity (#625, upstream #5074). `cx/transcribe`
 (also `codex/transcribe`) reuses an existing Codex OAuth chat connection instead
 of an OpenAI API key. Audio is converted locally to mono 24 kHz PCM16 WAV with
 ffmpeg and sent as a file-only multipart request to ChatGPT's internal
@@ -2626,7 +2626,7 @@ gateway.
 
 ### feat(dashboard): search box for the combo list
 
-upstream decolua/9router 9b4ea9eb parity (#629). The combo list takes a
+upstream decolua/xroute 9b4ea9eb parity (#629). The combo list takes a
 case-insensitive search over the combo name and its member model ids, so both
 "deepseek" and "deepseek-v4.1-flash" find the right rows. An `X of Y shown`
 counter appears while a query is active, the input carries an inline clear
@@ -2645,10 +2645,10 @@ selection surviving a cleared search, empty state restoring the full list).
 
 ### feat(cli-tools): pi settings endpoint
 
-upstream decolua/9router 342ecb0d parity (#630). The pi coding agent gets the
+upstream decolua/xroute 342ecb0d parity (#630). The pi coding agent gets the
 same settings API Hermes already has: `GET /api/cli-tools/pi-settings` reports
-the install state and the parsed `~/.pi/agent/models.json` with its 9router
-detection, `POST` writes the 9router provider block merging over the previously
+the install state and the parsed `~/.pi/agent/models.json` with its xroute
+detection, `POST` writes the xroute provider block merging over the previously
 saved one — a stored key, a custom `api`, or any other field the dashboard
 cannot read back survives an apply, which is the behaviour the upstream
 `existingProvider` ReferenceError fix (342ecb0d) restored — and `DELETE`
@@ -2656,8 +2656,8 @@ removes only that block, leaving every other provider untouched.
 
 The API-key fallback is upstream's `resolveApiKey.js`: the caller's key, the
 stored one, then the first active dashboard key, then empty — the placeholder
-`sk_9router` is never written, and a deployment without `requireApiKey` works
-with no key at all. `has9Router` reads both default gateway ports (20128
+`sk_xroute` is never written, and a deployment without `requireApiKey` works
+with no key at all. `hasXRoute` reads both default gateway ports (20128
 upstream's, 20130 this gateway's), so a config written by either gateway shows
 as connected.
 
@@ -2679,7 +2679,7 @@ detail page, and wiring an apply UI into the dashboard is a follow-up.
 
 ### fix(thinking): route deepseek-v4* /responses with nested reasoning via the declared format contract
 
-upstream decolua/9router d07e5bc3 parity (#631, upstream #3014). A Responses-format
+upstream decolua/xroute d07e5bc3 parity (#631, upstream #3014). A Responses-format
 client asking opencode-go for a deepseek-v4* model was converted to Chat Completions
 and bridged back instead of relayed, because the lane decision read the model's
 *target* format rather than whether the model serves the Responses wire at all —
@@ -2811,7 +2811,7 @@ Codex image generation failed for every non-Plus/Pro setup:
   gpt-5.6-sol answers "model is not supported when using Codex with a
   ChatGPT account".
 
-Mirrors upstream decolua/9router b08f12d5. Verified with the plan
+Mirrors upstream decolua/xroute b08f12d5. Verified with the plan
 resolution tests in `codex_image_plan_test.go` (token claims win over
 the stale stored value, unknown plans stay allowed).
 
@@ -2826,7 +2826,7 @@ The id now has its own level row (`low|high|max`, placed above the
 generic glob) and the DeepSeek clamp preserves `low` whenever the
 declared level set includes it: zen's upstream takes the level verbatim,
 unlike DeepSeek's own API. Models whose set omits `low` keep the
-collapse (upstream decolua/9router 313559f4).
+collapse (upstream decolua/xroute 313559f4).
 
 Note: mimo-v2.5-pro declares `low`, so its `low` requests also go out
 verbatim now — the same behavior change upstream's fix made for every
@@ -2845,7 +2845,7 @@ on every pass.
 
 The two texts are now classified as backoff-able, so the failing account
 cools down with an incremented backoff level while the combo moves on
-(upstream decolua/9router b82f5c4a, fixes upstream #4713).
+(upstream decolua/xroute b82f5c4a, fixes upstream #4713).
 
 Verified: `TestClassifyError_CreditExhaustionBacksOff` covers both texts
 (fallback, level 1, base cooldown) and the plain-400 no-fallback case.
@@ -2862,7 +2862,7 @@ and GPT-6 lines, the Claude Fable/Opus/Sonnet sets, Gemini 3.7/3.8/4
 Argon, Kimi K3 and MAI-Code-1.1-Flash. Embeddings stay.
 
 Live account discovery remains authoritative; this only refreshes the
-static seed (upstream decolua/9router dbdbb648).
+static seed (upstream decolua/xroute dbdbb648).
 
 ### fix(headroom): compress tool outputs on native Responses bodies
 
@@ -2879,7 +2879,7 @@ native format, and the committed body can only shrink. The shared
 compress round trip is factored into `callCompress` so both paths use
 the same guards.
 
-Mirrors upstream decolua/9router a440ef43, Responses lane only: no Go
+Mirrors upstream decolua/xroute a440ef43, Responses lane only: no Go
 client lane delivers the Gemini/Vertex/Antigravity envelopes to the
 compressor.
 
@@ -2929,7 +2929,7 @@ query, so matches were skipped non-deterministically. `lastIndex` is now
 reset before every `test()` call, making each candidate an independent
 search.
 
-Mirrors upstream decolua/9router 5853a88a. Verified with the new
+Mirrors upstream decolua/xroute 5853a88a. Verified with the new
 regression tests in `modelSearchFilter.test.ts`
 (`bun test src/lib/modelSearchFilter.test.ts`).
 
@@ -2989,7 +2989,7 @@ Zed envelope from a client body carrying `temperature: 0.7` and asserts
 
 #### Jailbreak prompt injection (per model, provider, and combo)
 
-- Ports the prompt-injection system from `arewedaks/9router-go`: an operator
+- Ports the prompt-injection system from `arewedaks/xroute`: an operator
   saves an `agents.md`-style document once and binds it to specific models, and
   every request to those models carries the prompt prepended ahead of the
   original content.
@@ -3210,7 +3210,7 @@ the shape Zed accepts. The Zed executor is updated to pass `"zed"` (the
 lane id) instead of `"anthropic"` (the wire protocol name) when resolving
 capabilities, so this override is scoped to the Zed lane only.
 
-Upstream (decolua/9router) pins the same id to adaptive thinking for the
+Upstream (decolua/xroute) pins the same id to adaptive thinking for the
 opencode-go lane, which routes through the same Anthropic backend.
 
 Verified: `EnsureClaudeMessagesFor` under `"zed"` now emits
@@ -3255,7 +3255,7 @@ would invalidate existing stored rows and touches the client contract.
 The last two clients, plus the registry `--tools` validates against.
 
 **kilo** — `~/.local/share/kilo/auth.json`, one entry under `auth`. Reset also
-removes `auth["9router"]`, a leftover from an earlier schema this adapter never
+removes `auth["xroute"]`, a leftover from an earlier schema this adapter never
 wrote.
 
 **cline** — the only client with two files and the only one that takes the bare
@@ -3271,14 +3271,14 @@ duplicate spellings collapsed. An unknown name is an error listing what is
 accepted rather than a silent skip: a connect that quietly ignored a misspelled
 tool would configure nothing and report success.
 
-Nested key creation was added to YAML for omp: writing `providers["9router"]`
+Nested key creation was added to YAML for omp: writing `providers["xroute"]`
 into a file with no `providers` object is the normal first run, and every key is
 quoted at every level so one style holds for a repeated patch.
 
 - Evidence: `go test ./internal/clientconfig/` passes, including S1 (round trip
   per adapter), S2 (foreign keys, comments and ordering survive), S3 (a malformed
   file is left byte-identical with no backup), and the registry assertions.
-  `go list -deps ./cmd/9router-go | grep clientconfig` is still empty, so the
+  `go list -deps ./cmd/xroute | grep clientconfig` is still empty, so the
   gateway binary is unchanged until Task 5 wires the command.
 
 ### Optimize release build and Docker multi-arch compilation
@@ -3305,21 +3305,21 @@ quoted at every level so one style holds for a repeated patch.
   (`absent capacityAdapter key falls back to the defaults`).
 
 ### Added
-- Upstream parity (`decolua/9router` commit `87a74e1b`, `open-sse/services/usage/misc.js`): surface Qoder add-on promotional credits (`addOnQuota`) in the dashboard Quota Tracker (#585).
+- Upstream parity (`decolua/xroute` commit `87a74e1b`, `open-sse/services/usage/misc.js`): surface Qoder add-on promotional credits (`addOnQuota`) in the dashboard Quota Tracker (#585).
 - Extracted `addOnQuota` in `fetchQoderUsageAt` (`internal/handlers/dashboard/usage_providers.go`) when `total > 0`, including `used`, `total`, `remaining`, and `detailUrl`.
 - Normalized `addOn` quota type in `web/src/components/quota/types.ts` to display as `"Add-On Promo"`.
 - Added backend unit tests in `internal/handlers/dashboard/usage_ollama_qoder_test.go` and frontend unit tests in `web/src/components/quota/qoderAddOn.test.ts`.
 
 ### feat(clientconfig): crush, pi, and omp adapters
 
-Three clients that each keep a `providers["9router"]` table and disagree on what
+Three clients that each keep a `providers["xroute"]` table and disagree on what
 an empty one means — the one distinction §7.1 warns about, because reading them
 as one group deletes two files that should survive.
 
-- **crush** and **pi** drop `providers["9router"]` and keep the file.
+- **crush** and **pi** drop `providers["xroute"]` and keep the file.
 - **omp** deletes the file once nothing but a bare `providers:` is left.
 - **pi merges** into its entry rather than replacing it: the user may have other
-  fields on the same `providers["9router"]`, and the matrix names that as the
+  fields on the same `providers["xroute"]`, and the matrix names that as the
   thing this adapter must not break.
 
 Clearing a YAML block needed work in the patch layer. The YAML parser reports a
@@ -3342,8 +3342,8 @@ Both write a container, which is what `ValueJSON` was added for.
 block as one object rather than several key edits. The shape is fixed — npm
 package, baseURL, apiKey, one models entry — and writing it whole means the
 file's other providers cannot be touched by construction. Every model carries a
-`9router/` prefix, stripped before use and re-added on write so a model the user
-copied out of opencode does not become `9router/9router/…`.
+`xroute/` prefix, stripped before use and re-added on write so a model the user
+copied out of opencode does not become `xroute/xroute/…`.
 
 **droid** (`~/.factory/settings.json`, JSON) rebuilds its whole `customModels`
 array. Droid addresses an entry by its `index` field rather than its position,
@@ -3370,7 +3370,7 @@ happens to be named the same keeps their entry.
 ### feat(clientconfig): the codex adapter, and empty TOML tables
 
 `~/.codex/config.toml` is TOML, so every write goes through the key-by-key path
-with `CreateIfMissing` — the first edit appends `[model_providers.9router]` and
+with `CreateIfMissing` — the first edit appends `[model_providers.xroute]` and
 the rest land inside it. `auth.json` beside it is deliberately not a target: a
 custom provider ignores it and reads the static `Authorization` header instead,
 which is what the adapter writes.
@@ -3385,7 +3385,7 @@ Two behaviours worth naming:
   provider selection someone changed by hand is the loud kind of wrong.
 
 Clearing a TOML table needed a fix in the patch layer, not the adapter. Deleting
-the last key under `[model_providers.9router]` left the bare header behind, and
+the last key under `[model_providers.xroute]` left the bare header behind, and
 a nested table's header is written under its parent's, so emptying the child
 left the parent empty too. `removeTOMLLine` now drops a header once nothing is
 left under it and walks up while each parent is still empty, stopping at the
@@ -3439,7 +3439,7 @@ rather than duplicated later:
   five assertions.
 
 ### Added
-- Upstream parity (`decolua/9router` `open-sse/services/tokenRefresh/dedup.js`): implemented global OAuth token refresh deduplication and 10-second result caching in `internal/proxy/oauth/dedup.go` for all providers (#501).
+- Upstream parity (`decolua/xroute` `open-sse/services/tokenRefresh/dedup.js`): implemented global OAuth token refresh deduplication and 10-second result caching in `internal/proxy/oauth/dedup.go` for all providers (#501).
 - Keyed on `provider + ":" + oldToken`, collapsing concurrent in-flight requests via `singleflight` and serving completed results from memory within `10s` TTL.
 - Bounded memory cache (512 entries max, sweeping expired entries on write) per §4.G.
 - Failures are never cached; empty refresh tokens bypass dedup.
@@ -3452,7 +3452,7 @@ rather than duplicated later:
 could be appended. That covers `claude`'s six `env` strings and `codex`'s TOML
 table, and nothing else: seven of the nine clients in
 `docs/specs/client-schema-matrix.md` write an object or an array — `opencode`'s
-`provider["9router"]`, `droid`'s `customModels`, `crush`/`pi`/`omp`'s provider
+`provider["xroute"]`, `droid`'s `customModels`, `crush`/`pi`/`omp`'s provider
 tables — and every `Reset` has to remove a key, which no edit could express.
 The adapter task could not start without this.
 
@@ -3516,7 +3516,7 @@ model added without a row would otherwise be asserted on by nothing.
 
 ### fix(codebuddy): resolve HTTP 400/403 channel verification error 11128
 
-- Upstream `decolua/9router#5032` parity: send full CodeBuddy CLI and Stainless SDK header set (`User-Agent: CLI/2.108.1 CodeBuddy/2.108.1`, `X-App: cli`, `X-IDE-Type: CLI`, `X-IDE-Name: CLI`, `X-IDE-Version: 2.108.1`, `X-Private-Data: false`, `X-Domain`, `X-Request-ID`, `X-Conversation-ID`, `X-Conversation-Request-ID`, `X-Conversation-Message-ID`, `X-Agent-Intent: craft`, `X-Agent-Purpose: conversation`, and `X-Stainless-*` family) on both `codebuddy-cn` and `codebuddy-intl` endpoints. Without these headers, upstream rejected chat completions with HTTP 400/403 `{"code":11128,"msg":"request illegal"}` ("This call failed channel verification, possibly because it was not sent from an official client").
+- Upstream `decolua/xroute#5032` parity: send full CodeBuddy CLI and Stainless SDK header set (`User-Agent: CLI/2.108.1 CodeBuddy/2.108.1`, `X-App: cli`, `X-IDE-Type: CLI`, `X-IDE-Name: CLI`, `X-IDE-Version: 2.108.1`, `X-Private-Data: false`, `X-Domain`, `X-Request-ID`, `X-Conversation-ID`, `X-Conversation-Request-ID`, `X-Conversation-Message-ID`, `X-Agent-Intent: craft`, `X-Agent-Purpose: conversation`, and `X-Stainless-*` family) on both `codebuddy-cn` and `codebuddy-intl` endpoints. Without these headers, upstream rejected chat completions with HTTP 400/403 `{"code":11128,"msg":"request illegal"}` ("This call failed channel verification, possibly because it was not sent from an official client").
 - Consolidate caller `system` and `developer` message instructions after the mandatory leading `"You are CodeBuddy Code."` prompt instead of stripping them, preserving user instructions while passing channel verification.
 - Sanitize third-party client identity markers (`You are Claude Code`, `x-anthropic-billing-header`, `cc_entrypoint=cli`, `OhMyOpenCode`) in `system`, `developer`, and `assistant` messages to prevent tripping Tencent content filter rules.
 - Map CodeBuddy rate limit error code 6004 (`超出频率限制` / `frequency limit` / `限额`) to HTTP 429 Too Many Requests and extract structured reset duration from date timestamps (`YYYY-MM-DD HH:MM:SS UTC+8`) in `extractResetDuration`.
@@ -3547,14 +3547,14 @@ Verified with `go build ./...`, `go test ./internal/...` (only the pre-existing 
 
 ### feat(tray): give the tray its own binary and verify identity before stop
 
-The tray was linked into `9router-go`, which put a GUI toolkit in the path of
+The tray was linked into `xroute`, which put a GUI toolkit in the path of
 every release build. It now ships as its own binary and the core never learns it
 exists (`docs/specs/tray-companion-architecture.md`).
 
-- `cmd/9router-tray/` is the GUI binary; `internal/tray/` holds the decisions it
+- `cmd/xroute-tray/` is the GUI binary; `internal/tray/` holds the decisions it
   makes, with no GUI import, so the rules are testable without a display.
-  `cmd/9router-go/tray_windows.go` and `tray_other.go` are deleted.
-- `cmd/9router-go/menu.go` keeps item 6 ("Run in background with tray icon") and
+  `cmd/xroute/tray_windows.go` and `tray_other.go` are deleted.
+- `cmd/xroute/menu.go` keeps item 6 ("Run in background with tray icon") and
   spawns the sibling binary instead of importing it. Only the sibling next to the
   running executable is tried: a `PATH` lookup could pick up a different
   install's tray, which would then control a gateway that is not this one.
@@ -3575,7 +3575,7 @@ exists (`docs/specs/tray-companion-architecture.md`).
   renders `Unknown`. An unreadable pid file never renders `Stopped` — offering
   Start from that state is how a user gets `ErrAlreadyRunning` for a click they
   did not cause.
-- Menu: `9Router Go (Port N)` / `(Stopped)` / `(Port N in use by foreign process
+- Menu: `XRoute Go (Port N)` / `(Stopped)` / `(Port N in use by foreign process
   (PID M))` / `(Unknown)`, plus Start, Stop, a real Auto-start checkbox, Open
   Dashboard and Quit Tray. systray has no menu-open callback, so the items are
   built once and refreshed in place every second — a menu drawn once at startup
@@ -3587,17 +3587,17 @@ exists (`docs/specs/tray-companion-architecture.md`).
 `CROSS_TARGETS` build. `gui.go` carries `//go:build windows || tray` so
 `go vet ./...` and `go test ./...` still pass on a Linux host without
 `libayatana-appindicator3-dev`; on macOS and Linux the real GUI needs
-`go build -tags tray ./cmd/9router-tray/`. Windows needs no tag — systray
+`go build -tags tray ./cmd/xroute-tray/`. Windows needs no tag — systray
 reaches the Win32 API directly there. A build without the tag compiles a stub
 that fails at startup with the flag that fixes it, rather than starting and
 never drawing an icon.
 
-- Evidence: `go test ./internal/tray/ ./cmd/9router-go/` passes; the identity
+- Evidence: `go test ./internal/tray/ ./cmd/xroute/` passes; the identity
   tests were mutation-checked by flipping `StopSupervised` to `StopVerified`,
   which fails the four supervised backends as expected. `CGO_ENABLED=0` builds
-  pass for all five `CROSS_TARGETS`, and `go list -deps ./cmd/9router-go/` names
+  pass for all five `CROSS_TARGETS`, and `go list -deps ./cmd/xroute/` names
   no GUI package on linux, darwin or windows. `go vet ./...` passes on linux and
-  darwin, and the Windows build of `cmd/9router-tray/` is now a CI step.
+  darwin, and the Windows build of `cmd/xroute-tray/` is now a CI step.
 - Not verified: the §8 acceptance matrix (W1–W6, M1–M5, L1–L5) needs three real
   desktops. Cross-compiling proves nothing about whether an icon appears.
 
@@ -3609,7 +3609,7 @@ never drawing an icon.
 - Added unit tests and live E2E test (`TestLiveE2E_Opencode_BeamFree_ToolCall`) in `internal/proxy/executor/opencode_test.go` verifying live tool call emission and subsequent turn completion with replayed reasoning.
 
 ### Added
-- Upstream parity (`decolua/9router` commit `da1756a8`): added advanced model search filter utility (`web/src/lib/modelSearchFilter.ts`) supporting:
+- Upstream parity (`decolua/xroute` commit `da1756a8`): added advanced model search filter utility (`web/src/lib/modelSearchFilter.ts`) supporting:
   - Negation tokens via `!keyword` or `-keyword` (e.g. `claude !haiku`, `!embed`).
   - Regular expressions via `/pattern/flags` or `/pattern/` (e.g. `/gpt-[45]/`).
   - Multi-term conjunct queries with case-insensitive matching across candidates (`name`, `id`, `value`, `alias`, `provider`).
@@ -3799,16 +3799,16 @@ models today — including the free tiers the operator was looking for
 ### OpenCode free lane passes the v2 gate on a direct dial (no relay)
 
 - Route every free-tier OpenCode path through the stealth Bun/BoringSSL transport on a direct dial: `forwardOpencodeGoFree` and the free `/messages` lane of `opencode-zen` previously used the plain Go HTTP stack (`proxy.ForwardOpenAI` / `proxy.DoRequest`), which the `/inference/v1` gate refuses with 403 FreeTierError — the same request only passed when an edge relay made the dial. Both now go through `forwardOpencodeRequest`, which keeps the relay and `OPENCODE_PLAIN_HTTP` escape hatches.
-- Drop `tool_choice: "none"` on every lane of the v2 fingerprint pass. The gate answers that field with 403 FreeTierError (upstream `open-sse/utils/opencodeFingerprint.js`; measured by Ebony-Vinyl/dsh-our-free-model on 2026-10-16), so a caller suppressing tools — a continuation path — failed the whole request. Tool suppression lives in the prompt, not the field; the Responses lane still refills `auto`. Deliberate divergence from upstream decolua/9router, which only avoids defaulting to `none` and still forwards an explicit one.
+- Drop `tool_choice: "none"` on every lane of the v2 fingerprint pass. The gate answers that field with 403 FreeTierError (upstream `open-sse/utils/opencodeFingerprint.js`; measured by Ebony-Vinyl/dsh-our-free-model on 2026-10-16), so a caller suppressing tools — a continuation path — failed the whole request. Tool suppression lives in the prompt, not the field; the Responses lane still refills `auto`. Deliberate divergence from upstream decolua/xroute, which only avoids defaulting to `none` and still forwards an explicit one.
 - Forward a downstream `x-opencode-session` hint verbatim only when it carries the encoding the gate decodes — the `ses_` shape plus the descending `~(ts_ms<<12|counter)` time half with counter 1–63 (low 12 bits `0xfc0–0xfff`). A shape-valid id with foreign hex (ascending timestamp, sha256 digest) was forwarded as-is and refused with 403; it is now re-encoded deterministically into the descending layout (`IsCanonicalOpenCodeSession`, `TranslateOpenCodeSessionID`; reference: jasonxu114514/opencode2api `descendingTimePartPattern`).
-- Reuse one stable upstream session per connection when the client sends no session of its own (`StableOpenCodeSessionID`: idle-TTL recycled, bounded map, lazy eviction — no background goroutine). The free tier accounts quota per session, so minting a fresh id per request burned the budget and surfaced as 429 FreeUsageLimitError with a growing retry-after (decolua/9router `stableSessionId`; dsh-our-free-model `sessionForConversation`). Keyed lanes keep their previous per-request behavior.
+- Reuse one stable upstream session per connection when the client sends no session of its own (`StableOpenCodeSessionID`: idle-TTL recycled, bounded map, lazy eviction — no background goroutine). The free tier accounts quota per session, so minting a fresh id per request burned the budget and surfaced as 429 FreeUsageLimitError with a growing retry-after (decolua/xroute `stableSessionId`; dsh-our-free-model `sessionForConversation`). Keyed lanes keep their previous per-request behavior.
 - Verified: `go test ./internal/proxy/... ./internal/translator/... ./internal/proxy/executor/...`, `go test -tags=integration ./internal/integration/...`, `go build ./...`; new regression tests pin the descending-session re-encoding, per-connection session stability, TTL recycle and map bound, and the `tool_choice` none drop on both lanes.
 
-### Bare `9router-go` shows an interface picker, and a Windows tray mode
+### Bare `xroute` shows an interface picker, and a Windows tray mode
 
 - Running the binary with no arguments on a terminal now offers a numbered menu — open the dashboard, start in the background, start in the foreground, stop, status, tray — with the live daemon PID in the header, instead of silently booting the server. A service unit, container, or pipe has no TTY and still boots exactly as before.
 - The same executable answers to `opencode-go`: help and error text follow `os.Args[0]`, and `make build` now produces both names.
-- Tray mode on Windows runs the gateway in the background with an icon (CGO-free, via `github.com/getlantern/systray`); on other platforms the menu item points at `9router-go start`, which is the equivalent there.
+- Tray mode on Windows runs the gateway in the background with an icon (CGO-free, via `github.com/getlantern/systray`); on other platforms the menu item points at `xroute start`, which is the equivalent there.
 
 ### Test Fix
 
@@ -3983,7 +3983,7 @@ correctly refused as one id. The operator should paste each half separately.
   removed the node row and its connections, but left behind custom models in
   the `customModels` KV scope. A deleted node therefore continued to surface its
   models in the catalog.
-- **Port upstream decolua/9router#3115 (commit a8f63f4d).** `DeleteProviderNode`
+- **Port upstream decolua/xroute#3115 (commit a8f63f4d).** `DeleteProviderNode`
   now cleans up associated `customModels` rows atomically inside the same
   transaction as the node and connection rows.
 - **Support both key separators and owning alias in row value.** Uses
@@ -4114,7 +4114,7 @@ Fixes: every `defer resp.Body.Close()` wrapped in the repo's checked form
 `ResponseBuf.Write` checked, error strings lowercased, `gofmt` on the test.
 
 Verified: `golangci-lint run --new-from-rev=origin/main ./...` → 0 issues,
-`go build ./cmd/9router-go/` OK, Zed tests pass on
+`go build ./cmd/xroute/` OK, Zed tests pass on
 `internal/providers`, `internal/proxy/executor` and
 `internal/handlers/dashboard`.
 
@@ -4520,9 +4520,9 @@ running the suites):
 
 **Cline client identity**
 
-Chat, OAuth refresh/exchange and OAuth model probes present the 9Router
-identity (`User-Agent: 9Router/<version>`, Go runtime platform fields,
-`X-CLIENT-TYPE: 9router`) instead of the `Cline/3.0.61` / `cline-cli`
+Chat, OAuth refresh/exchange and OAuth model probes present the XRoute
+identity (`User-Agent: XRoute/<version>`, Go runtime platform fields,
+`X-CLIENT-TYPE: xroute`) instead of the `Cline/3.0.61` / `cline-cli`
 impersonation the registry carried; API-key probes send `Accept`+`Authorization`
 only. `HTTP-Referer` and `X-Title` stay, because upstream's `buildClineHeaders`
 sends them too — they attribute the product, they do not identify the client.
@@ -4593,7 +4593,7 @@ this branch's own work). Every determinism seam above was checked by removing
 `json.Deterministic(true)` at that seam and confirming the named test fails.
 
 ### Added
-- **oauth**: add Nous Research Portal OAuth Device Code flow (`nous`) with `hermes-cli` client ID, agent-key minting, token refresh, and connection probe integration (upstream `decolua/9router#4745`).
+- **oauth**: add Nous Research Portal OAuth Device Code flow (`nous`) with `hermes-cli` client ID, agent-key minting, token refresh, and connection probe integration (upstream `decolua/xroute#4745`).
 
 ### Security page rebuilt on the dashboard's own layout
 
@@ -4647,7 +4647,7 @@ Verified with `TestInboundOversizedBodyIsForwardedUntouched` — both a declared
 chat suites.
 
 ### Added
-- **providers**: add Nous Research (`nous`) provider support with 8 free-tier models (`meituan/longcat-2.0:free`, `meituan/longcat-2.5-preview:free`, `stepfun/step-5-preview:free`, `upstage/solar-mini4:free`, `stepfun/step-3.7-flash:free`, `poolside/laguna-s-2.1:free`, `poolside/laguna-xs-2.1:free`, `stealth/missingno`), capabilities mapping, `nous` base thinking format levels, zero pricing, live catalogue normalisation, probe validation, and request attribution tags (upstream `decolua/9router#4745`, `decolua/9router#4770`).
+- **providers**: add Nous Research (`nous`) provider support with 8 free-tier models (`meituan/longcat-2.0:free`, `meituan/longcat-2.5-preview:free`, `stepfun/step-5-preview:free`, `upstage/solar-mini4:free`, `stepfun/step-3.7-flash:free`, `poolside/laguna-s-2.1:free`, `poolside/laguna-xs-2.1:free`, `stealth/missingno`), capabilities mapping, `nous` base thinking format levels, zero pricing, live catalogue normalisation, probe validation, and request attribution tags (upstream `decolua/xroute#4745`, `decolua/xroute#4770`).
 
 ### Fixed
 - **chat**: scope Nous thinking dialect transformation strictly to the `nous` provider (and its `ns` alias) to prevent cross-provider mutation. Previously `ApplyNousThinking` was called unconditionally and hardcoded the provider to `nous` when fetching capabilities, causing non-Nous providers (e.g., custom OpenAI-compatible nodes) serving a model with a matching ID (such as `meituan/longcat-2.0:free`) to incorrectly receive the nested Nous reasoning format with top-level `reasoning_effort` stripped. The fix passes the actual provider name through the call chain and gates the transformation on `provider == "nous" || provider == "ns"`.
@@ -5219,7 +5219,7 @@ behaviour: they are the same scanner with the labels dropped again.
 
 ### fix(headroom): restore byte floor and warn on upstream phantom savings
 
-Upstream decolua/9router commit db81a8c9 (PR #4855).
+Upstream decolua/xroute commit db81a8c9 (PR #4855).
 
 - **Restore 5% byte floor**: `HeadroomClient.Compress` restores the port's 5% byte floor (`len(newBody) >= len(body)*95/100`), ensuring that requests which grow or fail to shrink meaningfully are safely rejected rather than committed.
 - **Upstream phantom savings warning**: `IsHeadroomPhantomSavings` evaluates both `messageBytes` and `bodyBytes` and surfaces as a warning via `log.Warn` using `FormatHeadroomPhantomWarning`, matching upstream's warning-only behavior.
@@ -5227,7 +5227,7 @@ Upstream decolua/9router commit db81a8c9 (PR #4855).
 
 ### Dashboard: self-hosted fonts and pre-compressed assets
 
-The first dashboard open was slow, and the "Connecting to 9router-go Localhost
+The first dashboard open was slow, and the "Connecting to xroute Localhost
 Gateway (:20130)..." screen was the visible symptom. The gateway itself was
 never the bottleneck: every boot endpoint answers in under 5 ms. The delay was
 in the bytes the browser had to fetch before the app could mount.
@@ -5365,7 +5365,7 @@ The chart number is the effect of the narrow projection plus the covering index:
 
 ### fix(usage): token fallback for input_tokens rows and stable key masking in stats
 
-Upstream decolua/9router commit 813a0121 (PRs #3640, #2918).
+Upstream decolua/xroute commit 813a0121 (PRs #3640, #2918).
 
 - **Fallback to `input_tokens` and `output_tokens`**: live usage stats (today/24h) and recent requests now read token counts from the `tokens` JSON blob when rows are recorded with `input_tokens` or `output_tokens` (such as embeddings, Gemini, or Claude-format responses where the integer column was 0).
 - **Whitespace trimming in API key masking**: `handlerutil.MaskAPIKey` trims surrounding whitespace before masking so whitespace variants mask consistently.
@@ -5489,7 +5489,7 @@ The other providers still have no dedup at all, which is a separate change; it i
 
 ### fix(codex): drop retired gpt-5.5 models, update image and auto-ping defaults
 
-Upstream decolua/9router commit 7878f53b (PR #4852).
+Upstream decolua/xroute commit 7878f53b (PR #4852).
 
 - **`gpt-5.5` is retired from Codex with ChatGPT sign-in** (2026-10-14), causing the backend to reject requests with HTTP 400.
 - Removed `gpt-5.5`, `gpt-5.5-review`, `gpt-5.5-image`, and `gpt-5.3-image` from the Codex and CX registries in `internal/providers/registry_models.go` and `web/src/lib/models.ts`.
@@ -5677,7 +5677,7 @@ rest of `./internal/handlers/media/...` and `./internal/providers/...`.
 
 A key that is not allowed to use the requested model was refused with a body of
 the port's own invention: `Model not allowed for this API key`, `type:
-permission_denied`, `code: model_not_allowed`. Upstream decolua/9router builds
+permission_denied`, `code: model_not_allowed`. Upstream decolua/xroute builds
 that refusal in one place — `errorResponse(FORBIDDEN, keyAccessDeniedMessage(requested))`
 through `buildErrorBody` — so its body is `type: permission_error`, `code:
 insufficient_quota` (upstream `ERROR_TYPES[403]`) and the client-facing message
@@ -6089,7 +6089,7 @@ so it never reached the literal branch it was meant to cover.
 ### fix(proxy): decide the message/delta truthiness on the raw text, not on a decoded value
 
 `internal/proxy.IsZeroContentResponse` picks between the two OpenAI carrier
-fields the way upstream `decolua/9router` does
+fields the way upstream `decolua/xroute` does
 (`open-sse/services/combo.js`, `isZeroContentResponse`):
 
 ```js
@@ -6639,7 +6639,7 @@ code.
 `internal/proxy.IsZeroContentResponse` picked between the two OpenAI carrier
 fields with a *presence* test: `message` was used unless it was absent or
 `null`, and `delta` was read only in those two cases. Upstream
-(`decolua/9router` `open-sse/services/combo.js`, `isZeroContentResponse`)
+(`decolua/xroute` `open-sse/services/combo.js`, `isZeroContentResponse`)
 picks with JavaScript's `||`:
 
 ```js
@@ -6677,7 +6677,7 @@ The five fall-through cases fail on the pre-fix code and pass after it;
 
 ### fix(translator): rewrite competing-client branding in the antigravity system instruction
 
-Upstream `decolua/9router` sanitizes competing-client branding in the system
+Upstream `decolua/xroute` sanitizes competing-client branding in the system
 instruction before a request leaves the gateway. It drives this from a rule
 table (`ANTIGRAVITY_PROMPT_REWRITES` in
 `open-sse/config/appConstants.js:187-195`) with four rows, and its executor
@@ -6777,7 +6777,7 @@ there, and the empty answer became a generic upstream failure — which cooled a
 model's remaining connections before the combo moved on.
 
 `internal/proxy.IsZeroContentResponse` ports the upstream contract
-(`decolua/9router` `8f4e380`, PR #4750) next to the check that already owns "a
+(`decolua/xroute` `8f4e380`, PR #4750) next to the check that already owns "a
 200 that carries no completion". When a combo has armed the probe, such a
 response is now classified as zero content instead of failing as an upstream
 error: the combo advances to the next member directly, the account keeps its
@@ -6990,7 +6990,7 @@ profile folds the rate grid, the panel list and the sidebar row behind the
 Advanced settings switch (1204px → 506px a card) and unfolds them again, and
 `period=7d` narrows the request table and its total.
 
-Upstream parity: `decolua/9router#381` is the combo flow card; the header change
+Upstream parity: `decolua/xroute#381` is the combo flow card; the header change
 follows the house strip in `RequestDetailsTab.svelte`. No API, schema or `/v1`
 behaviour is touched; the only backend change is the additive `since` filter on
 the request-detail query.
@@ -7019,7 +7019,7 @@ same name, which the strict provider isolation in `AGENTS.md` §3 forbids.
 `rewriteBrandingText` are gone, so provider identifiers, config paths and code
 identifiers reach the upstream untouched.
 
-Upstream `decolua/9router` keeps the same mapping, scoped to the system
+Upstream `decolua/xroute` keeps the same mapping, scoped to the system
 instruction and driven by a table (`ANTIGRAVITY_PROMPT_REWRITES` in
 `open-sse/config/appConstants.js`), applied in
 `open-sse/executors/antigravity.js` with the reason *"competing-client branding
@@ -7775,7 +7775,7 @@ a different model on the same account still answers, and the router logged no
 
 ### Fixed
 
-- **`GET /api/keys` full-scanned the whole usage ledger once per key, stalling the dashboard boot.** Opening any dashboard page (e.g. `/dashboard/endpoint`) locks the UI on the "Connecting to 9router-go Localhost Gateway (:20130)…" spinner until `loadData()` resolves, and that promise waits on `GET /api/keys` alongside the four other boot reads. For every key row the handler calls `apiKeyUsedTokens` → `tokenUsageSince`, which sums `WHERE (clientKey = ? OR apiKey = ? OR apiKey = ?)`. SQLite answers a disjunction with a multi-index OR **only when every arm is indexable**; `idx_uh_apikey` covered the two `apiKey` arms but nothing covered `clientKey`, so the planner discarded the index and fell back to `SCAN usageHistory`. The per-key cost grew with the ledger: measured at **~127 ms per key on a 512k-row table**, so a 30–50 key install spent 1.6–10.6 s inside that single request while the four sibling reads finished in ~5 ms. The slowest read is what the spinner waits for, so one unindexed column held the whole page.
+- **`GET /api/keys` full-scanned the whole usage ledger once per key, stalling the dashboard boot.** Opening any dashboard page (e.g. `/dashboard/endpoint`) locks the UI on the "Connecting to xroute Localhost Gateway (:20130)…" spinner until `loadData()` resolves, and that promise waits on `GET /api/keys` alongside the four other boot reads. For every key row the handler calls `apiKeyUsedTokens` → `tokenUsageSince`, which sums `WHERE (clientKey = ? OR apiKey = ? OR apiKey = ?)`. SQLite answers a disjunction with a multi-index OR **only when every arm is indexable**; `idx_uh_apikey` covered the two `apiKey` arms but nothing covered `clientKey`, so the planner discarded the index and fell back to `SCAN usageHistory`. The per-key cost grew with the ledger: measured at **~127 ms per key on a 512k-row table**, so a 30–50 key install spent 1.6–10.6 s inside that single request while the four sibling reads finished in ~5 ms. The slowest read is what the spinner waits for, so one unindexed column held the whole page.
 - Added `idx_uh_clientkey` on `usageHistory(clientKey)`, and moved `clientKey` into the `usageHistory` column list in `coreSchema()` so the index can be created on a fresh database (the column previously arrived only via the later `keiRouterMigrations` pass, which runs after `coreSchema` has already built its indexes — the index statement failed with `no such column: clientKey` until the column was declared alongside the others). `EnsureCoreSchema` re-runs its `CREATE INDEX IF NOT EXISTS` list on every boot, so an existing install picks the index up on the next start with no migration step.
 - Effect on the same 512k-row, 30–50 key fixture: the plan becomes a multi-index union (`SEARCH … USING INDEX idx_uh_apikey` + `SEARCH … USING INDEX idx_uh_clientkey`), the per-key sum drops from ~127 ms to ~15 ms, and `GET /api/keys` falls from 10.567 s to 0.026 s end-to-end through the real router. The index costs no measurable write throughput (20k inserts: 246 ms without it, 155 ms with it — run-to-run noise).
 - Verified by `TestUsageHistoryClientKeyIndexExists`, which asserts on `EXPLAIN QUERY PLAN` for the **full three-arm OR** — the previous index test spelled out only the two `apiKey` arms, so `idx_uh_apikey` alone satisfied it while production still scanned — plus `TestUsageHistoryClientKeyIndexAddedOnUpgrade` for the in-place upgrade path.
@@ -7823,7 +7823,7 @@ uncovered currency and reset the cost surfaces to the compiled seed.
 
 ### GitHub embeddings catalogue: `text-embedding-ada-002`, not `text-embedding-3-large`
 
-- Ported the catalogue half of upstream `decolua/9router` commit `51a1827e`
+- Ported the catalogue half of upstream `decolua/xroute` commit `51a1827e`
   (#4793, issue #400 parity). GitHub Models inference (`models.github.ai`) was
   retired on 2026-07-30 and Copilot embeddings now go to
   `https://api.githubcopilot.com/embeddings`, whose accepted embedding ids do not
@@ -7942,7 +7942,7 @@ rows that pushed it over are pruned), `make vet-svelte`, `cd web && bun run buil
 Caveats, stated rather than implied: `all` and the analytics pages now mean "as
 far back as rows are retained" once a window is configured; the carryover holds
 tokens only, so a future USD budget measured from this table will need it to grow
-a cost column; and a database shared with upstream 9router will show upstream the
+a cost column; and a database shared with upstream xroute will show upstream the
 shortened ledger.
 
 - **The route is now always-protected.** `/api/settings/database/prune-usage` was
@@ -8134,12 +8134,12 @@ which is how CI runs it.
 
 ### feat(providers): port upstream Gemini 4 Argon capabilities, Antigravity client bump, and OpenCode Go wire transport
 
-Port of upstream `decolua/9router` PRs #4887, #4934, and #4991: full Gemini 4 Argon support across capabilities, pricing, thinking levels, Antigravity quota isolation, client fingerprinting, and OpenCode Go Google Generative AI wire transport.
+Port of upstream `decolua/xroute` PRs #4887, #4934, and #4991: full Gemini 4 Argon support across capabilities, pricing, thinking levels, Antigravity quota isolation, client fingerprinting, and OpenCode Go Google Generative AI wire transport.
 
 **Upstream References:**
-- `decolua/9router#4887`: Gemini 4 Argon capabilities, intro pricing ($2/$10), registry entries, and thinking level clamping.
-- `decolua/9router#4934`: Gemini 4 Argon under Antigravity (`gemini-4-argon`, `high`, `medium`, `low`), `ANTIGRAVITY_IDE_VERSION` bump to `2.23.0`, `ANTIGRAVITY_CLI_USER_AGENT` (`1.4.0`), weekly/session quota isolation, and Svelte dashboard normalization.
-- `decolua/9router#4991`: Native Google Generative AI wire transport on OpenCode Go (`/inference/go/v1/models/gemini-4-argon-contributor:(stream)GenerateContent`) with `x-goog-api-key`, plus newly released models (`claude-haiku-5-5`, `longcat-2.5-preview-free`, `step-5-preview`, `beam-free`).
+- `decolua/xroute#4887`: Gemini 4 Argon capabilities, intro pricing ($2/$10), registry entries, and thinking level clamping.
+- `decolua/xroute#4934`: Gemini 4 Argon under Antigravity (`gemini-4-argon`, `high`, `medium`, `low`), `ANTIGRAVITY_IDE_VERSION` bump to `2.23.0`, `ANTIGRAVITY_CLI_USER_AGENT` (`1.4.0`), weekly/session quota isolation, and Svelte dashboard normalization.
+- `decolua/xroute#4991`: Native Google Generative AI wire transport on OpenCode Go (`/inference/go/v1/models/gemini-4-argon-contributor:(stream)GenerateContent`) with `x-goog-api-key`, plus newly released models (`claude-haiku-5-5`, `longcat-2.5-preview-free`, `step-5-preview`, `beam-free`).
 
 **What changed:**
 - `internal/providers/capabilities.go`: Added `PDF: true` to `Capabilities` under pattern `*gemini*argon*`.
@@ -8178,7 +8178,7 @@ Port of upstream `decolua/9router` PRs #4887, #4934, and #4991: full Gemini 4 Ar
 - Recent requests also carry `latencyMs`, which `logUsage` already had: a member
   that answered shows how long it took. A member that refused shows no latency,
   because a rejection has a time-to-failure, not a latency.
-- New card above the provider map: `9router-go → combo → members`, with the
+- New card above the provider map: `xroute → combo → members`, with the
   members as a numbered list in the combo's own order — one row each with its
   provider, model, status and latency. A failed row names the member it handed
   off to, the row that answered says the rest were not used, and later rows are
@@ -8487,7 +8487,7 @@ negative control so the fake is not simply permissive.
 ### feat(access): allowlist globs and deny rules for per-key model access
 
 Per-key model allowlists gain the pattern vocabulary issue #365 asks for, ported
-from decolua/9router `keyAccess.js` (v0.5.104): a wildcard that spans the `/`
+from decolua/xroute `keyAccess.js` (v0.5.104): a wildcard that spans the `/`
 (`*claude*`), deny entries (`!opus`, `-haiku`), and a deny-only list that opens
 everything it does not name.
 
@@ -8648,7 +8648,7 @@ multi-byte rune the cut left invalid UTF-8 behind, and `encoding/json/v2`
 rejects invalid UTF-8 *while encoding*. By then the `200` header is already on
 the wire, so the client gets a half-written body plus the error sentinel
 appended after it; the dashboard falls back to 0/0. Reproduced 100% against a
-real `~/.9router/db/data.sqlite` holding two such connections.
+real `~/.xroute/db/data.sqlite` holding two such connections.
 
 `handlerutil.RunePrefix` / `RuneSuffix` / `RuneCount` is the single shared
 helper for the cut (AGENTS.md §3.C — one general abstraction instead of four
@@ -8698,7 +8698,7 @@ any Gemini 4 id that lost its custom row fell through to the 128k/4096 floor.
 **Verification:** `go test ./internal/db/ ./internal/providers/
 ./internal/handlers/chat/ ./internal/handlers/dashboard/` — 5 new tests, all of
 which fail without the fix (`declared limits = (0, 0)`, `max_completion_tokens
-= 4096`, `thinkingFormat = ""`). Replayed end to end against a 9router 1.9.11
+= 4096`, `thinkingFormat = ""`). Replayed end to end against a xroute 1.9.11
 binary and a gsb-shaped upstream: the four petafora `customModels` rows
 publish `128000/4096` before and `1048576/65536` after, on `/v1/models`,
 `/v1/models/info` and `/api/models/caps`.
@@ -8789,7 +8789,7 @@ and a fragment-only edit.
 
 GoReleaser and a `ghcr.io` publish were considered and not adopted: `install.sh`,
 `install.ps1`, and `internal/updater` all download a bare binary named
-`9router-go-<os>-<arch>`, while GoReleaser's default `.tar.gz`/`.zip` archives
+`xroute-<os>-<arch>`, while GoReleaser's default `.tar.gz`/`.zip` archives
 would break all three, and `release.yml` already produces the binaries, checksums,
 and multi-arch Docker Hub image on a tag.
 
@@ -9388,7 +9388,7 @@ present — ported from OmniRoute `MUSE_SPARK_MIN_OUTPUT_TOKENS`
   the sibling models that share the same Responses lane (`grok-4.6`,
   `gpt-5.6-luna`) keep their budgets.
 - Reasoning-effort suffixes survive cleaning again: the `(high)`/`(medium)`/`(low)`
-  a client appends to the model id is 9router request notation and never reaches
+  a client appends to the model id is xroute request notation and never reaches
   the wire, but the intent it carried was being dropped with it. The callers now
   pass the model id as the client sent it and the sanitizer strips the prefix and
   the override itself. **Fill-only precedence**: an effort the body states
@@ -9405,7 +9405,7 @@ ways. The pre-existing `TestForwardOpencode*MuseSpark*` and
 
 ### Fixes
 
-- **models**: report an unreachable (502) or timed-out (504) upstream error during models discovery instead of a blanket 500 internal server error (fixes #347, porting decolua/9router#4843).
+- **models**: report an unreachable (502) or timed-out (504) upstream error during models discovery instead of a blanket 500 internal server error (fixes #347, porting decolua/xroute#4843).
 
 ### fix(codex): a failed turn is no longer served to the client as an empty 200
 
@@ -9466,9 +9466,9 @@ only correct on a **schema node**: a `properties` value is a dictionary keyed by
 parameter name, so a tool parameter called `title` is not a keyword, and a
 parameter called `properties` is not the properties container.
 
-Upstream hit this twice. `decolua/9router#4620`: `ensureObjectType` recursed into
+Upstream hit this twice. `decolua/xroute#4620`: `ensureObjectType` recursed into
 the properties map, so a parameter named `properties` made the map itself look like
-a `type:"object"` schema and Vertex rejected the request. `decolua/9router#4831`:
+a `type:"object"` schema and Vertex rejected the request. `decolua/xroute#4831`:
 `removeUnsupportedKeywords` and `convertConstToEnum` walk `Object.values`, which
 deletes keyword-named parameters and rewrites a parameter named `const` into an
 enum.
@@ -9539,7 +9539,7 @@ the predicate and the `break` remove.
 
 ### Fixes
 
-- **translator**: sanitize nested array schemas, tuple items, and empty `{}` item definitions when converting schemas for Gemini and Google Cloud Code, preventing upstream 400 `INVALID_ARGUMENT: items.items: missing field` errors on multi-dimensional or stripped schemas (fixes #336, porting decolua/9router#4798).
+- **translator**: sanitize nested array schemas, tuple items, and empty `{}` item definitions when converting schemas for Gemini and Google Cloud Code, preventing upstream 400 `INVALID_ARGUMENT: items.items: missing field` errors on multi-dimensional or stripped schemas (fixes #336, porting decolua/xroute#4798).
 
 ### fix(codebuddy-intl): send the X-Conversation-* header family the intl gateway now requires
 
@@ -9556,7 +9556,7 @@ HTTP 400 {"code":11128,"msg":"conversation id missing",
 100% of `cbai/*` requests failed that way — the report that opened this is
 `codebuddy-intl/deepseek-v4.1-flash`. `codebuddy-cn` (`copilot.tencent.com`) is
 not gated, which is why only intl connections broke. Same upstream change as
-decolua/9router#4892.
+decolua/xroute#4892.
 
 `ForwardCodebuddyCN` now detects the intl `BaseURL` (`codebuddy.ai`) and merges
 three headers into a **copy** of the provider config's `StaticHeaders`, so the
@@ -9566,7 +9566,7 @@ shared map is never mutated and the CN path is untouched:
   (`req.SessionID`, falling back to the opening user message, then a random
   UUID), so retries of the same turn and account failovers stay on one
   conversation. The derivation is byte-identical to the JS executor's in
-  decolua/9router#4928, checked against it directly.
+  decolua/xroute#4928, checked against it directly.
 - `X-Conversation-Request-ID` — fresh UUID per request
 - `X-Conversation-Message-ID` — fresh UUID per message
 
@@ -9589,7 +9589,7 @@ review if a custom `baseUrl` ever pointed at that host.
 
 ### Fixes
 
-- **translator**: concatenate every `system` and `developer` message with `\n\n` into Responses `instructions` during Chat Completions to Responses translation, instead of silently dropping all but the first (fixes #332, porting decolua/9router#4813).
+- **translator**: concatenate every `system` and `developer` message with `\n\n` into Responses `instructions` during Chat Completions to Responses translation, instead of silently dropping all but the first (fixes #332, porting decolua/xroute#4813).
 
 ### fix(freebuff): route `x-relay-*` control-plane calls to their own endpoint
 
@@ -10107,7 +10107,7 @@ The previous code produced one id twice and the client merged them.
   - **Lifetime cards**: Total Requests, Lifetime Tokens, Peak Day Tokens (+ its date), Cache Hit Rate ("only real valid data is counted"), Most Used Model (trailing-7-day tokens, `force`-abbreviated like upstream).
   - **Activity Heatmap**: GitHub-style trailing-year grid (Mon–Sun rows, month labels, 5 brand levels, per-cell tooltip, current-streak line, Less/More legend).
   - **Node Health**: providers ranked by a 7-day health score (≥50 requests), expandable to the models under each node (≥10 requests). Score = success 60% + latency 20% + speed 20% with upstream's bands; a node with zero latency samples gets no score and stays out of the ranking.
-- New endpoint `GET /api/usage/dashboard` (`internal/handlers/usage_dashboard.go`): heatmap + lifetime totals/streaks from `usageDaily`, top model from a 7-day `usageHistory` scan, cache hit rate over cached rows only with the two input shapes resolved by `max(prompt, cached + creation)`, and per-provider/model aggregates. Divergence recorded deliberately: 9router-go stamps no latency into `usageHistory.meta`, so health is computed from the `requestDetails` ring (the gateway's only per-request latency source) instead of upstream's merged two-store feed.
+- New endpoint `GET /api/usage/dashboard` (`internal/handlers/usage_dashboard.go`): heatmap + lifetime totals/streaks from `usageDaily`, top model from a 7-day `usageHistory` scan, cache hit rate over cached rows only with the two input shapes resolved by `max(prompt, cached + creation)`, and per-provider/model aggregates. Divergence recorded deliberately: xroute stamps no latency into `usageHistory.meta`, so health is computed from the `requestDetails` ring (the gateway's only per-request latency source) instead of upstream's merged two-store feed.
 - All counters obey the unit-abbreviation switch from the previous fragment; `fmtTokens` gained the upstream `force` parameter for the always-abbreviated card subline.
 - Verified: `go test ./internal/handlers/...` (score bands, cache-rate shapes, streak direction, buffered-burst dampening, handler payload incl. the no-perf node), `bun test src` (351 tests), `bun run build`, `svelte-check` ratchet at baseline, and a browser pass on an isolated `DATA_DIR` instance seeded with a year of data — cards read `53,957 / 103.2M / 1.2M 2026-07-25 / 25% / deepseek-chat`, the heatmap renders 269 cells, and the toggle flips them to full numbers.
 
@@ -10230,11 +10230,11 @@ probes (minimal + colliding-tools bodies, cli and desktop identities).
 ## [v1.9.12] - 2026-10-15
 
 ### Fixed
-- **Deterministic request serialization for ALL providers**: chat-completions bodies leaving via `newJSONRequest` are now re-serialized with `encoding/json/v2` `Deterministic(true)` (map members sorted). Previously only the opencode/zen lanes carried per-lane `marshalStable` calls; a new provider serving a DeepSeek model did not inherit the fix, and any rewrite-free turn kept its original randomized-bytes body — turning the shared prefix of every turn after the first into a full prompt-cache miss on DeepSeek (and other prefix-caching upstreams). Non-chat payloads (OAuth token posts, Gemini `contents`, malformed JSON) pass through byte-identical, so signed flows (e.g. COSY) are unaffected. Parity note: the JavaScript `decolua/9router` original is deterministic by construction (JS object insertion order); this restores that property in the Go rewrite.
+- **Deterministic request serialization for ALL providers**: chat-completions bodies leaving via `newJSONRequest` are now re-serialized with `encoding/json/v2` `Deterministic(true)` (map members sorted). Previously only the opencode/zen lanes carried per-lane `marshalStable` calls; a new provider serving a DeepSeek model did not inherit the fix, and any rewrite-free turn kept its original randomized-bytes body — turning the shared prefix of every turn after the first into a full prompt-cache miss on DeepSeek (and other prefix-caching upstreams). Non-chat payloads (OAuth token posts, Gemini `contents`, malformed JSON) pass through byte-identical, so signed flows (e.g. COSY) are unaffected. Parity note: the JavaScript `decolua/xroute` original is deterministic by construction (JS object insertion order); this restores that property in the Go rewrite.
 
 ### OpenCode: free tier moved to the /inference/v1 gate with the v2 client fingerprint
 
-Upstream decolua/9router#4842 parity (Closes #317, supersedes #318 and #319):
+Upstream decolua/xroute#4842 parity (Closes #317, supersedes #318 and #319):
 OpenCode v2 moved free inference off /zen/v1; every free request there now
 answers 403 FreeTierError.
 
@@ -10377,12 +10377,12 @@ wrong in a way a user could hit.
   returning `\usr\local\bin`.
 - **`enable-linger` now runs even when `systemctl start` fails.** The early
   return on the failure path skipped it, so the one scenario install exists for
-  — the gateway already holding the port from `9router-go start` — lost linger
+  — the gateway already holding the port from `xroute start` — lost linger
   and the unit died at logout while the CLI reported the entry as enabled.
 - **`uninstallCron` no longer claims a removal that failed.** `os.Remove`'s
   error was discarded and `desktopRemoved` was set unconditionally, so a
   permission-denied delete printed "Autostart uninstalled" with
-  `~/.config/autostart/9router-go.desktop` still in place and set to fire at the
+  `~/.config/autostart/xroute.desktop` still in place and set to fire at the
   next login. Removal is now the source of truth, the rule the launchd and
   OpenRC backends in the same package already followed.
 - **Windows task status is locale-independent.** `statusWindowsTask` matched the
@@ -10409,7 +10409,7 @@ OS-conditional regression is caught on a PR rather than on someone's laptop.
 
 ### feat(cli): service autostart management
 
-`9router-go service install` registers the gateway to start on boot using
+`xroute service install` registers the gateway to start on boot using
 whatever init the machine actually runs:
 
 - **systemd** — always the per-user unit (`systemd --user`), so install stays
@@ -10420,7 +10420,7 @@ whatever init the machine actually runs:
   scope or `--system` flag.
 - **launchd** (macOS), **runit** (root, or `~/service` under a user `runsvdir`),
   and **cron `@reboot`** plus an XDG autostart desktop entry, all tagged with a
-  `# 9router-go-autostart` marker so install is idempotent and uninstall never
+  `# xroute-autostart` marker so install is idempotent and uninstall never
   touches the user's own entries.
 - **OpenRC** is a system service and needs root: it has no per-user scope, so
   `service install` refuses without it rather than silently installing a
@@ -10500,7 +10500,7 @@ both edges on screen.
 - Top-level limits came from the generic substring table (`claude-*` → 200000/8192) while
   `capabilities.contextWindow` / `maxOutput` carried the per-model values, so one entry
   contradicted itself (e.g. `cc/claude-opus-5-5`: 200000/8192 vs 1000000/128000). Clients that
-  read the OpenAI-style fields — such as `pi-9router-ext` — capped Claude output at 8192.
+  read the OpenAI-style fields — such as `pi-xroute-ext` — capped Claude output at 8192.
 - The top-level fields (and `/v1/models/info`) are now filled from the same chain as
   `capabilities` (declared custom limits → per-model caps → catalog → substring table); the
   substring table only fills gaps.
@@ -10655,7 +10655,7 @@ connection row, quota tracker filter, top bar) rendered an empty box.
 
 An audit of the catalog turned up two more dashboard-visible cases with the
 same cause: `tinyfish` and `v1m` (`systemone`). All three now carry the artwork
-upstream `decolua/9router` ships in `public/providers/` — 128×128 for muse and
+upstream `decolua/xroute` ships in `public/providers/` — 128×128 for muse and
 v1m, 96×96 for tinyfish. The remaining catalog entries without artwork are not
 provider cards: they are header/field names (`user-agent`, `x-requested-with`,
 `anthropic-version`), region ids (`cn`, `sgp`, `ams`), or entries that already
@@ -10776,11 +10776,11 @@ against a live instance — all three answer `200 image/png`.
 
 ### 🖼️ Aset provider upstream diambil, kartu "header semu" dihapus — 404 `/providers/*.png` hilang total
 
-- **Aset dari upstream lengkap.** `decolua/9router` sudah shipping 9 berkas yang repo ini
+- **Aset dari upstream lengkap.** `decolua/xroute` sudah shipping 9 berkas yang repo ini
   tidak punya: `bedrock.png`, `bedrock-xai.png`, `codewhale.svg`, `crush.png`,
   `forge.png`, `pi.svg`, `smelt.svg`, plus `hermes.png` dan `omp.png` yang di-refresh ke
   versi upstream. Kesembilananya identik dengan `public/providers/` upstream
-  (`raw.githubusercontent.com/decolua/9router/master`), kecuali tiga SVG yang hanya
+  (`raw.githubusercontent.com/decolua/xroute/master`), kecuali tiga SVG yang hanya
   berbeda line-ending CRLF↔LF. Seluruh aset upstream yang sudah ada di sini juga
   dibandingkan ulang satu per satu — tidak ada yang berubah diam-diam.
 - **Akar 404 sisanya bukan aset yang hilang, tapi katalog yang bohong.** Delapan entri
@@ -10816,7 +10816,7 @@ against a live instance — all three answer `200 image/png`.
   lokasi (`providers:`), bukan URL, saat resource di luar `<img>`/`<script>` gagal.
   Tidak ada handler 503 di `internal/handlers/**`; `GET /providers` dan `/providers/`
   menjawab `200 text/html` dari SPA shell, dan cache SW-nya kosong
-  (`caches.open('9router-go-static-v1').keys()` → 0 entri).
+  (`caches.open('xroute-static-v1').keys()` → 0 entri).
 - **Verifikasi.** (1) Regresi baru di `web/src/lib/providers.test.ts` membaca direktori
   aset dan gagal pada entri tanpa logo — terbukti gagal sebelum fix (`ERR_ASSERTION`
   saat `phantom-test-id` disisipkan) dan lolos sesudahnya; plus tabel `getIconPath` di
@@ -10877,7 +10877,7 @@ against a live instance — all three answer `200 image/png`.
 
 ### Features
 
-- **Hermes is configured per profile** (upstream decolua/9router `a9c9f683`,
+- **Hermes is configured per profile** (upstream decolua/xroute `a9c9f683`,
   #4660). Hermes treats `~/.hermes/profiles/<name>` as an independent agent home
   with its own `config.yaml` and `.env`, but the dashboard only ever wrote the
   default one — configuring a work profile meant editing YAML by hand, and a
@@ -10890,13 +10890,13 @@ against a live instance — all three answer `200 image/png`.
   `profiles/` is only listed once it carries an identity file, matching Hermes
   itself — a bare directory left by a cron run is not a profile.
 - **`applyToAll` propagates the endpoint without flattening the profiles.** A
-  profile already routed through 9router keeps its own model and only has the
+  profile already routed through xroute keeps its own model and only has the
   endpoint and API key refreshed; a profile on another provider is reported
   `skipped` with the blocking provider named rather than rewritten; a profile
   with no model yet is wired to the model chosen in the request. The response
   carries one `{profile, status, model, reason}` line per profile plus
   `updated`/`skipped` counts, so the dashboard reports exactly what moved. The
-  card refuses to run it against an endpoint that is not a known 9router one:
+  card refuses to run it against an endpoint that is not a known xroute one:
   the field mirrors the active profile, and it can hold a foreign provider URL
   whose key would then be written into every other profile.
 - **The YAML editor is surgical, never a round-trip.** The blocks are matched
@@ -10982,7 +10982,7 @@ viewport, and picking `Failed` updates the trigger and the list. Suites green �
   key list was empty. `web/dist` is embedded in the binary and served to anyone
   who can reach the gateway, so that fallback was a public credential, and
   opening any card on an instance with no key handed it to the visitor. The
-  fallback is gone: the snippet now carries `<your-9router-api-key>` and both
+  fallback is gone: the snippet now carries `<your-xroute-api-key>` and both
   the Pi and Oh My Pi cards say to create a key first — a placeholder cannot
   authenticate upstream, and an empty `apiKey` is worse still, because pi reads
   that as an unauthenticated provider and fails at request time rather than at
@@ -10990,7 +10990,7 @@ viewport, and picking `Failed` updates the trigger and the list. Suites green �
   an empty string into `••••`.
 
   Guarded twice. `web/src/lib/no-shipped-secrets.test.ts` scans every bundled
-  source file for an `sk-…` literal, exempting only the `sk-9router-*`
+  source file for an `sk-…` literal, exempting only the `sk-xroute-*`
   placeholders the env cards have always shown. `web/e2e/cliToolsPi.test.ts`
   asserts the same invariant against the bytes the gateway actually serves, and
   now seeds a key through `POST /api/keys` first — without that, every
@@ -11011,18 +11011,18 @@ viewport, and picking `Failed` updates the trigger and the list. Suites green �
 
 ### Halaman proyek + redirect Telegram yang tahan link revoke
 
-- **Halaman `https://luqman-v1.github.io/9router-go` sekarang terbit dari `README.md`**, bukan salinan kedua. `tools/sitegen` merender README dengan goldmark (GFM, heading anchor, HTML mentah untuk `<div align="center">` dan `<details>`) lalu membungkusnya dengan masthead dan footer. Alasannya: landing page yang ditulis terpisah sudah pasti melenceng dari README dalam satu rilis, dan setiap perbaikan harus ditulis dua kali.
+- **Halaman `https://x-inu.github.io/XRoute` sekarang terbit dari `README.md`**, bukan salinan kedua. `tools/sitegen` merender README dengan goldmark (GFM, heading anchor, HTML mentah untuk `<div align="center">` dan `<details>`) lalu membungkusnya dengan masthead dan footer. Alasannya: landing page yang ditulis terpisah sudah pasti melenceng dari README dalam satu rilis, dan setiap perbaikan harus ditulis dua kali.
 - **Link relatif di dalam README ditulis ulang saat build.** Gambar (`docs/screenshots/*.png`) disalin ke output, sedangkan tautan ke berkas repositori (`DATABASE.md`, `docs/*.md`) diarahkan ke URL blob github.com. Tanpa ini `docs/screenshots/providers.png` akan 404 di Pages, karena di sana path diselesaikan terhadap root situs, bukan terhadap repositori.
 - **`site/tg.html` menjadi satu-satunya tempat link invite Telegram berada.** Badge README dan kartu "Telegram Group" di modal Support kini menunjuk ke `.../tg`, bukan ke `t.me/...` secara langsung. Kalau invite di-revoke atau diganti, cukup edit satu baris di `site/tg.html`; pengguna lama yang sudah memasang dashboard tetap ikut ke grup yang baru tanpa perlu rilis binary baru.
 - **Redirect punya tiga lapis**: `<meta http-equiv="refresh">` untuk klien yang tidak menjalankan skrip, `location.replace` supaya URL ini tidak tertinggal di riwayat, dan tautan yang terlihat sebagai cadangan ketika keduanya diblokir. Halaman ditulis ke `/tg.html`, `/tg`, dan `/tg/`.
 - **Workflow `pages.yml`** menjalankan `go test ./tools/sitegen/...` sebelum deploy, lalu memaksa presence `index.html`, `style.css`, `tg.html`, `tg/index.html`, dan keberadaan invite di `site/tg.html`. Kegagalan di salah satu titik menggagalkan deploy, bukan menerbitkan halaman berisi 404.
-- **Modal "Support 9router-go" dapat kartu Telegram** (ikon `send`) dan tata letaknya diubah dari grid 2 kolom menjadi daftar bertumpuk, karena grid itu menyisakan kartu ketiga sendirian di baris sendiri. Warnanya disesuaikan ke `sky-600` di terang dan `sky-400` di gelap karena `sky-500` hanya mencapai 2.52:1 terhadap `bg-surface-2`.
+- **Modal "Support xroute" dapat kartu Telegram** (ikon `send`) dan tata letaknya diubah dari grid 2 kolom menjadi daftar bertumpuk, karena grid itu menyisakan kartu ketiga sendirian di baris sendiri. Warnanya disesuaikan ke `sky-600` di terang dan `sky-400` di gelap karena `sky-500` hanya mencapai 2.52:1 terhadap `bg-surface-2`.
 - **Escape sekarang benar-benar menutup modal Support.** Handler-nya sebelumnya menempel pada backdrop, yang tidak pernah menerima fokus, jadi tidak pernah terpanggil; dipindahkan ke `<svelte:window>`.
 - **Diverifikasi**: `go test ./...` (3813 lulus), `go vet ./...`, `bun run build`, `bun run ratchet:svelte` (0 unresolved, 83 error = baseline). Halaman dan modal diuji di Chromium pada light dan dark: semua anchor README resolve ke heading nyata, Tab pertama mendarat di skip link yang terlihat, tidak ada overflow horizontal di 360px maupun 768px, dan tidak ada console error.
 
 ### Fixes
 
-- **Antigravity 404 on every Gemini 3.8 request.** `v1.9.11-exp.9` introduced `AntigravityUpstreamModel`, which ported the registry's `upstreamModelId` column verbatim — including its parenthesised effort (`gemini-3.8-flash-low(low)`). That notation is 9router's own thinking marker, not a Google model id: Cloud Code answers `404 NOT_FOUND` for every suffixed form, so all six accounts failed over and the request ended in 404. `AntigravityUpstreamModel` now resolves to the bare id and the effort is stripped from both the client-supplied suffix and the table row, matching what upstream's `chatCore` does with `stripThinkingSuffix(upstreamModel)` on both its branches. The table stores the bare ids it sends.
+- **Antigravity 404 on every Gemini 3.8 request.** `v1.9.11-exp.9` introduced `AntigravityUpstreamModel`, which ported the registry's `upstreamModelId` column verbatim — including its parenthesised effort (`gemini-3.8-flash-low(low)`). That notation is xroute's own thinking marker, not a Google model id: Cloud Code answers `404 NOT_FOUND` for every suffixed form, so all six accounts failed over and the request ended in 404. `AntigravityUpstreamModel` now resolves to the bare id and the effort is stripped from both the client-supplied suffix and the table row, matching what upstream's `chatCore` does with `stripThinkingSuffix(upstreamModel)` on both its branches. The table stores the bare ids it sends.
 
   Verified live against `daily-cloudcode-pa.googleapis.com` with a real account: `gemini-3.8-flash-low(low)` and `gemini-3.8-flash-high(high)` both 404, while `gemini-3.8-flash-low`, `gemini-3.8-flash-medium`, `gemini-3.8-flash-high` and `gemini-3.7-flash-tiered` all 200 and return content; `fetchAvailableModels` lists those bare ids and no suffixed one. The live suite passes with no 404 in any log, and the same request that returns 404 on `v1.9.11-exp.9` returns 200 with content on this branch. `AntigravityUpstreamModel_NeverEmitsEffortSuffix` pins the invariant so a future catalog sync cannot reintroduce the 404 through the suffix.
 
@@ -11063,8 +11063,8 @@ These upstream fixes in the same range are **not** in this PR, each because it n
 
 ### feat(providers): MiniMax Code (mcode) credits provider
 
-Ports upstream `decolua/9router` commit `85bc33ce` (MiniMax Code as a credits
-provider) into 9router-go. MiniMax Code is a **new lane**, not an extension of
+Ports upstream `decolua/xroute` commit `85bc33ce` (MiniMax Code as a credits
+provider) into xroute. MiniMax Code is a **new lane**, not an extension of
 the existing API-key `minimax` provider: it authenticates through MiniMax's own
 OAuth device flow and serves Anthropic Messages on the mavis gateway.
 
@@ -11260,8 +11260,8 @@ Go stores an allowlist as one row per `(key, pattern)` in a dedicated table; ups
 
 ### Providers
 
-- **Antigravity**: added Claude Sonnet 5.5 and Opus 5.5 (eight ids, 1M context) with capabilities, pricing and quota-allowlist entries — upstream `decolua/9router#a07ed95b`.
-- **Antigravity**: resolved the wire model id through a new `AntigravityUpstreamModel`, the Go form of the registry's `upstreamModelId` column. The registry's parenthesised effort (`gemini-3.8-flash-high(high)`) is 9router's own thinking notation and never reaches Google, so the function resolves to the bare id and the table stores exactly what Cloud Code is asked for. A client-supplied `(level)` narrows the id to its own base rather than being appended to the id's preset. The table deliberately stays out of `AntigravityModelSynonyms`, which is shared with the lock and quota keys and must stay family-shaped.
+- **Antigravity**: added Claude Sonnet 5.5 and Opus 5.5 (eight ids, 1M context) with capabilities, pricing and quota-allowlist entries — upstream `decolua/xroute#a07ed95b`.
+- **Antigravity**: resolved the wire model id through a new `AntigravityUpstreamModel`, the Go form of the registry's `upstreamModelId` column. The registry's parenthesised effort (`gemini-3.8-flash-high(high)`) is xroute's own thinking notation and never reaches Google, so the function resolves to the bare id and the table stores exactly what Cloud Code is asked for. A client-supplied `(level)` narrows the id to its own base rather than being appended to the id's preset. The table deliberately stays out of `AntigravityModelSynonyms`, which is shared with the lock and quota keys and must stay family-shaped.
 - **Antigravity**: refreshed the catalog — added `gemini-3.1-pro-high`, retired the deprecated gemini-3.5 family and `gemini-3-flash`, moved the default to `gemini-3.8-flash-medium` — upstream `#24034f69`.
 - **GLM**: GLM-5.2 and GLM-5.3 now publish the 1M context window they actually have instead of falling through to the `*glm-5*` default — upstream `#4544`.
 - **Z.ai**: added `ForwardZai`, which rewrites the client's thinking request into Z.ai's dialect. `reasoning_effort` is mapped onto the three values the API accepts (`low|high|max`), thinking is switched off with `enable_thinking` rather than `thinking.type: disabled`, and a request for no reasoning on a model that cannot disable it is clamped to the lowest effort instead. Upstream `#4656` fixed this on a live 400 (`code 1210`); GLM-5.3 has no thinking-emission path in this port, so the flag alone would only have moved the dashboard picker.
@@ -11416,7 +11416,7 @@ rather than its presence.
 
 - **Latar belakang**: halaman CLI Tools hanya memuat 22 tool. `pi` (pi.dev) dan `omp`
   (Oh My Pi) tidak ada di katalog maupun di peta status, padahal keduanya sudah bisa
-  memakai 9router-go sebagai gateway — keduanya hanya butuh satu blok provider yang
+  memakai xroute sebagai gateway — keduanya hanya butuh satu blok provider yang
   menunjuk `baseUrl` ke `{origin}/v1`. Pengguna harus mencari sendiri snippet-nya di
   komentar issue.
 - **Backend**: `internal/handlers/media/clitools.go` menambahkan dua `toolDef` — `pi`
@@ -12183,7 +12183,7 @@ dan tercatat di sini, bukan disembunyikan:
 Alternatif yang ditolak di PR: memakai credential vault AES-256-GCM yang sudah ada
 (F-5) sehingga secret tetap bisa dibaca tanpa menyimpan plaintext. Vault itu butuh
 master key (`ROUTER_MASTER_KEY`) dan tidak ada yang mengaktifkannya secara default,
-sedangkan issue meminta parity penuh dengan upstream `decolua/9router`, yang memang
+sedangkan issue meminta parity penuh dengan upstream `decolua/xroute`, yang memang
 menyimpan plaintext.
 
 #### Kesocokan dengan sumber KeiRouter
@@ -12664,7 +12664,7 @@ without an id. Combos masked it by silently falling through to the next model.
 Upstream sets both (`id: tc.id` / `id: fid` in
 `open-sse/translator/request/openai-to-gemini.js`); this is the matching parity.
 Both sides now carry the id, stripped of the `__ts__<sig>` suffix — that suffix
-is 9router-go's private thought-signature transport and must not reach the wire
+is xroute's private thought-signature transport and must not reach the wire
 or desynchronise a call from its response.
 
 ### 🐛 Edit Compatible Node opens with a blank Prefix field (#177)
@@ -12771,7 +12771,7 @@ directly against upstream: `POST /zen/v1/chat/completions` with
 and healthy models are marked broken. This also applies to other media models
 on the same provider.
 
-**The fix (upstream parity with `decolua/9router#20014b31`, "probe System One
+**The fix (upstream parity with `decolua/xroute#20014b31`, "probe System One
 models through /v1/systemone"):**
 
 - **The probe now follows `kind`, not a chat assumption.** The new file
@@ -12853,7 +12853,7 @@ these cases previously slipped through silently:
   **never reaches anyone**; every install keeps reporting the previous version
   as "up to date".
 - An experimental version leaking into `version.json` → experimental builds are
-  blocked for every install. That manifest is polled by `9router-go update` on
+  blocked for every install. That manifest is polled by `xroute update` on
   the stable channel, so this must fail the release, not merely warn.
 
 `scripts/bump-version.sh` writes `version.json` only for stable bumps, and
@@ -13026,8 +13026,8 @@ Changes:
    `internal/handlers/dashboard/`, and so on) plus a field specific to
    OmniRoute, because both are different PR paths: parity must
    include an upstream commit/PR link, whereas an original request does not.
-3. `bug_report.yml` asks for `9router-go version`, OS, and a snippet of
-   `9router-go logs` / Translator tab → Console Logs, because all three
+3. `bug_report.yml` asks for `xroute version`, OS, and a snippet of
+   `xroute logs` / Translator tab → Console Logs, because all three
    are almost always needed for reproduction.
 4. `PULL_REQUEST_TEMPLATE.md` contains a list of gates *exactly* the same
    as the `test`, `integration`, and `docker` jobs in `.github/workflows/ci.yml`
@@ -13040,14 +13040,14 @@ Changes:
 6. The **Contributing** section in `README.md` summarizes the four templates and
    their verification commands.
 
-Upstream research: `decolua/9router` has no issue or PR templates
-(`gh api repos/decolua/9router/contents/.github` → only `dependabot.yml`;
+Upstream research: `decolua/xroute` has no issue or PR templates
+(`gh api repos/decolua/xroute/contents/.github` → only `dependabot.yml`;
 `contents/CONTRIBUTING.md` → 404), so this is a local addition, not parity.
 
 ### 🔄 Seven parity fixes from still-open upstream PRs
 
 Seven independent changes, each closing one open PR in
-`decolua/9router` that the 2026-10-05 audit still left a gap in this gateway.
+`decolua/xroute` that the 2026-10-05 audit still left a gap in this gateway.
 All are data/capabilities/API-limits/UI — no contract change
 not yet promised to the client.
 
@@ -13232,7 +13232,7 @@ local `make test-race` target runs the same command; `-race` needs cgo, so it
 is deliberately left out of `make test`/`test-short`.
 
 Two things made this possible now: the upstream live tests have already been
-separated from CI via the opt-in `9ROUTER_LIVE_TESTS=1` (#150) — previously
+separated from CI via the opt-in `XROUTE_LIVE_TESTS=1` (#150) — previously
 `go test -race ./...` failed because `space-bunny-free` hit a rate limit, not
 because of the gateway — and `web/dist` is built first in the same step as the
 `integration` job, because `internal/app` → `web` → `web/embed.go` fails to
@@ -13268,7 +13268,7 @@ without a C compiler.
   `internal/handlers/chat/resolution.go`.
 - **Email masking**: `web/src/lib/privacy.ts` adds `maskEmail` /
   `formatEmailLabel` plus an `emailPrivacy` store persisted to
-  `localStorage['9router_mask_email']`, with a toggle in Quota Tracker,
+  `localStorage['xroute_mask_email']`, with a toggle in Quota Tracker,
   Provider Detail, and the Media views so account emails can be hidden while
   screen sharing. `maskEmail` is idempotent, the store follows the `storage`
   event so a second window stays in sync, and the toggle also appears in the
@@ -13326,7 +13326,7 @@ menutupi di satu log. Target lokal `make test-race` menjalankan perintah yang
 sama; `-race` butuh cgo, jadi sengaja tidak ikut `make test`/`test-short`.
 
 Dua hal yang membuat ini mungkin sekarang: test live upstream sudah dipisah dari
-CI lewat opt-in `9ROUTER_LIVE_TESTS=1` (#150) — sebelumnya `go test -race
+CI lewat opt-in `XROUTE_LIVE_TESTS=1` (#150) — sebelumnya `go test -race
 ./...` gagal karena `space-bunny-free` kena rate limit, bukan karena gateway —
 dan `web/dist` dibangun lebih dulu di step yang sama seperti job `integration`,
 karena `internal/app` → `web` → `web/embed.go` gagal compile tanpa SPA.
@@ -13443,18 +13443,18 @@ signatures before and after the split are identical (`go doc -all
 clean, `go test ./...` is green, `go test -tags=integration
 ./internal/integration/...` is green (69.7s + 0.2s).
 
-### 🔧 Dashboard backup returns to tidied JSON, like 9router upstream
+### 🔧 Dashboard backup returns to tidied JSON, like xroute upstream
 
 Background (issue #160): the **Download Backup** button in Settings offers a
-`.zip` containing JSON. Upstream `9router` downloads raw JSON —
-`JSON.stringify(payload, null, 2)` — named `9router-backup-<stamp>.json`, so
+`.zip` containing JSON. Upstream `xroute` downloads raw JSON —
+`JSON.stringify(payload, null, 2)` — named `xroute-backup-<stamp>.json`, so
 the backup here can't be read without extracting it first and diverges from
 parity.
 
 - `HandleExportDatabase` (`internal/handlers/dashboard/settings.go`) no longer
   wraps the payload in an archive. Its response is two-space indented JSON
   (`JSON.stringify(x, null, 2)`) with
-  `Content-Disposition: attachment; filename="9router-backup-<date>.json"`.
+  `Content-Disposition: attachment; filename="xroute-backup-<date>.json"`.
   The `?format=zip` branch and the `Accept: application/zip` detection were
   removed because the export now has only one shape.
 - `handlerutil.WriteJSONIndented` (new) writes indented JSON using
@@ -13571,7 +13571,7 @@ The shared logic lives in `web/src/components/connections/credential.ts`
 (placeholder, whitespace trimming, verdict mapping, probe) so that both modals
 don't repeat the same rules.
 
-Upstream parity: `decolua/9router` `src/shared/components/EditConnectionModal.js`
+Upstream parity: `decolua/xroute` `src/shared/components/EditConnectionModal.js`
 — the label "Leave blank to keep the current API key.", a Check button via
 `/api/providers/validate`, and `testStatus` only set when validation succeeds.
 
@@ -13726,7 +13726,7 @@ Parity: upstream records the same condition. The identical condition in Next.js
 *throws* from inside `executor.execute` (`open-sse/utils/proxyFetch.js`,
 "Proxy required but failed"), so the catch in `open-sse/handlers/chatCore.js`
 writes `saveRequestDetail({status: "error"})` **and**
-`trackPendingRequest(..., false, true)`. 9router-go now records both.
+`trackPendingRequest(..., false, true)`. xroute now records both.
 
 Fix (`internal/handlers/chat/fallback.go`):
 1. `fwdErr` is assigned before the `return`, so the `TrackPending` defer reports
@@ -13800,7 +13800,7 @@ is served directly by the healthy member without touching the sick upstream). On
 bug (`hasTerminal` set before `inbandFailure` is read) was caught
 by these tests during implementation.
 
-Parity note: the local upstream path (`/Users/luqmannul.hakim/htdocs/9router`)
+Parity note: the local upstream path (`/Users/luqmannul.hakim/htdocs/xroute`)
 is not available on this host, so it could not yet be compared with
 `open-sse` — this change is additive (healthy streams are byte-identical, only
 error-only streams change from silent-success to 502) and is noted here
@@ -13847,28 +13847,28 @@ Follow-up fixes from review:
   state, so two `Repo`s over different databases do not read each other's pools),
   and invalidated on every pool mutation — per AGENTS.md §4.A.
 
-### 📖 README: how to use a 9Router database directly, without import
+### 📖 README: how to use a XRoute database directly, without import
 
-The most frequent question — "can I not import from 9router?" — is already
+The most frequent question — "can I not import from xroute?" — is already
 answered in the documentation, but the answer is scattered: one sentence in `DATABASE.md`
 and an operator checklist that in fact tells you to run upstream first. The second
 is wrong for the most common case, because `EnsureCoreSchema` already
 tolerates an existing database. As a result readers conclude they must
 migrate manually, when in fact nothing needs to be imported at all.
 
-The new `🔄 Sharing a database with 9Router` section in the README states the matter
+The new `🔄 Sharing a database with XRoute` section in the README states the matter
 plainly up front: both projects point at the same `DATA_DIR/db/data.sqlite`,
-9router-go opens it as-is, and providers, connections, proxy pools,
+xroute opens it as-is, and providers, connections, proxy pools,
 combos, API keys, model aliases, and usage history are immediately readable. There are no
 import, export, or migration steps. Two operational modes are explained: a full
-switch (stop 9Router, run 9router-go), or running side by side on different
+switch (stop XRoute, run xroute), or running side by side on different
 ports with the same `DATA_DIR`. The reverse direction is also safe — two Go-only
 columns and the `upstream_leases` table are ignored upstream because its schema
 sync is additive.
 
 The limits are written as-is, not polished: no legacy JSON import, no
 destructive migration or pre-migration backup, and `_meta.schemaVersion` is not
-interpreted — a DB from a much newer 9Router release must be checked manually.
+interpreted — a DB from a much newer XRoute release must be checked manually.
 The operator checklist in `DATABASE.md` is corrected so it no longer tells you to run
 upstream first; the "Default path" row in the compatibility Boundaries table
 is clarified that there are no import steps.
@@ -13906,13 +13906,13 @@ The backend probe is now two-stage: **Google `generate_204` → Cloudflare `cdn-
 
 The dashboard gains status filtering (All / Active / Passed / Failed — upstream `failed` and `error` are merged into one bucket), sorting (Fastest, Recently Tested, Name), and two cleanup actions: **Disable Failed** and **Delete Failed**. All three now report **only results actually confirmed by the server**; previously `Delete Failed` silently discarded non-409 errors and still sounded successful, so the user could think the proxies were clean while they were still active and still used by routing.
 
-Parity note: upstream `decolua/9router` still probes `https://google.com/` with an 8s HEAD and writes `testStatus: "active" | "error"`. Those two words are still accepted in the UI, while the gateway itself still writes `passed`/`failed` as before.
+Parity note: upstream `decolua/xroute` still probes `https://google.com/` with an 8s HEAD and writes `testStatus: "active" | "error"`. Those two words are still accepted in the UI, while the gateway itself still writes `passed`/`failed` as before.
 
 ### 🩹 Live upstream tests split from CI via explicit opt-in
 
-19 tests in `internal/handlers/chat/` call real providers with real credentials from `~/.9router/db/data.sqlite`, and all of them are included in `go test ./...` which CI runs. The models are free-tier and shared: `oc/space-bunny-free` and `muse-spark-*-contributor-free` rate-limit per IP and are often already used up by other users. As a result `space-bunny-free` fails in `go test -race ./...` with `upstream error: Forward...` — a failure that has absolutely nothing to do with this gateway. Worse, without CI credentials those tests would "pass" while proving nothing.
+19 tests in `internal/handlers/chat/` call real providers with real credentials from `~/.xroute/db/data.sqlite`, and all of them are included in `go test ./...` which CI runs. The models are free-tier and shared: `oc/space-bunny-free` and `muse-spark-*-contributor-free` rate-limit per IP and are often already used up by other users. As a result `space-bunny-free` fails in `go test -race ./...` with `upstream error: Forward...` — a failure that has absolutely nothing to do with this gateway. Worse, without CI credentials those tests would "pass" while proving nothing.
 
-The test class is now distinguished by the opt-in `9ROUTER_LIVE_TESTS=1`, not by per-status skips. Its gate is `requireLiveUpstream`, called inside `getRealUserDB` which every live test already goes through — so a new live test that forgets to install the gate still skips, rather than leaking into CI. The five `muse_spark_*` tests don't go through `getRealUserDB` (their opencode connections aren't seeded, so their models resolve straight to the provider) and install the gate themselves. `make test-live` is a wrapper to run them locally.
+The test class is now distinguished by the opt-in `XROUTE_LIVE_TESTS=1`, not by per-status skips. Its gate is `requireLiveUpstream`, called inside `getRealUserDB` which every live test already goes through — so a new live test that forgets to install the gate still skips, rather than leaking into CI. The five `muse_spark_*` tests don't go through `getRealUserDB` (their opencode connections aren't seeded, so their models resolve straight to the provider) and install the gate themselves. `make test-live` is a wrapper to run them locally.
 
 The nine `if rec.Code == http.StatusTooManyRequests || ...` patterns that were rewritten over and over per test are now one `requireLiveOK`/`requireLiveSSE` helper, and `upstreamUnavailable` is widened to 429/403/402/502/503/504 — statuses that mean "not now", not a gateway defect. Every skip carries the provider's response body, so a local run still tells you what upstream actually said. 400 and 500 still fail, because those are gateway errors. 401 is deliberately separated: that's a local profile problem, not a provider outage.
 
@@ -13961,11 +13961,11 @@ The test's strength is not reduced. Tried with pacing decoupled from `reserve()`
 
 ### 🐛 Vercel/Deno/Cloudflare relay dashboard deploys 401 — issue #140
 
-All three deploy relay endpoints were registered in `SetupRoutes` (`internal/handlers/router.go`) at the path `/proxy-pools/{platform}-deploy`, which is mounted under `RequireApiKey`. The dashboard SPA instead calls it with a session cookie and without an engine key (`getAuthHeaders()` only sends `Authorization: Bearer` if `localStorage['9router_key']` is populated), so every "Deploy Relay" button is answered with `401 Authentication required. Provide an API key via Authorization: Bearer <key> ...` — exactly the issue #140 report.
+All three deploy relay endpoints were registered in `SetupRoutes` (`internal/handlers/router.go`) at the path `/proxy-pools/{platform}-deploy`, which is mounted under `RequireApiKey`. The dashboard SPA instead calls it with a session cookie and without an engine key (`getAuthHeaders()` only sends `Authorization: Bearer` if `localStorage['xroute_key']` is populated), so every "Deploy Relay" button is answered with `401 Authentication required. Provide an API key via Authorization: Bearer <key> ...` — exactly the issue #140 report.
 
 Moved to `SetupDashboardRoutes` as `/api/proxy-pools/{vercel,deno,cloudflare}-deploy` behind `RequireDashboardAuth`, same as the pool CRUD next to it and same as upstream (`src/app/api/proxy-pools/*-deploy/route.js`, which does indeed live in the `/api/*` namespace). The `/api` prefix closes a second gap at the same time: `web/vite.config.ts` only proxies `['/api', '/v1', '/usage', '/translator', '/debug', '/admin']`, so the old path also 404s in dev mode.
 
-Note: this applies to **Vercel and Cloudflare too**, not just Deno — all three share the same registration block. The only thing that masked Vercel was the presence of an API key in `localStorage`; as soon as one 401 occurs, `handleUnauthorized()` deletes `9router_key` *and* `9router_auth`, so the next attempt dies too.
+Note: this applies to **Vercel and Cloudflare too**, not just Deno — all three share the same registration block. The only thing that masked Vercel was the presence of an API key in `localStorage`; as soon as one 401 occurs, `handleUnauthorized()` deletes `xroute_key` *and* `xroute_auth`, so the next attempt dies too.
 
 A second bug in the same handler: Deno status polling only looks for `"succeeded"`, so a revision Deno has already rejected as `failed` still burns the full 60-second budget and finally reports `"deployment timed out"` — a symptom that reads like a network problem rather than a build failure. `awaitDenoRevision` now follows upstream: the loop only runs while `queued`/`building`, and a terminal status already reported by the deploy call is returned without a single request.
 
@@ -14002,12 +14002,12 @@ The profiling endpoints `/debug/pprof/*` were previously registered directly on 
 Four Antigravity handler tests (`TestHandleAntigravityAuthorize`, `TestGetAntigravityRedirectURI`, `TestHandleAntigravityExchangeErrors`, `TestHandleAntigravityExchangeSuccess`) were previously stored in `freebuff_test.go`, obscuring provider isolation. All four were moved to `antigravity_test.go` with identical contents, preserving the principle of independence between providers.
 **Verification:** `go vet ./...` is clean, `go test -race ./internal/handlers/oauth/...` is green.
 
-### ⚡ Force Fallback: serve the account whose cooldown expires soonest (issue #130, parity with `decolua/9router` PR #130)
+### ⚡ Force Fallback: serve the account whose cooldown expires soonest (issue #130, parity with `decolua/xroute` PR #130)
 
 Until now, if **all** accounts of a provider were on cooldown, the gateway
 failed immediately — while the account that would be free soonest could have
 served requests just seconds later. Operators had to wait or add more
-accounts. Upstream PR `decolua/9router#130` adds a "Force Fallback" switch:
+accounts. Upstream PR `decolua/xroute#130` adds a "Force Fallback" switch:
 when no account is available, use the account with the smallest remaining
 cooldown, then let upstream decide whether to accept or reject.
 
@@ -14271,7 +14271,7 @@ drop when the Tailwind palette bumps versions.
 ### 🐛 Capacity adapter does not follow upstream — parity with `open-sse/services/capacityAdapter.js`
 
 The input-modality adapter (vision/pdf/audioInput/videoInput) in this port
-diverges from upstream `decolua/9router` in six places, three of which change
+diverges from upstream `decolua/xroute` in six places, three of which change
 client-observable behavior:
 
 1. **`enabled: false` toggle ignored.** `combo.go` `continue`s past disabled
@@ -14365,7 +14365,7 @@ A second flaw was caught while writing the test: the fixed-width stamp `…:00.0
 
 > Note: `TestGateAcquire_*` in `internal/fetchgate` occasionally fails due to `time.Sleep` assumptions in this environment, and has been failing identically on `origin/main` (proven with `git stash`), so it is out of scope for this issue.
 
-### 🐛 "Strict Proxy" does not hold — upstream decolua/9router#4333 parity
+### 🐛 "Strict Proxy" does not hold — upstream decolua/xroute#4333 parity
 
 `strictProxy` on the pool and on the connection means "never leave through the real IP". Two places in this gateway still let it through: `proxy.DoRequest` replays a request that failed at the proxy through `directProxyClient` without checking the flag at all, and the legacy path `getClientForConnection` merely logs `strict proxy enabled but proxy url invalid` and returns a direct client. Both mean traffic that should never touch the real IP stays active.
 
@@ -14397,7 +14397,7 @@ Three filters that upstream applies when picking an account and building a reque
 
 ### 🔵 Four upstream v0.5.95 providers — Meta Muse, v1m System One, TinyFish, Agnes seed
 
-Four registry entries from upstream `decolua/9router` v0.5.91…v0.5.95. Each entry must exist in **every** table (transport, alias, catalog, executor, dashboard) — otherwise that provider is present in `/v1/models` but never routes.
+Four registry entries from upstream `decolua/xroute` v0.5.91…v0.5.95. Each entry must exist in **every** table (transport, alias, catalog, executor, dashboard) — otherwise that provider is present in `/v1/models` but never routes.
 
 - **Meta Muse** (`muse`): Meta's Model API with dual auth — the device code of a Meta account (Muse Code subscription, its key minted from the account token) **and** a pay-as-you-go API key from dev.meta.ai. Both ride the same bearer transport. All five Muse Spark models pin the `openai-responses` lane, so `internal/proxy/executor/muse.go` chooses an endpoint per model (using `handleCodexStream`, like the other Responses executors), not per provider. The live `/v1/models` catalog needs the `x-api-version: 1.0.0` header besides the bearer — that is why `providers.ModelsListHeaders` exists (upstream `PROVIDER_MODELS_CONFIG.muse`). The device flow is in `internal/handlers/oauth/muse_device.go`, including the mint retry when Meta replies 429 and the message that the subscription is not active yet. Pricing for all five models also comes from dev.meta.ai (the contributor tier is far cheaper).
 - **v1m System One** (`v1m`, alias `systemone`): a calibrated decision engine, `serviceKinds: ["systemone"]`, endpoint `https://v1m.ir/v1/systemone`. The `ProviderConfig` registry has no chat BaseURL for it — upstream does not either, so `BaseURL` is deliberately empty and only `SystemoneURL` is filled. `/v1/models/{kind}` selects via `SystemoneURL != ""`, so the model automatically appears on the System One tab.
@@ -14438,7 +14438,7 @@ The generator runs the upstream `getThinkingLevels` directly, and the pair list 
 
 **3. The last tool result never entered the cache** (upstream `49c761cd`). In the tool loop, a request ends with the tool result from the last assistant round — after that round's breakpoint — so its body is paid for in full and only written to the cache by the next request. While the 4-marker budget has room left, a single 5m breakpoint is now placed on the last cache-eligible block of that user turn; turns that already have `cache_control` are left untouched so re-anchoring stays idempotent.
 
-**Not ported: the unsigned thinking placeholder for DeepSeek** (upstream `08b21fea`, #4436). Upstream injects `{"type":"thinking","thinking":"."}` into an assistant round that has `tool_use` but no thinking block while thinking is active, and on DeepSeek appends that placeholder **without** a signature. In `9router-go` that path does not exist at all: `prepareClaudeRequest` has not been ported, and `AnchorClaudeCache` — the only `cache_control` anchor — never touches thinking or signatures (our passthrough also strips `signature` before forwarding). Patching in a placeholder without a proper `prepareClaudeRequest` path would only write a fake signature into the history, so this change is deliberately not forced; neither the placeholder nor a signature fetch is created so that no dead code remains.
+**Not ported: the unsigned thinking placeholder for DeepSeek** (upstream `08b21fea`, #4436). Upstream injects `{"type":"thinking","thinking":"."}` into an assistant round that has `tool_use` but no thinking block while thinking is active, and on DeepSeek appends that placeholder **without** a signature. In `xroute` that path does not exist at all: `prepareClaudeRequest` has not been ported, and `AnchorClaudeCache` — the only `cache_control` anchor — never touches thinking or signatures (our passthrough also strips `signature` before forwarding). Patching in a placeholder without a proper `prepareClaudeRequest` path would only write a fake signature into the history, so this change is deliberately not forced; neither the placeholder nor a signature fetch is created so that no dead code remains.
 
 ### 🐛 Combo publish limit ctx wrong entirely — plus an endless recursion that hangs the process — issue #99
 
@@ -14470,7 +14470,7 @@ Six changes, two of which are outside the requested file list and therefore reco
 
 ### 🐛 Codex: prevent refresh-token reuse and restore hosted web search — issue #94 (PR #113)
 
-Upstream parity `decolua/9router` `0bc7f86e`, `7bf93178`:
+Upstream parity `decolua/xroute` `0bc7f86e`, `7bf93178`:
 - **Refresh-token reuse prevention:** The per-provider `RefreshLead` delay is aligned (`oauth.refreshLeadMs` upstream). For Codex it is reduced from 5 days (432,000,000 ms) to 10 minutes (600,000 ms) so it does not trigger a token rotation on every call that ends in an OpenAI session revocation. The connection row is refreshed straight from the DB just before the exchange.
 - **Hosted web search on Lite models:** A body requesting `web_search` is forwarded via the regular Responses lane — tools are lifted to the top level without duplication, the `additional_tools` prefix is stripped from the input, and Lite models are bypassed for both the payload and the `x-openai-internal-codex-responses-lite` header.
 
@@ -14494,7 +14494,7 @@ One remaining flaky test is **not** a result of this change: `TestApplyConnectio
 
 ### ⬆️ Client identity: bump Codex CLI 0.159.0 & Grok CLI 1.0.44 — issue #103
 
-Upstream parity `decolua/9router` `ca6e8407`, `6b9dc54d`:
+Upstream parity `decolua/xroute` `ca6e8407`, `6b9dc54d`:
 - `cli-chat-proxy.grok.com` rejects identities below 1.0.13 with HTTP 426. The Grok CLI version was updated to `1.0.44` and the Codex CLI to `0.159.0`.
 - The literal versions are centralized in `internal/providers/client_identity.go` with a single constant to avoid drift.
 - Codex now sends a `version` header alongside the `User-Agent`.
@@ -14717,7 +14717,7 @@ actually closes gap #72, never touches a real release.
 Proven: with a manifest shaped exactly like the one the repo publishes,
 `CheckUpdate` returns `Source="manifest"`, `SHA256=""`, while the GitHub
 fallback that has `SHA256SUMS.txt` is never contacted. Every installation ends
-up `release carries no checksum` — fail-closed and safe, but `9router-go
+up `release carries no checksum` — fail-closed and safe, but `xroute
 update` is practically dead.
 
 The manifest may now only answer if it can actually produce an installable
@@ -14837,7 +14837,7 @@ rejected** — that is the gap #83 filled itself.
 
 #### Upstream audit before/after
 
-| Aspect | Upstream `decolua/9router` | 9router-go before | 9router-go after |
+| Aspect | Upstream `decolua/xroute` | xroute before | xroute after |
 |:--|:--|:--|:--|
 | Refresh before reading quota | present (`refreshAndUpdateCredentials`, `src/app/api/usage/[connectionId]/route.js`) | **absent** | present (`usage_credentials.go`) |
 | Retry on auth-expired message | present (once) | **absent** | present (once) |
@@ -15036,7 +15036,7 @@ the issue.
   prerelease, `rc2 > rc1`, build metadata is ignored), plus a second guard in
   `runCheckCycle`: the automatic path never installs a prerelease-tagged
   version onto a process running a final version. RCs can still be installed
-  manually via `9router-go update` or the dashboard button.
+  manually via `xroute update` or the dashboard button.
 - 🔴 **PID reuse could make `stop` kill another process (#74).**
   `RunningPID` only trusted the bare PID plus `proc.Alive`, so a pid file left
   by a dead daemon could be reported alive after the OS reused its number —
@@ -15116,7 +15116,7 @@ caught by `go vet`, `bun test`, or `-race`, because the existing tests mock
 exactly the same thing as the code path. All five have been fixed and
 tested with regression tests that fail when the fix is reverted (*mutation-checked*).
 
-- 🔴 **`9router-go status|stop|logs` were blind to the `DATA_DIR` from `.env`.**
+- 🔴 **`xroute status|stop|logs` were blind to the `DATA_DIR` from `.env`.**
   `daemonURL()` and `daemon.Dir()` read `os.Getenv`, while the server
   resolves it through viper, which reads `.env`. On a deployment
   configured only via `.env` — including every docker compose — the CLI process
@@ -15153,7 +15153,7 @@ tested with regression tests that fail when the fix is reverted (*mutation-check
   two credits wasted. The key is now minted when the modal opens, reset when it closes,
   and `confirmResetCredit` refuses to send an empty key. Its helper moved to
   `lib/codexResetCredit.ts` to be unit-testable per the repo's conventions.
-- 🔴 **`9router-go stop` on Windows was never graceful.** `stopGraceMS = 5000`
+- 🔴 **`xroute stop` on Windows was never graceful.** `stopGraceMS = 5000`
   was declared, but `requestStop` in `proc_windows.go` always
   `ErrStopUnsupported`, so `proc.Terminate` goes straight to `ForceKill` — the 5-second
   `server.Shutdown` drain designed in `server.go:99-101` **never
@@ -15218,9 +15218,9 @@ tested with regression tests that fail when the fix is reverted (*mutation-check
   - Added support for importing `.zip` archives in `POST /api/settings/database`, automatically extracting and restoring the JSON payload.
   - Updated `ProfileSettingsView.svelte` to download `.zip` by default and accept `.zip` as well as `.json` imports.
 
-### ✅ The binary can run in the background — `9router-go start` / `stop` / `restart` / `status` / `logs`
+### ✅ The binary can run in the background — `xroute start` / `stop` / `restart` / `status` / `logs`
 
-- **New options:** `--background` (alias `-d`) and the sub-command `start` run the gateway as a separate process that does not attach to the terminal, then return immediately. New sub-commands: `stop`, `restart`, `status`, `logs -n <lines>`. The old behaviour (`9router-go` without flags) is **unchanged** — it still runs in the foreground and stops on `^C`.
+- **New options:** `--background` (alias `-d`) and the sub-command `start` run the gateway as a separate process that does not attach to the terminal, then return immediately. New sub-commands: `stop`, `restart`, `status`, `logs -n <lines>`. The old behaviour (`xroute` without flags) is **unchanged** — it still runs in the foreground and stops on `^C`.
 - **PID file & log:** the detached process records itself in `DATA_DIR/run/gateway.pid` and writes stdout/stderr to `DATA_DIR/run/gateway.log`. Stale PID files are cleaned up when the next command runs, so a daemon force-killed from Task Manager does not leave a misleading trace.
 - **`Start` refuses when the port is already taken** — a pre-flight TCP connect, not merely relying on the PID file. Tested with a Python server holding the port: `start` fails with a message naming the port and its source, instead of racing two processes over one bind.
 - **Two real Windows bugs found and fixed on the same path.** (1) `HandleShutdown` (the Shutdown button in the dashboard) self-signals `SIGTERM`, and `os.Process.Signal(syscall.SIGTERM)` on Windows returns `not supported by windows` — the button never stopped the server. (2) `RestartSelf()` called `os.Exit(0)` before the listener was closed, then spawned the replacement, so the new process could seize the port before the old one released it. Both now go through `shutdown.RequestStop()` / `shutdown.RunAfterStop()`: main waits on three sources (`SIGINT`, `SIGTERM`, stop request), runs `fxApp.Stop`, and only then runs the spawn hook. Proven: `POST /api/version/shutdown` with a session cookie → process dies, port `20197` truly released.
@@ -15233,12 +15233,12 @@ tested with regression tests that fail when the fix is reverted (*mutation-check
 
 ### 🐛 Makefile only worked in a POSIX shell — on Windows every build/run target was broken
 
-- 🔴 **All symptoms came from POSIX syntax inside the recipe.** `VERSION ?= $(shell cat VERSION 2>/dev/null …)` returns an empty string in a non-POSIX shell (`/dev/null` does not exist), so `-X …CurrentVersion=` embeds an **empty** version into the binary. `PORT=20130 ./9router-go` makes cmd.exe try to run a program named `PORT`. `run`/`version`/`update`/`mitm-*` call `./$(BINARY_NAME)`, and cmd.exe answers `'.' is not recognized as an internal or external command` because `.` is not on PATH (PATHEXT only includes `.EXE`). `LDFLAGS` is wrapped in single quotes, and cmd.exe treats `'` as a literal character so the linker receives an already-quoted symbol name. `DATA_DIR ?= $(HOME)/.9router` expands to empty on native Windows → the literal path `/.9router` → `C:/Program Files/Git/.9router`, so **every** `make run` writes a fresh temporary DB and the dashboard keeps answering 401.
-- **The fix:** `VERSION` is read via `$(file <VERSION))` (Make-native, no shell) with successive fallbacks to `version.json`, then `git describe`, then `1.0.0`; the binary is invoked as `$(BINARY)` without `./` (found via PATHEXT in cmd.exe, still works in sh/POSIX); `LDFLAGS` uses double quotes; `DATA_DIR ?=` is left empty so the binary applies its own per-platform default (`%APPDATA%\9router` / `~/.9router`).
+- 🔴 **All symptoms came from POSIX syntax inside the recipe.** `VERSION ?= $(shell cat VERSION 2>/dev/null …)` returns an empty string in a non-POSIX shell (`/dev/null` does not exist), so `-X …CurrentVersion=` embeds an **empty** version into the binary. `PORT=20130 ./xroute` makes cmd.exe try to run a program named `PORT`. `run`/`version`/`update`/`mitm-*` call `./$(BINARY_NAME)`, and cmd.exe answers `'.' is not recognized as an internal or external command` because `.` is not on PATH (PATHEXT only includes `.EXE`). `LDFLAGS` is wrapped in single quotes, and cmd.exe treats `'` as a literal character so the linker receives an already-quoted symbol name. `DATA_DIR ?= $(HOME)/.xroute` expands to empty on native Windows → the literal path `/.xroute` → `C:/Program Files/Git/.xroute`, so **every** `make run` writes a fresh temporary DB and the dashboard keeps answering 401.
+- **The fix:** `VERSION` is read via `$(file <VERSION))` (Make-native, no shell) with successive fallbacks to `version.json`, then `git describe`, then `1.0.0`; the binary is invoked as `$(BINARY)` without `./` (found via PATHEXT in cmd.exe, still works in sh/POSIX); `LDFLAGS` uses double quotes; `DATA_DIR ?=` is left empty so the binary applies its own per-platform default (`%APPDATA%\xroute` / `~/.xroute`).
 - **`PORT`/`DATA_DIR`/`RTK`/`CAVEMAN`/`PONYTAIL` are only exported when their origin is not `file`.** The `make run` probe must not clobber config: a `?=` value has origin `file`, while values coming from environment or the command line have origin `environment`/`command line`. Operator-set values are still passed through; unset ones are skipped so the binary reads `.env` (viper) itself as usual. This replaces the `VAR=value` prefix that cmd.exe cannot parse.
 - **`web-build` and `cross` no longer need POSIX.** The `[ ! -f web/dist/index.html ]` guard dies in cmd.exe (`! was unexpected at this time.`), so all existence checks and the build are delegated to `bun -e` — Bun was already a prerequisite for every path through this target. `cross` no longer writes `GOOS=… GOARCH=…` in front of `go build`; the per-target OS/ARCH go in via `export` directives identical in both sh and cmd, and the `export` is scoped to the `cross-one` subgoal so an empty `GOARCH` never leaks into the ordinary `build`.
-- **Verification:** `make version` produces `9router-go version 1.9.5 (windows/amd64)` both when make is invoked from sh and from `cmd.exe /c`; `make cross-one CROSS_OS=linux CROSS_ARCH=amd64` from Windows produces a real ELF binary (magic `\x7fELF`), so the `export GOOS/GOARCH` plumbing is proven to be more than merely parsing. The `cross` recipe (a `for` loop), `clean` (`rm -f`), `help` (`grep|sed`), and `bench` remain POSIX-only — on a machine without `sh.exe` on PATH, those are the recipes that fail first.
-- 🔴 **Follow-up: `BINARY_NAME` had no extension, so the new build was never run on Windows.** `go build -o 9router-go` on native Windows writes a file named `9router-go` (a PE without extension), while `make run` calls `9router-go`, which cmd.exe resolves via `PATHEXT` to **the previous build's `9router-go.exe`**. As a result `make run` silently ran the old binary: the `go:embed` assets stayed the stale SPA bundle, and frontend fixes looked like they "did not land" even though they were built. Fixed with `BINARY_SUFFIX := $(if $(findstring Windows_NT,$(OS)),.exe,)` so the build target writes exactly the file that gets executed. `BINARY` is also split per-OS: bare name on Windows (PATHEXT), `./$(BINARY_NAME)` on macOS/Linux (`.` is not on PATH).
+- **Verification:** `make version` produces `xroute version 1.9.5 (windows/amd64)` both when make is invoked from sh and from `cmd.exe /c`; `make cross-one CROSS_OS=linux CROSS_ARCH=amd64` from Windows produces a real ELF binary (magic `\x7fELF`), so the `export GOOS/GOARCH` plumbing is proven to be more than merely parsing. The `cross` recipe (a `for` loop), `clean` (`rm -f`), `help` (`grep|sed`), and `bench` remain POSIX-only — on a machine without `sh.exe` on PATH, those are the recipes that fail first.
+- 🔴 **Follow-up: `BINARY_NAME` had no extension, so the new build was never run on Windows.** `go build -o xroute` on native Windows writes a file named `xroute` (a PE without extension), while `make run` calls `xroute`, which cmd.exe resolves via `PATHEXT` to **the previous build's `xroute.exe`**. As a result `make run` silently ran the old binary: the `go:embed` assets stayed the stale SPA bundle, and frontend fixes looked like they "did not land" even though they were built. Fixed with `BINARY_SUFFIX := $(if $(findstring Windows_NT,$(OS)),.exe,)` so the build target writes exactly the file that gets executed. `BINARY` is also split per-OS: bare name on Windows (PATHEXT), `./$(BINARY_NAME)` on macOS/Linux (`.` is not on PATH).
 - **`web-build` can be forced to rebuild.** The `existsSync('web/dist/index.html')` condition meant the SPA was only built once; now `FORCE=1 make web-build` (or `FORCE=1 make build`) rebuilds `web/dist`. Docker (`Dockerfile` stage `web-builder`) and GitHub Actions (`ci.yml`, `release.yml`) are **not** affected: both already call `bun run build` explicitly in a clean build context, so they never hit this cache.
 
 
@@ -15342,7 +15342,7 @@ tested with regression tests that fail when the fix is reverted (*mutation-check
 
 ### 🐛 Issue #57 — a stream that dies after HTTP 200 was closed silently
 
-- **The client was told the answer was complete.** A stall timeout or a dropped socket used to end a streaming request with a synthesized finish_reason plus the [DONE] sentinel; every OpenAI client reads a finish_reason as a normal completion, so truncated text was kept and reported as a finished turn. Ported from upstream decolua/9router commit 93001213 (buildStreamErrorBytes, onAbortTerminal).
+- **The client was told the answer was complete.** A stall timeout or a dropped socket used to end a streaming request with a synthesized finish_reason plus the [DONE] sentinel; every OpenAI client reads a finish_reason as a normal completion, so truncated text was kept and reported as a finished turn. Ported from upstream decolua/xroute commit 93001213 (buildStreamErrorBytes, onAbortTerminal).
 - **An in-band error frame, and never a fabricated terminal.** New `internal/proxy/sse_error.go` emits the OpenAI shape (a data frame carrying an error key with a machine-readable code, then the [DONE] sentinel) and the Anthropic shape (event error) for the Claude-named path. The abort path of `SSECopy` no longer reaches the `finish_reason` synthesis that `finish()` still uses for a clean EOF.
 - **A timeout is distinguishable from a lost socket.** The stall watchdog now records that it fired (`stall.go` sets an atomic flag) and `Read` re-wraps the opaque closed-file error as `ErrStreamStall`, so the client gets a 504 `gateway_timeout` instead of a 502 `upstream_error`. Cancellation stays 499 rather than being reported as a gateway failure.
 - **Verified, not just green.** New unit tests cover the abort frame and all three classifications; a new integration test drives the real router against a fake upstream that hijacks and kills the socket mid-turn. Mutation-checked: restoring the old call site fails the integration test and the unit tests with exactly the reported symptom. Smoke-tested against the built binary with a socket reset mid-turn: the client receives the error frame plus [DONE], and a healthy stream is relayed unchanged with no error frame.
@@ -15411,7 +15411,7 @@ tested with regression tests that fail when the fix is reverted (*mutation-check
 
 ### 🔒 Issue #35 — the backup file carried the dashboard password hash and the live OIDC client secret
 
-- 🔴 **`GET /api/settings/database` wrote the raw settings blob into the payload.** `exportDatabase` assigned `Repo.GetSettingsRaw()` straight into `out.Settings` (`settings.go:349-354`), and `GetSettingsRaw` unmarshals the stored JSON unfiltered. `sanitizeSettings` — the one function that drops these keys — had exactly two call sites, `GET /api/settings` and `PUT /api/settings`, so the backup path bypassed it entirely. Every `9router-backup-*.json` therefore contained `"password": "$2a$10$…"` and `"oidcClientSecret": "…"` on disk. The OIDC secret is not a hash: `HandleOidcTest` (`sso.go:70`) reads it as plaintext, so it is directly usable against the identity provider. Since #32/#34 made the password-modal flow actually produce a file instead of 401-ing in the browser, this stopped being theoretical.
+- 🔴 **`GET /api/settings/database` wrote the raw settings blob into the payload.** `exportDatabase` assigned `Repo.GetSettingsRaw()` straight into `out.Settings` (`settings.go:349-354`), and `GetSettingsRaw` unmarshals the stored JSON unfiltered. `sanitizeSettings` — the one function that drops these keys — had exactly two call sites, `GET /api/settings` and `PUT /api/settings`, so the backup path bypassed it entirely. Every `xroute-backup-*.json` therefore contained `"password": "$2a$10$…"` and `"oidcClientSecret": "…"` on disk. The OIDC secret is not a hash: `HandleOidcTest` (`sso.go:70`) reads it as plaintext, so it is directly usable against the identity provider. Since #32/#34 made the password-modal flow actually produce a file instead of 401-ing in the browser, this stopped being theoretical.
 - **Export now strips them through the existing key list.** `exportDatabase` calls a new `stripSecretSettings`, which reuses `secretSettingKeys` rather than repeating the list, so there is one place that decides what a secret is. It deliberately does *not* add the derived `hasPassword` field the way `sanitizeSettings` does: the payload is read back by `importDatabase` and written into the settings row, so a response-only flag would persist a value nothing reads. Non-secret settings are untouched — `oidcIssuerUrl`, `requireLogin` and friends still restore.
 - 🔴 **Naive sanitising was itself a security regression, and this is the part the issue did not predict.** `importDatabase` wipes the settings row (`DELETE FROM settings`) before writing the payload, so a backup with the keys stripped would have *deleted the live password* on restore and dropped the dashboard onto the well-known default `123456` — trading "a secret sits in a file" for "anyone who knows the default can log in", with OIDC silently disabled on top. Verified against a live build before fixing it: after importing a sanitised backup, `POST /api/auth/login` answered **200 for `123456`**, 401 for the real password, and `/api/auth/status` reported `hasPassword: false`. `importDatabase` now reads the current secret values **inside the transaction, before the wipe** (`readSettingsSecrets`) and carries them forward, so a restore can never downgrade auth. A payload that does carry its own hash still wins, so files written by older builds — or by the Next dashboard — keep restoring as before; and an *empty* secret in the payload is read as "not present here" rather than "clear it", so a hand-edited backup cannot blank the stored credentials either.
 - **Deliberate divergence from upstream.** `exportSettings()` in `src/lib/db/repos/settingsRepo.js` is a plain `return await readRaw()` and `exportDb()` uses it directly, so upstream leaks the same two keys. This is a parity break, taken because the file is user-shared by nature.
@@ -15420,12 +15420,12 @@ tested with regression tests that fail when the fix is reverted (*mutation-check
 
 ### ⚡ PGO + upstream connection-pool tuning
 
-- **PGO is now on for release builds.** `cmd/9router-go/default.pgo` is a CPU profile captured from a real chat-completions workload (auth + model resolution + SQLite reads + upstream forward). Go 1.27's default `-pgo=auto` picks it up automatically, so `make build`, `make run` and `make cross` all get the optimized binary with no flag to remember — `go version -m 9router-go | grep pgo` confirms it.
+- **PGO is now on for release builds.** `cmd/xroute/default.pgo` is a CPU profile captured from a real chat-completions workload (auth + model resolution + SQLite reads + upstream forward). Go 1.27's default `-pgo=auto` picks it up automatically, so `make build`, `make run` and `make cross` all get the optimized binary with no flag to remember — `go version -m xroute | grep pgo` confirms it.
 - **The connection pool was the actual bottleneck, not the compiler.** Go defaults `MaxIdleConnsPerHost` to **2**, so a reverse proxy under concurrency kept re-dialling upstream: a fresh TCP connect plus TLS handshake per request. `FallbackTransport`, `directProxyClient`, the chat handler's streaming client and the rotating-proxy client all ran on 2 idle slots per host. Raising it to 128 idle per host (256 total) and enabling HTTP/2 cut p99 latency **-51%** and raised throughput **+27%** at c=100 against the mock upstream.
 - **The numbers live in `constants.HTTPTransportConfig`.** The pool/timeout values were four separate magic-number blocks; they are now one struct with a documented field for each knob, plus `Configure(t)` for a cloned `*http.Transport` and `NewTransport()` for a fresh one. `internal/proxy`, `internal/handlers/chat` and the rotating-proxy cache all read the same `DefaultHTTPTransportConfig`.
 - **Verified behaviour-preserving against 13 live providers.** A three-way fingerprint (HTTP status, response envelope, error body) was captured from the pre-change build, a `-pgo=off` build and a PGO build, all against the same real upstream accounts: **0/13 providers changed outcome**, and the provider executor suite is 94/94 identical. The eight providers that fail do so for account reasons that predate this work — model not in plan (groq, clinepass), ChatGPT-plan restriction (codex), zero credits (commandcode, trae/opencode), and a bad base path (nvidia).
 - **Two pre-existing non-streaming bugs surfaced while probing and are left as-is here.** `qd/*` and `kr/*` answer a `stream:false` request with HTTP 200 and an SSE-shaped body (qoder even mislabels it `application/json` while embedding an upstream 400 envelope). Confirmed identical on the pre-change build, so this change neither caused nor fixed it.
-- **`benchmark/run_perf_test.py`** reproduces the load numbers end-to-end against a mock upstream; **`benchmark/live_provider_smoke.py`** reproduces the 13-provider fingerprint against the real database. Neither is part of `go test` — the live one needs `SMOKE_API_KEY` and a populated `~/.9router/db/data.sqlite`.
+- **`benchmark/run_perf_test.py`** reproduces the load numbers end-to-end against a mock upstream; **`benchmark/live_provider_smoke.py`** reproduces the 13-provider fingerprint against the real database. Neither is part of `go test` — the live one needs `SMOKE_API_KEY` and a populated `~/.xroute/db/data.sqlite`.
 ### ✨ Combos page: bulk delete with selection
 
 - Every combo card gets a checkbox, with **Delete Selected (n)** and **Delete All (n)** buttons in the header. Both open the existing confirm modal, then delete sequentially and report partial failures (`Deleted 3 of 5 combo(s)`) instead of silently dropping the rest.
@@ -15454,7 +15454,7 @@ tested with regression tests that fail when the fix is reverted (*mutation-check
 
 ### 🐛 The CLI Tools page could not be opened at all (broken since v1.9.0)
 
-- 🔴 **The view threw before it could render.** `CliToolsView.svelte` referenced `selectedTool` in ~20 places — the tool-card click handler and the whole detail modal — but the `$state` declaration had been dropped, leaving it as an undeclared global. The template threw `ReferenceError: selectedTool is not defined`, so the component never finished mounting and the page sat on "Connecting to 9router-go Localhost Gateway (:20130)…" forever. `git log -S` pinned the removal to `d8aa5ec3`, which is in **every release from v1.9.0 through v1.9.5** — six releases, about four days.
+- 🔴 **The view threw before it could render.** `CliToolsView.svelte` referenced `selectedTool` in ~20 places — the tool-card click handler and the whole detail modal — but the `$state` declaration had been dropped, leaving it as an undeclared global. The template threw `ReferenceError: selectedTool is not defined`, so the component never finished mounting and the page sat on "Connecting to xroute Localhost Gateway (:20130)…" forever. `git log -S` pinned the removal to `d8aa5ec3`, which is in **every release from v1.9.0 through v1.9.5** — six releases, about four days.
 - 🔴 **The API it calls was behind the wrong auth gate.** `/api/cli-tools/all-statuses` was registered inside `SetupRoutes`, which `SetupServerRouter` mounts under `RequireApiKey` — the LLM API-key middleware. But the SPA calls it with the dashboard session cookie and never an API key, so every call returned 401 and the app bounced back to the endpoint tab even after the render crash was fixed. The route's own comment already said "dashboard batch status", so it was never meant to sit behind the LLM gate. It now lives in the `RequireDashboardAuth` group alongside the rest of the dashboard API; the unprefixed `/cli-tools/all-statuses` alias stays on the API-key group for external callers, and both paths still reject anonymous requests.
 - **Why six releases missed it.** `tsc -b` does not typecheck `.svelte` files and the Svelte compiler does not scope-check templates, so an undeclared variable in a template is invisible to both `bun run build` and the CI build step. The 85-test web suite added in #36 covers `client.ts`, `router.ts` and friends, but there is no component-level render test, and no `svelte-check` in the toolchain. Fixing the two bugs closes the symptom; the gap that let it ship six times is still open.
 - `TestSetupServerRouter_CLIToolsStatusIsADashboardRead` pins the dashboard-session auth (anonymous stays 401, session gets 200), and `TestSetupServerRouter_CLIToolsStatusAPIKeyAliasUnchanged` keeps the API-key alias registered rather than accidentally removed. Both are mutation-checked: restoring the old registration fails the first one with the exact 401 the dashboard was hitting.
@@ -15474,7 +15474,7 @@ tested with regression tests that fail when the fix is reverted (*mutation-check
 - **Quota reads now pass through a single process-wide gate: 250ms floor plus up to 120ms of jitter**, so the same call repeated for the next account is always at least a quarter-second behind the last one and never lands in a perfectly periodic pattern. Measured A/B on the real router with six ollama connections fetched concurrently: with the gate the six responses spread across 325ms → 2.59s (gaps 295–661ms), without it they all landed inside a 22ms window (333–355ms) — the exact burst from the report.
 - **New `internal/fetchgate` is the general, provider-agnostic mechanism** (`fetchgate.New(minGap, maxJitter)` + `Acquire(ctx)`), not an Antigravity patch: slots are reserved under the lock in call order, jitter is additive so `minGap` stays a hard floor, and a cancelled context releases the wait instead of holding a slot against the requests behind it. `HandleGetConnectionUsage` acquires one slot before every live read, on both the `fetchProviderUsage` dispatch and the separate Antigravity branch (which does not route through it). One account's own two RPCs (`loadCodeAssist` then `fetchAvailableModels`) stay back to back — that is upstream's own sequence, and one account is not the burst.
 - **Only the start of a request is paced, and only when one is actually made.** A single account's manual refresh pays nothing, a provider with no live fetcher (the lock/Cooldown fallback) never queues, and a dashboard that navigates away mid-refresh spends no upstream request on a response nobody reads.
-- **Upstream `decolua/9router` has no throttle here either**, so this is a deliberate, documented gap rather than a parity regression to revert later. The same shape is what OmniRoute added in `quotaFetchThrottle` after accounts on one egress IP started looking like automation to their provider.
+- **Upstream `decolua/xroute` has no throttle here either**, so this is a deliberate, documented gap rather than a parity regression to revert later. The same shape is what OmniRoute added in `quotaFetchThrottle` after accounts on one egress IP started looking like automation to their provider.
 - Covered by `internal/fetchgate` (idle gate is free, concurrent callers spaced, jitter only widens the gap, cancellation releases the wait) and by the dashboard, which asserts the spacing at the fake provider's own socket — the ollama dispatch, the Antigravity branch, and that an abandoned request makes no upstream call at all. Every one of those three fails when the gate is set to a zero gap.
 
 ### ✨ Chat Completions → OpenAI Responses streaming translator
@@ -15561,7 +15561,7 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 
 ### ✨ `/v1/models` can report the models you can actually call (#28)
 
-- Reported by **@FmcStore** ([#28](https://github.com/luqman-v1/9router-go/issues/28)) and implemented in [#29](https://github.com/luqman-v1/9router-go/pull/29) — Thank you for the report that pinned the two code paths apart, and for the live before/after model counts that made the fix verifiable!
+- Reported by **@FmcStore** ([#28](https://github.com/x-inu/XRoute/issues/28)) and implemented in [#29](https://github.com/x-inu/XRoute/pull/29) — Thank you for the report that pinned the two code paths apart, and for the live before/after model counts that made the fix verifiable!
 - On a fresh install `/v1/models` listed **1302 models across 119 providers** while the dashboard picker showed ~8, and nothing in the response said which list was authoritative. The two numbers came from different code paths: `buildModelsList` deliberately dumps the whole static registry when `providerConnections` is empty ("so a fresh install still has a usable picker"), while `resolveModelPickerGroups` in `web/src/components/combos/pickerData.ts` gates on `isConnected || noAuth`. A new user reads the 1302-entry list as "models I can call" and looks for a missing import step.
 - The listing is now scopeable by query parameter, leaving the default byte-for-byte upstream-compatible:
   - `GET /v1/models` (default) — unchanged: full catalog on a fresh install, connection-scoped once connections exist
@@ -15576,8 +15576,8 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 
 ### 🐛 Dashboard backup import always failed with `Invalid database payload`
 
-- Implemented by [@lautdalamvip](https://github.com/lautdalamvip) in [#32](https://github.com/luqman-v1/9router-go/pull/32) — the multipart/JSON mismatch and the upstream modal port both traced correctly, thank you!
-- `ProfileSettingsView.svelte` posted the chosen file as **`multipart/form-data`**, but `HandleImportDatabase` (like upstream `src/app/api/settings/database/route.js`) does `request.json()` on the body, so every import died at the decode with HTTP 400 and the user saw "Failed to import database: Import failed with status 400". The client now reads `file.text()`, `JSON.parse`s it, and POSTs the raw JSON body — verified against a real `9router-backup-<ISO stamp>.json` export.
+- Implemented by [@lautdalamvip](https://github.com/lautdalamvip) in [#32](https://github.com/x-inu/XRoute/pull/32) — the multipart/JSON mismatch and the upstream modal port both traced correctly, thank you!
+- `ProfileSettingsView.svelte` posted the chosen file as **`multipart/form-data`**, but `HandleImportDatabase` (like upstream `src/app/api/settings/database/route.js`) does `request.json()` on the body, so every import died at the decode with HTTP 400 and the user saw "Failed to import database: Import failed with status 400". The client now reads `file.text()`, `JSON.parse`s it, and POSTs the raw JSON body — verified against a real `xroute-backup-<ISO stamp>.json` export.
 - The destructive op also re-authenticates against the stored bcrypt hash, and the client never sent a password at all: once a dashboard password was set, import (and the plain anchor-click export, which is likewise an `x-9r-password`-gated route) returned 401. Upstream prompts in a modal first; the port now does the same — both buttons open a password modal, and the password travels in the `x-9r-password` header.
 - Backup filename stamp regained full precision (`T15-07-00-715Z` instead of a day-only `T00-00-00-000Z`), matching upstream's `toISOString().replace(/[.:]/g, '-')`.
 - Server side accepts the password from **either** the body field or the header, so the pre-existing body-embedded contract keeps working. The upstream post-import `applyOutboundProxyEnv` has no Go equivalent yet (no `outboundProxyUrl` handling exists in this runtime), so it is noted in a comment rather than faked.
@@ -15656,7 +15656,7 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 - 🔴 **Round-robin state was an in-memory index, so it reset to the top account on every restart** — and the reported "round robin never reaches the next account" is exactly what that produces. Rotation is now persisted per row, ported from upstream's stateless LRU (`src/sse/services/auth.js:151-189`): `lastUsedAt` / `consecutiveUseCount` are read with the candidate set, the least-recently-used row wins once its sticky window expires, and the winner's stamp is written back. The selector lives in `selectByRecency`, replacing `rotateConnectionsSticky`; the now-dead `ResetConnectionState` and the `conn:`-prefixed in-memory keys are gone, since there is no in-memory connection state left to reset.
 - **Rotation stamps need nanosecond precision, and this is load-bearing.** The least-recently-used tie-break keeps the first row in priority order when two stamps are equal, so with `time.RFC3339` (whole seconds) every account ends up carrying the same stamp after one full cycle and the rotation then locks onto the top account forever. `db.RotationTimestampFormat` is a fixed-width nanosecond RFC3339 — fixed width, not `time.RFC3339Nano`, which trims trailing zeros and would sort `…:00.5Z` after `…:00.500000001Z`. `TestApplyConnectionStrategy_KeepsRotatingPastFirstCycle` fails on pick 5 if the format is reverted to seconds.
 - **Test fixtures were building a narrower schema than production.** `dbtest.CreateTables` and five hand-rolled test schemas declared `providerConnections` without the Go-only additive columns, so any query reading `lastUsedAt` failed in tests while working in a real database. `db.EnsureAdditiveColumns` is now exported and applied by those fixtures, which keeps the two shapes from drifting again the next time a column is added.
-- **Providers added to the catalog without a shipped PNG rendered as an empty tile.** `getIconPath` resolves `/providers/<id>.png` for every card, and the sites hid the failed `<img>` — B.AI, Qoder CN, Dahl, Atria, Agnes, TokenHarbor (and `zai-search`) all showed a blank 32px box. The real logos were copied from upstream `decolua/9router` (`public/providers/{bai,atria,dahl,agnes,tokenharbor,qoder-cn}.png`, verified as valid PNGs), so the cards now render the genuine artwork. As a backstop, the new shared `ProviderIcon.svelte` (card tile, detail header, top bar) still falls back to an initials badge in the provider's own catalog colour on any missing asset, so a future provider that forgets to ship artwork reads as intentional rather than broken. `zai-search` is an internal tool provider with no card and no upstream logo; only the fallback covers it if it ever renders.
+- **Providers added to the catalog without a shipped PNG rendered as an empty tile.** `getIconPath` resolves `/providers/<id>.png` for every card, and the sites hid the failed `<img>` — B.AI, Qoder CN, Dahl, Atria, Agnes, TokenHarbor (and `zai-search`) all showed a blank 32px box. The real logos were copied from upstream `decolua/xroute` (`public/providers/{bai,atria,dahl,agnes,tokenharbor,qoder-cn}.png`, verified as valid PNGs), so the cards now render the genuine artwork. As a backstop, the new shared `ProviderIcon.svelte` (card tile, detail header, top bar) still falls back to an initials badge in the provider's own catalog colour on any missing asset, so a future provider that forgets to ship artwork reads as intentional rather than broken. `zai-search` is an internal tool provider with no card and no upstream logo; only the fallback covers it if it ever renders.
 - Verified with `go test ./...`, a full SPA build, and a live run of the built binary driven through the dashboard UI: the reorder endpoint repaired a deliberately tied pool; a chevron click moved a row the old two-PUT path had wedged; renaming a NULL-priority row left the column NULL while an explicit priority change still took effect; and a chevron click landed while a row proxy dropdown was open.
 - Round-robin was then exercised end to end against a stand-in upstream that echoes back the credential it received, over a custom OpenAI-compatible node with three accounts: six requests rotated `1→2→3→1→2→3`; the gateway was restarted mid-cycle and the next three continued `3→1→2` rather than restarting at the top account; disabling one account removed it from service (`3→1→3→1`) and an explicit `x-connection-id` pin naming that disabled account was ignored in favour of an active one.
 
@@ -15703,10 +15703,10 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 ### ✨ Sync batch — Codex `responsesLite` and the connection name guard
 
 - **`responsesLite` for `gpt-6-sol` / `gpt-6-luna`** (`95600db1`). Those two models were in the catalogue but would 400: Codex 0.155 serves them with a different request shape — tools and instructions travel as an `input` prefix (`additional_tools` + a developer message) instead of top-level fields, and reasoning carries `context: "all_turns"` with no `summary`. Adding the ids to the catalogue without the wire shape was worse than leaving them out, so `internal/proxy/executor/codex_responses_lite.go` ports it: `isCodexResponsesLiteModel` (stripping a trailing `(level)` override first), the prefix rewrite, and the lite reasoning block (effort defaulting to medium rather than low). A body that already carries the prefix is left untouched, so replaying a transcript is not double-wrapped, and an input shape the rewrite cannot read is left alone rather than replacing the conversation with the prefix — the two build paths produce different concrete slice types, `[]any` and `[]map[string]any`. Classic Codex models keep the shape they had; `TestBuildResponsesBody_ClassicCodexUnchanged` pins that.
-- Not ported: upstream falls back to `CODEX_DEFAULT_INSTRUCTIONS` when the client sends none, and 9router-go has no copy of that prompt blob for any model — the prefix carries the caller's own instructions, and adds no developer message when there are none. Carrying a Codex prompt only on the lite path would be a new, unreviewed prompt rather than a parity fix.
+- Not ported: upstream falls back to `CODEX_DEFAULT_INSTRUCTIONS` when the client sends none, and xroute has no copy of that prompt blob for any model — the prefix carries the caller's own instructions, and adds no developer message when there are none. Carrying a Codex prompt only on the lite path would be a new, unreviewed prompt rather than a parity fix.
 - **`POST /api/connections` refused to overwrite nothing** (`239bcfc5`, fixes #4311). A create reusing a name already in use replaced the stored key without a word: a script naming rows "Key 1", "Key 2", … kept wiping existing pool entries and got a success back. A create now looks the name up first and answers **409 `PROVIDER_NAME_CONFLICT`** naming the row that would have been replaced; a caller that means it passes `allowOverwrite: true` (or the legacy `overwrite`), which rewrites that row in place, keeping its id and its place in the rotation instead of leaving two rows the account picker cannot tell apart. A request carrying an `id` is already an explicit edit and is never name-guarded. Go's symptom was a silent duplicate rather than a silent replace, because `CreateProviderConnectionFull` is a plain INSERT — same caller-facing hole, different shape.
 - The O(1) half of that upstream commit was already ported (`MAX(priority)+1`, no renumber pass on insert).
-- Live: `POST /api/connections {"provider":"commandcode","name":"9router",…}` without an id answers 409 with `existingId`/`existingName`, and the stored connection is still the only one — one row, key intact.
+- Live: `POST /api/connections {"provider":"commandcode","name":"xroute",…}` without an id answers 409 with `existingId`/`existingName`, and the stored connection is still the only one — one row, key intact.
 
 ### ✨ Sync batch — 5 aggregator providers, catalogue and Cline free tier
 
@@ -15788,17 +15788,17 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 - A resolver is only consulted when `enabledModels` is not pinned on the connection, exactly like upstream; the live catalog replaces the static one while custom models and aliases are still merged in.
 - Response shape aligned with upstream: kiro `capabilities` uses the live `{thinking, agentic}` block verbatim; combos use a separate `ComboCapabilities` shape (no `thinkingEffortSupported`, `tools` = AND across leaves, `contextWindow` = narrowest leaf, `maxOutput` = widest leaf — the `aggregateComboCapabilities` rules); `context_length`/`max_completion_tokens` are gone from combo entries (`omitzero` is required because `encoding/json/v2` does not drop zero numbers under `omitempty`); the `outputAlias/` qualifier is stripped only from registry/alias ids, never from custom ids (which is why `openrouter/openrouter/free` stays double-prefixed upstream too).
 - `internal/providers/catalog_sync.go`: the models.dev catalog file written by upstream is now readable (its `v2`/`etag`/epoch-millisecond `syncedAt` format), and `GetCatalogLimits` is consulted before the substring guesses, so token limits follow the catalog instead of heuristics.
-- Cross-check against the running upstream instance (`:20128`, same database): **714 models upstream vs 713 in 9router-go, all 713 ids identical, 0 entry-key and 0 `capabilities`-key differences**. Breakdown: `clinepass` 469/469, `kr` 34/34, `ag` 20/20, `cbai` 15/15, `openrouter` 7/7, `nvidia` 4/4, `Id` 3/3, `gcli` 1/1, `tr` 153/154, combos 7/7.
+- Cross-check against the running upstream instance (`:20128`, same database): **714 models upstream vs 713 in xroute, all 713 ids identical, 0 entry-key and 0 `capabilities`-key differences**. Breakdown: `clinepass` 469/469, `kr` 34/34, `ag` 20/20, `cbai` 15/15, `openrouter` 7/7, `nvidia` 4/4, `Id` 3/3, `gcli` 1/1, `tr` 153/154, combos 7/7.
 - Remaining: (a) `tr/typesafe/jev-1.13` exists only upstream — the tokenrouter node's `GET <baseUrl>/models` now returns nothing, so it is a leftover upstream cache entry; (b) the **values** of `context_length`/`max_completion_tokens` still differ for 627 ids because upstream's `MODEL_CAPABILITIES`/`PATTERN_CAPABILITIES` tables are not ported yet (the models.dev catalog only covers 23 providers) — the model list and the response shape are identical, the numbers are not.
 - Tests: `live_catalog_test.go` (kiro variant expansion, `kiroDisplayName`, grok-cli catalogue parser with 5 cases, region from profileArn) + `live_catalog_handler_test.go` (live kiro replaces the static catalog, `enabledModels` skips the live fetch, failures fall back to the static catalog, live grok-cli and its headers).
 
 ### 🐛 `GET /v1/models` — full port of upstream's Next.js `buildModelsList` (fixes issue #1)
 
 - Symptom: `/v1/models` flooded the catalogue — `ghost customs` in `kv.customModels` for unconnected providers were published, alias keys were published as models of their own, `enabledModels` was ignored, and media/embedding models leaked in. On the user's real database: 640 models, `clinepass/` duplicated with `cp/`, and 4 dead nodes still exposing 21 models.
-- Source of truth: `~/htdocs/9router/src/app/api/v1/models/route.js` (`buildModelsList`, `KIND_SLUG_MAP`, `MODEL_TYPE_TO_KIND`, `inferKindFromUnknownModelId`, `aggregateComboCapabilities`).
+- Source of truth: `~/htdocs/xroute/src/app/api/v1/models/route.js` (`buildModelsList`, `KIND_SLUG_MAP`, `MODEL_TYPE_TO_KIND`, `inferKindFromUnknownModelId`, `aggregateComboCapabilities`).
 - `internal/handlers/chat/models_list.go` (new; the builder moved out of `chat.go` — 1331 → 897 lines):
   - Upstream ordering: **combos first** (`owned_by: "combo"`, capabilities aggregated across every leaf), then per-connection models.
-  - `isActive !== false` **only** — upstream requires no credentials for listing, so 9router-go's credential gate was deliberately reverted (`TestHandleModels_SkipsCredentiallessConnections` was replaced by `TestHandleModels_ActiveConnectionPublishesCatalog`).
+  - `isActive !== false` **only** — upstream requires no credentials for listing, so xroute's credential gate was deliberately reverted (`TestHandleModels_SkipsCredentiallessConnections` was replaced by `TestHandleModels_ActiveConnectionPublishesCatalog`).
   - Per connection: `staticAlias` = catalogue alias, `outputAlias` = `providerSpecificData.prefix`; `enabledModels` (psd or top-level) **replaces** the static catalogue; then custom models whose `providerAlias ∈ {staticAlias, outputAlias, providerId}` (llm-typed only) and `modelAliases` targets with a matching prefix are merged in; `isDisabled(outputAlias|staticAlias, id)` is enforced; `outputAlias/`, `staticAlias/` and `providerId/` qualifiers are stripped from ids.
   - Alias keys are **no longer** model ids themselves (upstream only uses their targets), and untyped custom models are now filtered by `isLLMModelID` (the same `embed|tts|speech|audio|voice|image|imagen|dall-e|flux|sdxl|sd-|stable-diffusion` heuristic as upstream's `inferKindFromUnknownModelId`).
   - The static dump only runs when the `providerConnections` table is genuinely empty (upstream `connections.length === 0`).
@@ -15807,8 +15807,8 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 - Entry shape aligned with upstream: `ModelInfoObject` now only has `id`, `object`, `owned_by`, `capabilities`, `context_length`, `max_completion_tokens` (the `created` and `context_window` fields that upstream does not have were dropped), and `CapabilitiesDetail` gained `search`, `tools`, `reasoning`, `thinkingFormat`, `contextWindow`, `maxOutput` (replacing the duplicated `contextWindows`).
 - `internal/providers/registry_models.go` fully regenerated from `open-sse/providers/registry` (89 providers, 1550 id/alias entries) plus a new `ProviderModelKinds` table (191 media models typed `image`/`tts`/`stt`/`embedding`/`video`/`systemone`) and a `GetProviderModelKind` accessor. Kind resolution in `/v1/models` now mirrors upstream (custom `type` → registry `kind` → id heuristic), so media models no longer leak into the LLM list and the static catalogue tracks upstream (e.g. `openrouter` 10 → 18 entries, `ag` 21 models).
 - Derived fix: a provider with one active plus one inactive connection row is no longer treated as entirely disabled (previously `tr/*`'s 153 models disappeared).
-- Cross-check against the running upstream instance (port 20128, same database): **714 models upstream vs 726 in 9router-go, 687 identical ids**; prefixes, entry keys and `capabilities` keys match exactly. Breakdown: `clinepass` 469/469, `tr` 154/153, `kr` 34/44, `ag` 20/20, `cbai` 15/15, `openrouter` 7/6, `nvidia` 4/4, `Id` 3/3, `gcli` 1/5, combos 7/7.
-- Remaining 39-id gap at that point: (a) upstream uses a **live catalog** for kiro/grok-cli (`kr/auto`, `kr/minimax-m2.1`, `gcli/grok-4.7`) while 9router-go used the static catalogue — the next PR; (b) `openrouter/free` exists upstream only; (c) an upstream quirk: vendor-prefixed ids (`nvidia/parakeet-ctc-1.1b-asr`) lose their qualifier before the kind lookup, so they slip through on both sides.
+- Cross-check against the running upstream instance (port 20128, same database): **714 models upstream vs 726 in xroute, 687 identical ids**; prefixes, entry keys and `capabilities` keys match exactly. Breakdown: `clinepass` 469/469, `tr` 154/153, `kr` 34/44, `ag` 20/20, `cbai` 15/15, `openrouter` 7/6, `nvidia` 4/4, `Id` 3/3, `gcli` 1/5, combos 7/7.
+- Remaining 39-id gap at that point: (a) upstream uses a **live catalog** for kiro/grok-cli (`kr/auto`, `kr/minimax-m2.1`, `gcli/grok-4.7`) while xroute used the static catalogue — the next PR; (b) `openrouter/free` exists upstream only; (c) an upstream quirk: vendor-prefixed ids (`nvidia/parakeet-ctc-1.1b-asr`) lose their qualifier before the kind lookup, so they slip through on both sides.
 - Tests: `TestIsLLMModelID` (9 cases), `TestGetProviderModelKind` (11 cases), `TestHandleModels_MediaKindModelsExcluded`, `TestHandleModels_EnabledModelsOverrideCatalog`, `TestHandleModels_AliasTargetMergedIntoProvider`, `TestHandleModels_ComboOwnedByCombo`, plus the filtering tests from the previous commit; the legacy `TestHandleModelLookup_ProviderModel` / `TestHandleModels_IncludesTokenLimits` were re-seeded to upstream semantics (an alias needs a connected provider, and token limits are asserted through `context_length`/`max_completion_tokens`/`capabilities.contextWindow`). Full suite: 1433 pass.
 
 ### 🐛 Fallback logs never named the failing account/project (Antigravity 403 `VALIDATION_REQUIRED`)
@@ -15913,7 +15913,7 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 - Note: coordination fixes *technical* hijacking between cooperating instances, not *policy* — two machines serving traffic concurrently on one account is still concurrent use server-side.
 
 
-### ⬆️ Upstream v0.5.86 Parity (decolua/9router#v0.5.86)
+### ⬆️ Upstream v0.5.86 Parity (decolua/xroute#v0.5.86)
 
 - `internal/handlers/chat/claude_cloaking.go` + `internal/providers/providers.go`: bumped Claude CLI fingerprint `2.1.258` → `2.1.280` (upstream `cbffeb9`), so the billing-header cloak and `claude-cli/*` UA stay current. Added `claude-opus-5-5` to `cc`/`claude` catalogs (`registry_models.go`, `web/src/lib/models.ts`).
 - `internal/handlers/media/deploy.go`: Vercel relay template now forwards headers losslessly (copy to plain object, strip only `x-relay-target`/`x-relay-path`/`host`) — upstream `6af26a9`. Cloaking headers survive relay pools, which matters for proxied Freebuff traffic.
@@ -15921,11 +15921,11 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 
 ### 🛡️ Freebuff client_id Cloaking (Anti-Ban Parity)
 
-- `internal/proxy/executor/freebuff.go`: `ForwardFreebuff` reuses the account's stored `fingerprintId` verbatim as `codebuff_metadata.client_id`, falling back to a fresh unbranded UUID only for connections saved before this change. Previously every chat request sent `client_id: "9router-<uuid>"`, which brands the traffic as non-CLI at the application layer — the most likely reason accounts got `banned` even though headers/User-Agent already matched the CLI. Note: cloaking only removes the self-identifying fingerprint; it cannot protect accounts banned for quota abuse, multi-account farming on one IP/fingerprint, or region violations.
+- `internal/proxy/executor/freebuff.go`: `ForwardFreebuff` reuses the account's stored `fingerprintId` verbatim as `codebuff_metadata.client_id`, falling back to a fresh unbranded UUID only for connections saved before this change. Previously every chat request sent `client_id: "xroute-<uuid>"`, which brands the traffic as non-CLI at the application layer — the most likely reason accounts got `banned` even though headers/User-Agent already matched the CLI. Note: cloaking only removes the self-identifying fingerprint; it cannot protect accounts banned for quota abuse, multi-account farming on one IP/fingerprint, or region violations.
 - `internal/handlers/oauth/cline.go`: `decodeClineCode` now accepts the real browser-callback shape — base64url (`-`/`_` alphabet, padding stripped) plus the trailing signature segment the extension appends after the JSON payload. Previously only strict `StdEncoding` decoded, so pasting the callback failed to extract tokens and the handler fell through to `POST /api/v1/auth/token`, which the server rejects with `Forbidden` — exactly the reported `Cline token exchange failed ... Forbidden` error.
 - `internal/handlers/chat/connections.go` + `internal/handlers/dashboard/connection_probe.go`: the `workos:` prefix is now JWT-only (WorkOS JWT = base64url `eyJ…` + dot, upstream parity `open-sse/shared/clineAuth.js`). Non-JWT ClinePass API keys ride plain `Bearer` — prefixing them is what the server answers with 401 `"Unauthorized: Please make sure you're using the latest version of Cline and re-authenticate your Cline account."` Note: your pasted bundle decodes to a real WorkOS JWT (`eyJhbGciOiJSUzI1NiIsImtpZCI6InNzb19vaWRj...`, `expiresAt` already past `2026-09-24T07:23:51Z`), so that specific token is expired server-side — reconnect with a fresh browser login after updating.
 - `internal/handlers/oauth/cline.go`: new Cline/ClinePass connections are named by account email from the token bundle (fallback: first+last name, then provider default) instead of the generic `ClinePass` label, so multi-account setups stay distinguishable in provider detail.
-- All-providers branding sweep (no behavior change otherwise): audited every header/body sent to upstream. Only one real leak found and removed — `User-Agent: 9router/oauth` on the Antigravity Google token exchange (`internal/handlers/oauth/antigravity.go`), now unbranded Go default. Everything else already mirrors an official client: Freebuff `codebuff-cli/*` + fingerprinted `client_id` (no `9router-` anywhere on the wire), Cline `Cline/*` + `cline-cli`, Antigravity `antigravity/ide/*`, Gemini CLI `google-api-nodejs-client/*`, Grok/Codex/iFlow/Qoder/MiMo browser or CLI UAs, TTS browser UAs. `X-Msh-Platform: 9router` (Kimi) and `HTTP-Referer/X-Title: endpoint-proxy.local / Endpoint Proxy` (OpenRouter/Airforce) are byte-identical to upstream `decolua/9router` — changing them would *break* parity, not improve stealth. `User-Agent: 9Router` only ever hits the user's own proxy-test target and GitHub API (never an LLM provider). Local-only strings (`9router-oauth` BroadcastChannel, MITM CA, updater UA, file paths) never leave the machine.
+- All-providers branding sweep (no behavior change otherwise): audited every header/body sent to upstream. Only one real leak found and removed — `User-Agent: xroute/oauth` on the Antigravity Google token exchange (`internal/handlers/oauth/antigravity.go`), now unbranded Go default. Everything else already mirrors an official client: Freebuff `codebuff-cli/*` + fingerprinted `client_id` (no `xroute-` anywhere on the wire), Cline `Cline/*` + `cline-cli`, Antigravity `antigravity/ide/*`, Gemini CLI `google-api-nodejs-client/*`, Grok/Codex/iFlow/Qoder/MiMo browser or CLI UAs, TTS browser UAs. `X-Msh-Platform: xroute` (Kimi) and `HTTP-Referer/X-Title: endpoint-proxy.local / Endpoint Proxy` (OpenRouter/Airforce) are byte-identical to upstream `decolua/xroute` — changing them would *break* parity, not improve stealth. `User-Agent: XRoute` only ever hits the user's own proxy-test target and GitHub API (never an LLM provider). Local-only strings (`xroute-oauth` BroadcastChannel, MITM CA, updater UA, file paths) never leave the machine.
 - `internal/handlers/oauth/naming.go` (new) + all OAuth handlers (`freebuff.go`, `cline.go`, `antigravity.go`, `trae.go`, `windsurf.go`, `zed.go`, `authcode.go`, `pkce.go`, `device.go`): single email-first naming rule `connectionDisplayName` — account email when known, else explicit user-supplied name, else provider default. No more `"Provider (name)"` labels anywhere, so every provider detail page (Freebuff, ClinePass, Antigravity, …) lists accounts by email.
 **Production Internet Hardening & Cloudflare Integration:**
 - **Protect `/debug/pprof/*` endpoints**: Disabled Go runtime profiling endpoints (`/debug/pprof/*`) by default in production to prevent Denial of Service (DoS) and potential memory/key disclosures. Can be explicitly enabled via `PPROF_ENABLED=true`.
@@ -16019,13 +16019,13 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 - `web/src/index.css`: Added `.changelog-body` markdown typography and badge styles.
 
 **Update notification banner in Sidebar (upstream Next.js parity):**
-- `web/src/components/Sidebar.svelte`: Added update notification banner below the version label (`↑ New version available: v{latestVersion}`) with `Update now` button and clickable `9router-go update` command pill, matching upstream Next.js `Sidebar.js`.
+- `web/src/components/Sidebar.svelte`: Added update notification banner below the version label (`↑ New version available: v{latestVersion}`) with `Update now` button and clickable `xroute update` command pill, matching upstream Next.js `Sidebar.js`.
 - Added interactive Update modal with release notes, one-click auto-updater (`api.triggerUpdate()`), manual copy command with countdown shutdown, and disconnected reconnect overlay.
 - `web/src/api/client.ts`: Added `SystemVersionInfo` type, `checkUpdate()`, `triggerUpdate()`, and `shutdownServer()`.
 
-**Remove 9Remote & 9English; align Support 9Router with 9router-go repo:**
+**Remove 9Remote & 9English; align Support XRoute with xroute repo:**
 - `web/src/components/Sidebar.svelte`: Removed the `9Remote` action button & modal and `9English` external link from navigation items; cleaned up modal markup and unused `isRemoteModalOpen` state.
-- `web/src/components/TopBar.svelte`: Updated the "Support 9Router" modal to remove the external 9English project link and point to the `9router-go` repository ([`https://github.com/luqman-v1/9router-go`](https://github.com/luqman-v1/9router-go)) and Releases page ([`/releases`](https://github.com/luqman-v1/9router-go/releases)).
+- `web/src/components/TopBar.svelte`: Updated the "Support XRoute" modal to remove the external 9English project link and point to the `xroute` repository ([`https://github.com/x-inu/XRoute`](https://github.com/x-inu/XRoute)) and Releases page ([`/releases`](https://github.com/x-inu/XRoute/releases)).
 
 ### 🐛 Bug Fixes
 
@@ -16074,17 +16074,17 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 
 ### 🔄 Upstream Parity Sync
 
-**Strike-breaker quota-only (upstream `decolua/9router#4197` parity, PR #16):**
+**Strike-breaker quota-only (upstream `decolua/xroute#4197` parity, PR #16):**
 - `internal/handlers/chat/antigravity_quota.go` — `HandleAntigravityQuotaError` now takes the upstream `errorMessage` and only counts a strike on explicit quota markers (`RATE_LIMIT_EXCEEDED`, `QUOTA_EXHAUSTED`, `Individual quota reached`). Generic bare `RESOURCE_EXHAUSTED` 429s no longer burn strikes / lock combos.
 - `internal/handlers/chat/gemini_handler.go` — forwards `string(uErr.Body)` as the error message source.
 - Added `TestAntigravityQuota_Generic429NoStrike` regression test.
 
-**Refusal → content_filter mapping (upstream `decolua/9router#4210` parity, PR #16):**
+**Refusal → content_filter mapping (upstream `decolua/xroute#4210` parity, PR #16):**
 - `internal/translator/claude_response.go` — streaming + non-streaming: Gemini `refusal` finish maps to `content_filter`, emits `stop_details.explanation` so Claude Code renders the block instead of hanging.
 - `internal/translator/response.go` — reverse mapping `content_filter → refusal` for round-trips.
 - Added refusal stream / non-stream / round-trip tests.
 
-**Weekly vs session quota buckets (upstream `decolua/9router#4209` parity, PR #18):**
+**Weekly vs session quota buckets (upstream `decolua/xroute#4209` parity, PR #18):**
 - `internal/handlers/chat/antigravity_quota.go` — `ParseWeeklyQuotaSummary` classifies the `window` field into weekly (`gemini`/`claude_gpt`) vs 5h-session (`gemini_session`/`claude_gpt_session`) buckets; `IsAntigravityModelBlocked` honors session buckets via `quotaEntryExhausted` helper.
 - Added `TestAntigravityWeeklyQuota_SessionBuckets`.
 
@@ -16116,11 +16116,11 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 
 ### 🐛 Bug Fixes
 
-**OMP Harness False-429 on Antigravity (upstream `decolua/9router#3986` parity):**
+**OMP Harness False-429 on Antigravity (upstream `decolua/xroute#3986` parity):**
 - `internal/translator/antigravity.go` — `WrapForAntigravity` no longer sends `requestType: "agent"` in the Cloud Code envelope (`AntigravityRequest.RequestType` is now `omitempty` and left empty). Google enforces a tiny separate quota bucket whenever `requestType="agent"` is present, so OMP (Oh My Pi) harness payloads (~25–30k token system prompt + tools) were rejected with false `429 RESOURCE_EXHAUSTED` even with quota remaining — cascading into `CACHE_BLOCK` account locks while Claude Code stayed green. Verified live: same payload returns `200 OK` after the fix.
 - `internal/translator/antigravity_test.go` — Added `TestWrapForAntigravity_OmitsAgentRequestType` regression test (asserts the field is absent from the raw envelope JSON and the `requestId` `agent/<…>` shape is preserved). Image (`image_gen`) and search (`search`) request types are untouched.
 
-### 🔄 Upstream Parity Sync — `decolua/9router` v0.5.75…v0.5.81 (100%)
+### 🔄 Upstream Parity Sync — `decolua/xroute` v0.5.75…v0.5.81 (100%)
 
 **Model Catalog & Routing:**
 - `internal/providers/registry_models.go` — Registered `deepseek-v4.1-flash` for `codebuddy-intl` (`cbai`, replacing the retired `deepseek-v4-flash`) and added `deepseek-v4.1-flash:cloud` to the `ollama` catalog.
@@ -16143,7 +16143,7 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 ### 🚀 Features & Upstream Parity
 
 **Claude OAuth Subscription (`sk-ant-oat`) Support End-to-End (PR #13):**
-- Contributed by **@rezhajulio** ([#13](https://github.com/luqman-v1/9router-go/pull/13)) — Special thanks for bringing full Claude Pro/Max subscription parity from the dashboard to the native Go proxy!
+- Contributed by **@rezhajulio** ([#13](https://github.com/x-inu/XRoute/pull/13)) — Special thanks for bringing full Claude Pro/Max subscription parity from the dashboard to the native Go proxy!
 - `internal/handlers/chat/fallback.go` — Automatic header switching to `Authorization: Bearer` and appending `?beta=true` for Claude OAuth credentials (`sk-ant-oat` or `accessToken`), supporting direct Anthropic API as well as Edge Relay proxy pools.
 - `internal/handlers/chat/claude_cloaking.go` — Injected official `x-anthropic-billing-header` into `system[0]`, deterministic account `metadata.user_id`, client tool name obfuscation with `_ide` suffix, and decoy tools (`CCDecoyTools`) preventing false HTTP 429 anti-abuse rate limits.
 - `internal/proxy/executor/claude_decloak.go` — Streaming and non-streaming response decloaker restoring original tool names and translating decoy tool invocations into clean text blocks.
@@ -16151,20 +16151,20 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 - `internal/tokensaver/prompts.go` — Added `InjectSystemPromptClaude` for format-aware system prompt injection at top-level `system`.
 
 **Antigravity Zen Free-Tier Tool Quartet Renaming (PR #12):**
-- Contributed by **@yxxrn** ([#12](https://github.com/luqman-v1/9router-go/pull/12)) — Special thanks for identifying the exact upstream fingerprinting gate and eliminating Claude Code 403/500 errors!
+- Contributed by **@yxxrn** ([#12](https://github.com/x-inu/XRoute/pull/12)) — Special thanks for identifying the exact upstream fingerprinting gate and eliminating Claude Code 403/500 errors!
 - `internal/translator/fingerprint.go` — Implemented `ConcealFingerprintTools` to rename uppercase tool quartet variants from Claude Code CLI (`Bash`, `Glob`, `Grep`, `Read`) to canonical lowercase (`bash`, `glob`, `grep`, `read`), eliminate duplicates (preventing upstream HTTP 500), retarget `tool_choice`, and restore original tool names in response payloads via `RestoreToolNamesInPayload` / `RestoreToolNamesInSSE`.
 - `internal/proxy/executor/toolname_writer.go` — Embedded `toolNameRestoringWriter` on responses ensuring client tools are seamlessly restored across both streaming and non-streaming responses.
 
 ### 🐛 Bug Fixes & Improvements
 
 **CommandCode CLI User-Agent & Schema Wrapping (PR #14, fixes #9):**
-- Reported by **@jhonoryza** ([#9](https://github.com/luqman-v1/9router-go/issues/9)) — Thank you for reporting the Cloudflare challenge error!
+- Reported by **@jhonoryza** ([#9](https://github.com/x-inu/XRoute/issues/9)) — Thank you for reporting the Cloudflare challenge error!
 - `internal/providers/providers.go` & `internal/proxy/executor/providers.go` — Added official `User-Agent: commandcode/0.25.7 (cli)` and `x-command-code-version: 0.25.7`, eliminating Cloudflare WAF bot-challenge intercepts (HTTP 403 `Attention Required!`).
 - `internal/proxy/executor/providers.go` — Implemented `buildCommandcodeBody` wrapping OpenAI payloads into `{threadId, memory, config, params}` schema required by CommandCode's `/alpha/generate` endpoint.
 - `internal/handlers/chat/fallback.go` & `internal/proxy/proxy.go` — Enhanced error parsing in `extractErrorText` and `UpstreamError.Error()` to summarize Cloudflare challenge pages cleanly without dumping raw HTML.
 
 **Responses API (`POST /v1/responses`) Public Provider Fallback & String Input (PR #15, fixes #10):**
-- Reported by **@pankaj-raikar** ([#10](https://github.com/luqman-v1/9router-go/issues/10)) — Thank you for the detailed reproduction report!
+- Reported by **@pankaj-raikar** ([#10](https://github.com/x-inu/XRoute/issues/10)) — Thank you for the detailed reproduction report!
 - `internal/handlers/media/media.go` — Added automatic fallback for public/free-tier providers (`DefaultAPIKey: "public"`) in `forwardMediaRequest`, eliminating `"no active connections for provider: opencode"` when no SQLite connection is seeded.
 - `internal/handlers/media/media.go` & `internal/handlers/chat/resolution.go` — Routed `opencode`, `opencode-go`, and `antigravity/muse-spark-*` models on `/responses` directly to `ForwardOpencode` so session tracking, request headers, and tool-name concealing work out of the box.
 - `internal/proxy/executor/transform.go` — Updated `buildResponsesBody` to support both string inputs (`"input": "Say hello"`) and array inputs (`Input []any`), normalizing string prompts into valid Responses message items.
@@ -16174,7 +16174,7 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 ### 🐛 Upstream Parity & Bug Fixes
 
 **Active Provider Connections & Capabilities on `/v1/models` and `/api/models` (PR #8, fixes #7):**
-- `internal/providers/registry_models.go` — Added comprehensive upstream provider models registry mapped from 128 provider definitions (`decolua/9router` parity) with `GetProviderModels()`.
+- `internal/providers/registry_models.go` — Added comprehensive upstream provider models registry mapped from 128 provider definitions (`decolua/xroute` parity) with `GetProviderModels()`.
 - `internal/providers/capabilities.go` — Implemented `CapabilitiesDetail` and `GetCapabilitiesDetailForModel()`, outputting full multimodal flags (`vision`, `pdf`, `audioInput`, `videoInput`, `imageOutput`, `audioOutput`), `thinkingCanDisable`, and dual token limits (`contextWindows` and `contextWindow`).
 - `internal/handlers/chat/chat.go` — Replaced empty `/v1/models` responses by dynamically aggregating models for active connections (`isActive = 1`), honoring custom prefixes and connection-enabled models. Custom models from deactivated connections (`disabledProviders`) are automatically excluded, and clean static catalogs are returned when no database connections are configured.
 - `internal/handlers/router.go` — Mounted `GET /api/models` and `GET /api/models/*` serving both `"data"` and `"models"` top-level keys for universal compatibility across OpenAI-compliant IDE clients and Next.js web dashboards.
@@ -16377,13 +16377,13 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 - `internal/proxy/sse.go` — Added `HeartbeatWriter` emitting periodic `: keep-alive\n\n` comments every 15 seconds during prolonged upstream reasoning phases (fixes #3796 stream stall timeouts on strict clients like Oh My Pi during deep thinking on `ag/gemini-3.8-flash*`).
 - `internal/proxy/stall.go` — Added `NewStallReaderWithContext` binding client `ctx.Done()` directly to body closer, immediately freeing upstream sockets on client abort and eliminating Windows socket leaks (`CLOSE_WAIT`/`FIN_WAIT_1`).
 **Database Path Configuration:**
-- `internal/config/config.go` — Enhanced `DB_PATH` resolution to automatically detect `db/data.sqlite`, `data.sqlite`, or `9router.db` when pointed directly to a directory (e.g. `E:\project\database\9router`).
+- `internal/config/config.go` — Enhanced `DB_PATH` resolution to automatically detect `db/data.sqlite`, `data.sqlite`, or `xroute.db` when pointed directly to a directory (e.g. `E:\project\database\xroute`).
 ## [v1.8.8] — 2026-09-03
 
 ### ✨ E2E & Parity — Next.js v0.5.65 (31 commits)
 
 **E2E Gemini 3.8 Flash High + tool calling (deterministic mocks):**
-- `internal/handlers/chat/gemini38_e2e_test.go` — `gemini-3.8-flash-high` via Antigravity `2.11.0` non-stream + multi-turn + stream SSE `get_weather_ide` uncloaking, `prefixItems` cleaning, `thoughtSignature` backfill, `tool_calls` dedup. Ports `decolua/9router` `gemini-3.8-flash-medium/high/low` + `capabilities.go:*gemini-3.8*` + `antigravity.go:gemini-3.8-flash-tiered` + `proxy/gemini.go:2.11.0`.
+- `internal/handlers/chat/gemini38_e2e_test.go` — `gemini-3.8-flash-high` via Antigravity `2.11.0` non-stream + multi-turn + stream SSE `get_weather_ide` uncloaking, `prefixItems` cleaning, `thoughtSignature` backfill, `tool_calls` dedup. Ports `decolua/xroute` `gemini-3.8-flash-medium/high/low` + `capabilities.go:*gemini-3.8*` + `antigravity.go:gemini-3.8-flash-tiered` + `proxy/gemini.go:2.11.0`.
 
 **E2E Opencode muse-spark (deterministic mocks, no real network):**
 - `internal/handlers/chat/opencode_mock_e2e_test.go` — `oc/muse-spark-1.2` & `1.3` via `Responses API /v1/responses` SSE `output_item.added` + `function_call_arguments.delta/done` aggregation, `reasoning max→xhigh`, `Vision:true` (`capabilities.go:124` pattern `*muse-spark*`), `image_url` preservation. Fixes routing `muse-spark-1.3` `500` → `200` (`providers.go:293` `Contains(muse-spark)` + `capabilities.go:124` `1.3`).
@@ -16401,7 +16401,7 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 - **Opencode 1.3 `500` → `200`** — `ForwardOpencode` routing `Contains(muse-spark)` + `capabilities` `1.3` Vision (fixes report `14:11:47` `muse-spark-1.3 500`).
 - **jcode tool_smoke 3→1** — `stream.go:118` dedup `ToolCallIdx` + `codebuddy.go:168` `sseToOpenAIJSON` dedup `arguments` for `bash` `intent` split (fixes `echo JCODE_TOOL_OK` 3 tool_calls).
 - **Flaky real upstream 429** — `muse_spark_e2e_test.go` real `opencode.ai` `429 FreeUsageLimitError` now `Skip` instead of `Fail`.
-- **DB flaky `429` in `go test ./...`** — `go vet` clean, `ps` `9router-go 20130` health `{"status":"ok"}` (not stopped, log stopped due to `user stepped away` recap 98k prompt).
+- **DB flaky `429` in `go test ./...`** — `go vet` clean, `ps` `xroute 20130` health `{"status":"ok"}` (not stopped, log stopped due to `user stepped away` recap 98k prompt).
 
 ## [v1.8.7] — 2026-09-02
 
@@ -16415,19 +16415,19 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 
 ### 🐛 Bug Fixes
 
-- **Gemini Tool Schema `where.items.items: missing field` 400 Fix** — `cleanGeminiSchema` now ensures every `type: array` has a valid `items` schema (default `{"type":"string"}`), flattens `prefixItems` (2020-12 tuple) and `items: [...]` tuple to single `items`, and auto-fills inner `items` without `type`/`properties`/`enum`. Fixes `ForwardGemini (antigravity/gemini-3.7-flash-high): upstream returned 400: ...where.items.items: missing field.` when Claude Code sends DB-like tools with nested `array<array>` params. Added `internal/proxy/gemini.go` 400 payload dump to `/tmp/9router-gemini-400.json` for post-mortem. (`internal/translator/schema.go`, `internal/proxy/gemini.go`)
+- **Gemini Tool Schema `where.items.items: missing field` 400 Fix** — `cleanGeminiSchema` now ensures every `type: array` has a valid `items` schema (default `{"type":"string"}`), flattens `prefixItems` (2020-12 tuple) and `items: [...]` tuple to single `items`, and auto-fills inner `items` without `type`/`properties`/`enum`. Fixes `ForwardGemini (antigravity/gemini-3.7-flash-high): upstream returned 400: ...where.items.items: missing field.` when Claude Code sends DB-like tools with nested `array<array>` params. Added `internal/proxy/gemini.go` 400 payload dump to `/tmp/xroute-gemini-400.json` for post-mortem. (`internal/translator/schema.go`, `internal/proxy/gemini.go`)
 - **Bare Alias `ag` -> `antigravity` Resolution** — `resolveModel("ag")` now checks `ProviderAliasMap` before common-provider fallback, so `POST /search` with `{"model":"ag"}` correctly routes to `antigravity` instead of `deepseek/ag` -> `404 Via cloudfront`. Parity with Next.js `ag` search. (`internal/handlers/chat/resolution.go`)
 - **Antigravity Search Default Model Parity** — `handleAntigravitySearch` default changed `gemini-3-flash-agent` -> `gemini-2.5-flash` (Next.js `ag` search returns `answer.model: gemini-2.5-flash`), fixing `500 UNKNOWN` from `daily-cloudcode-pa.googleapis.com` for bare `ag` search. (`internal/handlers/media/antigravity_search.go`)
-- **Claude `call_` Tool Name Fallback Fix (Gateway IP Check)** — `TranslateOpenAIToClaude` no longer falls back to `tc.ID` (`call_...`) when `Function.Name` is empty; skips invalid tool calls instead of emitting `tool_use` with `name: call_...` which caused `No such tool available: call_...` and `Invalid tool parameters` churn on `toloing cek config gateway` via `opencode/muse-spark`. (`internal/translator/response.go:165`, `cf42120`, port `decolua/9router#2077`/`#3685`)
+- **Claude `call_` Tool Name Fallback Fix (Gateway IP Check)** — `TranslateOpenAIToClaude` no longer falls back to `tc.ID` (`call_...`) when `Function.Name` is empty; skips invalid tool calls instead of emitting `tool_use` with `name: call_...` which caused `No such tool available: call_...` and `Invalid tool parameters` churn on `toloing cek config gateway` via `opencode/muse-spark`. (`internal/translator/response.go:165`, `cf42120`, port `decolua/xroute#2077`/`#3685`)
 - **Claude Streaming Tool Delta Deduplication** — `TranslateOpenAIToClaudeStreamSession` now checks `state.ToolCalls[idx]` before creating a new `content_block_start`; second delta for same `idx`/`id` (Codex `output_item.added` + `function_call_arguments.delta` same `call_...`) no longer creates duplicate `tool_use` and empty `partial_json: "{}"`; correctly buffers `arguments` and emits `{"command":"ip route ..."}`. Fixes `InputValidationError: Bash missing command` on `Gue cek gateway IP...` streaming. (`internal/translator/response.go:468`, `ea10c16`)
 - **Bash Extra Fields Strip** — `sanitizeBashArgs` now keeps only `command`, deletes hallucinated `description` etc. inside `input` (`{"command":"ls ...","description":"List home..."}` -> `{"command":"ls ..."}`), fixing `Bash(input JSON failed to parse — 433 bytes)` on `Cek gateway config — lagi intip file-file di home`. (`internal/translator/sanitize.go:239`, `6b94535`)
-- **Server Tool Use Foreign ID Drop (Combo Poison)** — `SanitizeClaudePassthrough` drops `server_tool_use` with id not matching `^srvtoolu_` (e.g. `call_` from `z.ai/glm` `analyze_image`) and paired `tool_result`, strips empty text and empty messages. Port `decolua/9router#3686`. (`internal/translator/request.go:342`, `cf42120`)
-- **1M Context Marker Strip** — `stripModelContextMarker` strips trailing `[1m]`/`[1M]` from `claude-opus-5[1m]` before `resolveModel`, so combo `combo-wombo[1m]` routes correctly instead of `Invalid model format`. Port `decolua/9router#3691`. (`internal/handlers/chat/resolution.go:135`)
-- **Streaming Model Echo** — `SeedStreamState` pre-seeds `StreamState.Model` with client-requested model via `WithRequestedModel` context so `message_start` echoes `combo-wombo` not `claude-3-5-sonnet` provider model. Port `decolua/9router#3693`. (`internal/translator/usage.go:41`, `forward.go:91`)
-- **GPT-5 / o-series `max_completion_tokens`** — `requiresMaxCompletionTokens` (`/gpt-5|o[134]-/i`) emits `max_completion_tokens` instead of `max_tokens` for `gpt-5`/`o1-`/`o3-`/`o4-` in `TranslateClaudeToOpenAI`. Port `decolua/9router#3657`. (`internal/translator/request.go:12`, `types.go:202`)
-- **Antigravity Optimistic Quota Strike-Breaker** — after 3 consecutive `429` for same `connection|model` within 60s while quota `remaining>0`, `HandleAntigravityQuotaError` returns `CACHE_BLOCK 15m` instead of looping 300s `modelLock`. Port `decolua/9router#3684`. (`internal/handlers/chat/antigravity_quota.go:44`)
-- **Forced-SSE JSON for Claude Clients** — `handleJSONResponse` detects `isSSEBody` when `translate=true` and `stream:false` retry hits forced-stream provider (Responses-API), aggregates via `sseToClaudeJSON` then `TranslateOpenAIToClaude` to return `Anthropic Message` not `chat.completion`. Port `decolua/9router#3683`. (`internal/handlers/chat/forward.go:144`)
-- **OpenRouter Pattern Compat + Combo Tools Detection** — `NormalizeToolSchemasForProvider("openrouter")` strips invalid `pattern` regex (keep valid, handle `properties` named `properties`), and `DetectRequiredCapabilities` now requires `tools` capability for `type:function`/`functionDeclarations`. Port `decolua/9router#3665`. (`internal/translator/tool_schema.go`, `combo.go:129`, `forward.go:35`)
+- **Server Tool Use Foreign ID Drop (Combo Poison)** — `SanitizeClaudePassthrough` drops `server_tool_use` with id not matching `^srvtoolu_` (e.g. `call_` from `z.ai/glm` `analyze_image`) and paired `tool_result`, strips empty text and empty messages. Port `decolua/xroute#3686`. (`internal/translator/request.go:342`, `cf42120`)
+- **1M Context Marker Strip** — `stripModelContextMarker` strips trailing `[1m]`/`[1M]` from `claude-opus-5[1m]` before `resolveModel`, so combo `combo-wombo[1m]` routes correctly instead of `Invalid model format`. Port `decolua/xroute#3691`. (`internal/handlers/chat/resolution.go:135`)
+- **Streaming Model Echo** — `SeedStreamState` pre-seeds `StreamState.Model` with client-requested model via `WithRequestedModel` context so `message_start` echoes `combo-wombo` not `claude-3-5-sonnet` provider model. Port `decolua/xroute#3693`. (`internal/translator/usage.go:41`, `forward.go:91`)
+- **GPT-5 / o-series `max_completion_tokens`** — `requiresMaxCompletionTokens` (`/gpt-5|o[134]-/i`) emits `max_completion_tokens` instead of `max_tokens` for `gpt-5`/`o1-`/`o3-`/`o4-` in `TranslateClaudeToOpenAI`. Port `decolua/xroute#3657`. (`internal/translator/request.go:12`, `types.go:202`)
+- **Antigravity Optimistic Quota Strike-Breaker** — after 3 consecutive `429` for same `connection|model` within 60s while quota `remaining>0`, `HandleAntigravityQuotaError` returns `CACHE_BLOCK 15m` instead of looping 300s `modelLock`. Port `decolua/xroute#3684`. (`internal/handlers/chat/antigravity_quota.go:44`)
+- **Forced-SSE JSON for Claude Clients** — `handleJSONResponse` detects `isSSEBody` when `translate=true` and `stream:false` retry hits forced-stream provider (Responses-API), aggregates via `sseToClaudeJSON` then `TranslateOpenAIToClaude` to return `Anthropic Message` not `chat.completion`. Port `decolua/xroute#3683`. (`internal/handlers/chat/forward.go:144`)
+- **OpenRouter Pattern Compat + Combo Tools Detection** — `NormalizeToolSchemasForProvider("openrouter")` strips invalid `pattern` regex (keep valid, handle `properties` named `properties`), and `DetectRequiredCapabilities` now requires `tools` capability for `type:function`/`functionDeclarations`. Port `decolua/xroute#3665`. (`internal/translator/tool_schema.go`, `combo.go:129`, `forward.go:35`)
 
 ## [v1.8.5] — 2026-08-31
 
@@ -16472,7 +16472,7 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 - **Enriched Prompt-Injection Guard** — enhanced prompt-injection detector with heuristic patterns for raw model delimiters (`<|im_start|>system`, `<<SYS>>`, `[SYSTEM PROMPT]`, `[INST]`), verbatim system prompt extraction attempts, and developer/admin mode override simulations. (`internal/tokensaver/injection.go`)
 - **Accurate Gemini Cached Token Tracking** — correctly unmarshals and propagates `cachedContentTokenCount` from Gemini stream and non-stream responses into `OpenAIUsage.CachedTokens`, providing accurate cache hit reporting and cost calculation. (`internal/translator/gemini.go`)
 - **Gemini Vision FileData & Audio Modalities** — added support for remote HTTP/HTTPS image URLs (`fileData: { fileUri, mimeType: "image/*" }`), base64 input audio (`input_audio`, `audio_url`), and uploaded documents in Gemini native translator, matching Next.js full multimodal capabilities. (`internal/translator/gemini.go`)
-- **Realtime SSE Usage Stream & Topology Animation** — added in-memory in-flight request tracker (`internal/usagetracker`), real-time SSE broadcasting (`GET /api/usage/stream` and `GET /usage/stream`), and recent requests ring buffer matching the Next.js dashboard shape, enabling instant glowing pulse node & marching-ants edge animations on the Usage Topology graph when requests are handled by `9router-go`. (`internal/usagetracker/tracker.go`, `internal/handlers/usage_stream.go`, `internal/handlers/chat/fallback.go`, `internal/handlers/chat/usage.go`)
+- **Realtime SSE Usage Stream & Topology Animation** — added in-memory in-flight request tracker (`internal/usagetracker`), real-time SSE broadcasting (`GET /api/usage/stream` and `GET /usage/stream`), and recent requests ring buffer matching the Next.js dashboard shape, enabling instant glowing pulse node & marching-ants edge animations on the Usage Topology graph when requests are handled by `xroute`. (`internal/usagetracker/tracker.go`, `internal/handlers/usage_stream.go`, `internal/handlers/chat/fallback.go`, `internal/handlers/chat/usage.go`)
 - **Antigravity Anti-Competitive Prompt Stripping & 429 Prevention** — automatically strips competitor identity phrases (e.g. `"You are a Claude agent, built on Anthropic's Claude Agent SDK."` from Zed IDE and Claude agents) from `system_instruction` and message contents, preventing Antigravity from returning synthetic `429 Quota Exhausted` errors. (`internal/translator/antigravity.go`)
 - **Edge Relay URL Rewriting & Header Forwarding** — automatically rewrites `BaseURL` to the relay deployment and injects `x-relay-target` and `x-relay-path` headers when a connection uses a Vercel, Cloudflare Worker, or Deno Edge Relay Proxy Pool. (`internal/handlers/chat/connections.go`)
 - **No-Auth Provider Proxy Pool Strategy** — automatically respects `settings.providerStrategies` for no-auth providers (e.g. `mimo-free`, `opencode`), attaching configured proxy pools or rotation strategies to virtual connections. (`internal/handlers/chat/connections.go`, `internal/db/settings.go`)
@@ -16480,7 +16480,7 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 - **CodeBuddy OAuth Configuration** — registered `codebuddy-cn` and `codebuddy-intl` OAuth token refresh configurations. (`internal/providers/oauth.go`)
 - **OpenCode Official Client Fingerprint Headers** — injects official headers (`User-Agent: opencode`, `x-opencode-client: desktop`, `x-opencode-session: ses_...`, `x-opencode-request: msg_...`, `x-opencode-project: global`) on free-tier OpenCode requests to prevent rate limiting from unidentified client traffic. (`internal/proxy/opencode.go`, `internal/proxy/executor/providers.go`)
 - **Kimchi Dual Authentication** — supports direct API keys (`Authorization: Bearer <key>`) in addition to OAuth tokens with seamless credential resolution. (`internal/handlers/chat/connections.go`, `internal/handlers/chat/kimchi_handler_test.go`)
-- **Startup Banner & Version Display** — dynamically displays current version in CLI startup banner (`🚀 9Router Go Proxy (v1.8.3) on :20130`) and server ready logs. (`cmd/9router-go/main.go`)
+- **Startup Banner & Version Display** — dynamically displays current version in CLI startup banner (`🚀 XRoute Go Proxy (v1.8.3) on :20130`) and server ready logs. (`cmd/xroute/main.go`)
 - **New Provider Registries & Aliases** — added Alibaba Token Plan Singapore (`alitp-intl` / `ali-tp` / `alitp`) and Fish Audio Text-to-Speech (`fish-audio` / `fish`). (`internal/providers/providers.go`, `internal/providers/aliases.go`)
 
 ### 🐛 Bug Fixes
@@ -16581,7 +16581,7 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 - `StallReader` now closes in-flight SSE upstream bodies on shutdown, so `server.Shutdown` drains streams in milliseconds instead of waiting out the 15s deadline — and the deferred DB/log-file close always runs.
 - Translate-path SSE handlers emit a final `data: [DONE]` on abort so clients get a clean end instead of a truncated stream.
 - A second Ctrl+C / SIGTERM force-quits immediately (stuck-drain escape hatch).
-- Shutdown timeout logs a warning instead of `log.Fatalf`, so `conn.Close()` and the log file are still closed gracefully. (`internal/proxy/stall.go`, `cmd/9router-go/main.go`, `internal/handlers/chat/forward.go`, `internal/proxy/executor/openai.go`)
+- Shutdown timeout logs a warning instead of `log.Fatalf`, so `conn.Close()` and the log file are still closed gracefully. (`internal/proxy/stall.go`, `cmd/xroute/main.go`, `internal/handlers/chat/forward.go`, `internal/proxy/executor/openai.go`)
 
 ### 🔧 Internal
 
@@ -16650,7 +16650,7 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 
 ### 🚀 Architecture & Observability Enhancements
 
-- **Modular `main.go` Refactoring** — Extracted CLI subcommands (`mitmEnable`, `mitmDisable`, `mitmStatus`, `resolveDataDir`) to `cmd/9router-go/commands.go` and encapsulated server routing setup into `handlers.SetupServerRouter()`.
+- **Modular `main.go` Refactoring** — Extracted CLI subcommands (`mitmEnable`, `mitmDisable`, `mitmStatus`, `resolveDataDir`) to `cmd/xroute/commands.go` and encapsulated server routing setup into `handlers.SetupServerRouter()`.
 - **Structured Request Logging Middleware** — Moved `statusWriter` and `RequestLogger` to `internal/middleware/logging.go`. Requests are logged with Correlation ID (`id=req_...`) using structured logger (`slog.Info`, `slog.Warn`, `slog.Error`).
 - **Dynamic HTTP Status Log Levels** — Requests with status 5xx are logged at `ERROR` level, 4xx at `WARN` level, and 2xx/3xx at `INFO` level for clean log filtering in production.
 - **Upstream Memory Exhaustion Protection** — Added `io.LimitReader` caps (1MB for upstream error bodies, 10MB for non-streaming completion bodies) to protect proxy memory from rogue upstreams.
@@ -16665,10 +16665,10 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 - **Thread-safe Daily Usage Updates** — Protected `upsertDailyUsage()` with `dailyUsageMu` mutex to prevent concurrent SQLite read-modify-write races. (`internal/handlers/chat/usage.go`)
 - **Committed Response Writer** — Wrapped `http.ResponseWriter` with `committedResponseWriter` to prevent safe-retry attempts after response headers have already been sent to the client. (`internal/handlers/chat/response_writer.go`)
 - **Strict Context Propagation** — Replaced all `http.NewRequest` with `http.NewRequestWithContext` across handlers, proxy execution drivers, and OAuth helpers to prevent orphaned upstream connections.
-- **Graceful Shutdown** — Implemented `http.Server` graceful shutdown with signal drain (15-second timeout) on SIGINT/SIGTERM. (`cmd/9router-go/main.go`)
+- **Graceful Shutdown** — Implemented `http.Server` graceful shutdown with signal drain (15-second timeout) on SIGINT/SIGTERM. (`cmd/xroute/main.go`)
 - **SQLite Connection Pool Optimization** — Reduced SQLite `SetMaxOpenConns(4)` for optimal WAL mode performance and zero connection contention. (`internal/db/client.go`)
 - **Thread-Safe ProxyPool Cache** — Added `sync.Map` `proxyPoolCache` in `internal/db/proxyPools.go` to preserve round-robin rotation indices across requests. (`internal/db/proxyPools.go`)
-- **Unbounded Request Body Guard** — Added `middleware.MaxBody` (10MB limit) to protect all endpoints from OOM attacks. (`internal/middleware/max_body.go`, `cmd/9router-go/main.go`)
+- **Unbounded Request Body Guard** — Added `middleware.MaxBody` (10MB limit) to protect all endpoints from OOM attacks. (`internal/middleware/max_body.go`, `cmd/xroute/main.go`)
 
 ### ⚡ Metrics, Latency & Token Accounting Fixes
 
@@ -16683,7 +16683,7 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 
 ### 🌐 Endpoints
 
-- **`/api/hello`** — Registered `/api/hello` route returning `200 OK` for ping probes from Claude Code CLI. (`cmd/9router-go/main.go`)
+- **`/api/hello`** — Registered `/api/hello` route returning `200 OK` for ping probes from Claude Code CLI. (`cmd/xroute/main.go`)
 
 ## [v1.3.0] — 2026-07-22
 
@@ -16692,7 +16692,7 @@ An audit after the wiring found paths that go through neither `sseStream` nor `h
 - **Connection-based health** — Replaced old `kv`-based `IsProviderHealthy`/`RecordProviderHealth` with `modelLock_*` fields in `providerConnections.data` JSON blob, matching Next.js `markAccountUnavailable` / `clearAccountError` flow. (`internal/db/health.go`, `internal/db/accounts.go`)
 - **Per-connection model locks** — `LockConnectionModel` / `UnlockConnectionModel` / `IsConnectionModelLocked` use SQLite `json_set()` on shared `providerConnections.data`. Dashboard can read/write same fields. (`internal/db/accounts.go`)
 - **`IsProviderAvailable`** — New `Repo` method checks if ANY connection for a provider has no active `modelLock_<model>`, replacing the old kv-based pre-check. (`internal/db/accounts.go`)
-- **`POST /admin/health/reset`** — Resets `modelLock_*` on connections via query params `?provider=X&model=X`. Dashboard can call via headroom proxy. (`cmd/9router-go/main.go`)
+- **`POST /admin/health/reset`** — Resets `modelLock_*` on connections via query params `?provider=X&model=X`. Dashboard can call via headroom proxy. (`cmd/xroute/main.go`)
 - **Eliminated duplication** — Package-level `IsProviderHealthy` / `ResetProviderHealth` now delegate to `NewRepo(database)` instead of duplicating lock JSON parsing logic. (`internal/db/health.go`)
 
 ### 🧪 Test Fixes

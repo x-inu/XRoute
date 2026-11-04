@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 // deprecationScope is the kv scope the gateway files model deprecations under.

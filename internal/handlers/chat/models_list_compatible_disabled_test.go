@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 // TestHandleModels_CompatibleNodeDisabledModels pins two claims about a custom

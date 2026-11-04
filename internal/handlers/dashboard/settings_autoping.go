@@ -3,7 +3,7 @@ package dashboard
 import (
 	"fmt"
 
-	"9router/proxy/internal/schedule"
+	"xroute/proxy/internal/schedule"
 )
 
 // mergeAutoPingSchedules replaces each auto-ping payload in `updates` with the

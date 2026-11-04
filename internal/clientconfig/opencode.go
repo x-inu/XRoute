@@ -8,11 +8,11 @@ import (
 // OpenCode: ~/.config/opencode/opencode.json, JSONC.
 // docs/specs/client-schema-matrix.md §3.3.
 //
-// The one shape worth knowing: every model this writes carries a "9router/"
+// The one shape worth knowing: every model this writes carries a "xroute/"
 // prefix, and Reset only touches keys that still carry it. A model the user
 // pointed somewhere else is theirs.
 
-const opencodePrefix = "9router/"
+const opencodePrefix = "xroute/"
 
 type opencodeAdapter struct{ baseAdapter }
 
@@ -58,7 +58,7 @@ func (a opencodeAdapter) Reset(opts Options) (Result, error) {
 	return applyPlans([]FilePlan{{File: paths.Files[0], Edits: edits}}, nil)
 }
 
-const opencodeProviderKey = "9router"
+const opencodeProviderKey = "xroute"
 
 // opencodeApplyEdits writes the provider block, the default model, and the
 // explorer subagent.
@@ -69,7 +69,7 @@ const opencodeProviderKey = "9router"
 func opencodeApplyEdits(opts Options) []Edit {
 	// The prefix is stripped here and re-added at each write, so a caller that
 	// passes it already (a user copying a model id out of opencode) does not end
-	// up with "9router/9router/…".
+	// up with "xroute/xroute/…".
 	model := strings.TrimPrefix(opts.Model, opencodePrefix)
 	// The limit is the whole point of writing the model entry: a model unknown
 	// to opencode's models.dev snapshot has no context percentage and cannot

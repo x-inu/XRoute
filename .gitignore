@@ -1,4 +1,6 @@
 # Build artifacts
+/xroute
+/xroute-*
 /9router-go
 /9router-go-*
 /SHA256SUMS.txt
@@ -17,6 +19,7 @@ _site/
 /tmp/*.log
 
 # Data directory
+.xroute/
 .9router/
 data/
 

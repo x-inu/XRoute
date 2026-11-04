@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"time"
 
-	"9router/proxy/internal/fetchgate"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/fetchgate"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/providers"
 )
 
 // quotaFetchGate paces every live quota read this handler makes (issue #30).
@@ -18,7 +18,7 @@ import (
 // with ten accounts behind one office IP fired ten quota reads within a few
 // milliseconds. Google answered 429, and the chat path reads a 429 as real
 // quota exhaustion — locking accounts whose tokens were still live, and taking
-// the paid combos down with them. Upstream decolua/9router has no throttle here
+// the paid combos down with them. Upstream decolua/xroute has no throttle here
 // either, so this is a deliberate gap and not a parity regression.
 //
 // The floor is 250ms with up to 120ms of jitter on top: enough that a burst

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy"
 )
 
 func TestBuildOpenCodeHeaders(t *testing.T) {

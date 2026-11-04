@@ -17,12 +17,12 @@ import (
 
 	"golang.org/x/crypto/bcrypt"
 
-	"9router/proxy/internal/auth"
-	"9router/proxy/internal/config"
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/proxy"
-	"9router/proxy/internal/thinking"
+	"xroute/proxy/internal/auth"
+	"xroute/proxy/internal/config"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/proxy"
+	"xroute/proxy/internal/thinking"
 )
 
 // Dashboard client headers, matching the Next dashboard settings/database route.
@@ -190,7 +190,7 @@ func (h *DashboardHandler) HandleExportDatabase(w http.ResponseWriter, r *http.R
 	}
 
 	nowStr := time.Now().Format("2006-01-02")
-	w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="9router-backup-%s.json"`, nowStr))
+	w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="xroute-backup-%s.json"`, nowStr))
 	handlerutil.WriteJSONIndented(w, http.StatusOK, payload)
 }
 
@@ -319,7 +319,7 @@ func (h *DashboardHandler) HandleProxyTest(w http.ResponseWriter, r *http.Reques
 		handlerutil.WriteJSON(w, http.StatusInternalServerError, map[string]any{"ok": false, "error": err.Error()})
 		return
 	}
-	req.Header.Set("User-Agent", "9Router")
+	req.Header.Set("User-Agent", "XRoute")
 
 	resp, err := client.Do(req)
 	if err != nil {

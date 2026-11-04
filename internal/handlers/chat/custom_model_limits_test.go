@@ -6,8 +6,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/providers"
 )
 
 // Issue #90: a custom model on an OpenAI-compatible provider node had no way to

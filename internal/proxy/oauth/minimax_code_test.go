@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 // pinMCodeSite points a provider's token endpoint at a fixture for the life of

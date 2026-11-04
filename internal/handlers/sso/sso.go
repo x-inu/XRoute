@@ -19,8 +19,8 @@ import (
 
 	json "encoding/json/v2"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
 )
 
 const (
@@ -129,7 +129,7 @@ func (h *Handler) HandleSamlTest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	entryPoint := strings.TrimSpace(firstNonEmpty(body.SamlEntryPoint, handlerutil.GetString(settings, "samlEntryPoint")))
-	issuer := strings.TrimSpace(firstNonEmpty(body.SamlIssuer, handlerutil.GetString(settings, "samlIssuer"), "urn:9router:sp"))
+	issuer := strings.TrimSpace(firstNonEmpty(body.SamlIssuer, handlerutil.GetString(settings, "samlIssuer"), "urn:xroute:sp"))
 	cert := strings.TrimSpace(firstNonEmpty(body.SamlCert, handlerutil.GetString(settings, "samlCert")))
 
 	if entryPoint == "" {
@@ -175,7 +175,7 @@ func (h *Handler) HandleSamlMetadata(w http.ResponseWriter, r *http.Request) {
 	}
 	issuer := handlerutil.GetString(settings, "samlIssuer")
 	if issuer == "" {
-		issuer = "urn:9router:sp"
+		issuer = "urn:xroute:sp"
 	}
 	origin := publicOrigin(r)
 	acsURL := origin + samlACSPath

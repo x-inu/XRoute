@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"testing"
 
-	"9router/proxy/internal/auth"
+	"xroute/proxy/internal/auth"
 )
 
 // Issue #90 smoke: a custom model on an OpenAI-compatible provider node

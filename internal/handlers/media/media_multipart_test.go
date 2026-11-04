@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 func TestRewriteMultipartModelPart_ByteExact(t *testing.T) {

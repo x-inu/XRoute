@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/translator"
 )
 
 // kimiProbe is a fake upstream that records where the gateway sent a request.

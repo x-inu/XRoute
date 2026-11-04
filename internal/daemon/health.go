@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/proc"
+	"xroute/proxy/internal/proc"
 )
 
 // Flag names and the environment marker shared by the CLI, the child argument
@@ -23,7 +23,7 @@ const (
 	// BackgroundAlias is the short form as it appears in argv.
 	BackgroundAlias = "-d"
 	// EnvBackground marks a process started as a background daemon.
-	EnvBackground = "9ROUTER_BACKGROUND"
+	EnvBackground = "XROUTE_BACKGROUND"
 )
 
 // HealthPath is the endpoint Start polls; it is public and answers without a

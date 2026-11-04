@@ -3,7 +3,7 @@ package chat
 import (
 	"testing"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 // A client-pinned connection must not serve a request when the dashboard has

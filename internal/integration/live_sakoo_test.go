@@ -12,7 +12,7 @@ import (
 	"sync"
 	"testing"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 // sakooLiveKey returns the live key or skips the test. Every test in this file

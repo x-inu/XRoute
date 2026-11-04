@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 // Issue #46 reported that /v1/models dropped to zero models once every

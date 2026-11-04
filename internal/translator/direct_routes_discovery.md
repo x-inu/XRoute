@@ -2,15 +2,15 @@
 
 **Mã phân hệ:** G06, G07, G08, G10, G26  
 **Trạng thái:** CONDITIONAL Discovery Gate (Task 1)  
-**Vị trí tài liệu:** `internal/translator/direct_routes_discovery.md` (repo `D:/Code/9router-go`)  
-**Tài liệu tham chiếu:** `docs/superpowers/specs/2026-10-18-9router-go-translation-design.md`, `docs/superpowers/plans/2026-10-19-9router-go-translation.md`
+**Vị trí tài liệu:** `internal/translator/direct_routes_discovery.md` (repo `D:/Code/xroute`)  
+**Tài liệu tham chiếu:** `docs/superpowers/specs/2026-10-18-xroute-translation-design.md`, `docs/superpowers/plans/2026-10-19-xroute-translation.md`
 
 ---
 
 ## 1. Tổng quan và Bối cảnh (Context & Problem Statement)
 
 ### 1.1. Hiện trạng Pivot trong `HandleMessages`
-Trong 9Router Go hiện tại, hàm `HandleMessages` (`internal/handlers/chat/chat.go:259–278`) xử lý các request gửi tới endpoint Claude Messages (`POST /v1/messages`). Nếu provider đích không phải là `claudeNative` (chỉ giới hạn ở Anthropic native hoặc `minimax-code`), hệ thống lập tức thực hiện chuyển đổi trung gian sang OpenAI Chat Completions:
+Trong XRoute Go hiện tại, hàm `HandleMessages` (`internal/handlers/chat/chat.go:259–278`) xử lý các request gửi tới endpoint Claude Messages (`POST /v1/messages`). Nếu provider đích không phải là `claudeNative` (chỉ giới hạn ở Anthropic native hoặc `minimax-code`), hệ thống lập tức thực hiện chuyển đổi trung gian sang OpenAI Chat Completions:
 
 ```go
 openaiBody, err := translator.TranslateClaudeToOpenAI(body)

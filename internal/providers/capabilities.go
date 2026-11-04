@@ -314,7 +314,7 @@ var modelCapabilities = map[string]Capabilities{
 	"agnes-3.0-pro":   {Vision: true, Reasoning: true, Tools: true, ThinkingFormat: "openai", ContextWindow: 512000, MaxOutput: 65536},
 	"agnes-3.0-flash": {Vision: true, Reasoning: true, Tools: true, ThinkingFormat: "openai", ContextWindow: 512000, MaxOutput: 65536},
 	// GLM-5.3-FLASH is the multimodal z.ai line and it carries the full 1M
-	// window. Upstream decolua/9router#4656: z.ai's docs state that "GLM-5.3
+	// window. Upstream decolua/xroute#4656: z.ai's docs state that "GLM-5.3
 	// and GLM-5.3-FLASH no longer support disabling thinking (an error will
 	// occur if the thinking.type parameter is set to disabled)". Left unset,
 	// CanDisableThinking reports true and the translator emits
@@ -382,7 +382,7 @@ var modelCapabilities = map[string]Capabilities{
 }
 
 // codexExtendedContextWindow is the context window the codex registry
-// publishes for the `[1m]` extended-context variants. The suffix is a 9router
+// publishes for the `[1m]` extended-context variants. The suffix is a xroute
 // catalog id, not a wire id — upstream resolves it to the base model through
 // `upstreamModelId` — so these entries carry their own window rather than
 // inheriting the base model's.
@@ -540,7 +540,7 @@ var providerCapabilities = map[string]map[string]Capabilities{
 	},
 	// Devin CLI's registry declares 200k for these GPT variants; the generic
 	// gpt-5.4/5.5 rows now publish the 1.05M API window, so the gateway's own
-	// number has to be recorded here (upstream decolua/9router 89ffac5a).
+	// number has to be recorded here (upstream decolua/xroute 89ffac5a).
 	"devin-cli": {
 		"gpt-5.4-high":   devinCLIGPTCaps,
 		"gpt-5.4-medium": devinCLIGPTCaps,
@@ -555,7 +555,7 @@ var providerCapabilities = map[string]map[string]Capabilities{
 	// (claude-adaptive). Limits are the static catalog magpie's minimax plugin
 	// ships; the M2.7 pair always thinks and takes no effort knob in MiniMax
 	// Code itself, hence thinkingCanDisable:false. Port of upstream
-	// decolua/9router open-sse/providers/capabilities.js.
+	// decolua/xroute open-sse/providers/capabilities.js.
 	"minimax-code": {
 		"MiniMax-M3.1-Flash-Preview": {Vision: true, Reasoning: true, Tools: true, ThinkingFormat: "claude-adaptive", ThinkingCanDisable: new(false), ContextWindow: 512000, MaxOutput: 128000},
 		"MiniMax-M3":                 {Vision: true, Reasoning: true, Tools: true, ThinkingFormat: "claude-adaptive", ContextWindow: 512000, MaxOutput: 128000},
@@ -569,7 +569,7 @@ var providerCapabilities = map[string]map[string]Capabilities{
 	// "thinking.type.adaptive" and "output_config.effort"`. claude-adaptive
 	// emits exactly that pair, so the id is pinned here for the zed lane only
 	// — other lanes keep the budget shape for the same id. Port of upstream
-	// decolua/9router open-sse/providers/capabilities.js, which pins the same
+	// decolua/xroute open-sse/providers/capabilities.js, which pins the same
 	// id for opencode-go; Zed routes this model through the same Anthropic
 	// backend. Limits follow the model, not the pattern: the Zed catalogue
 	// reports 1M context / 128k output, not the 200k/8192 the haiku substring

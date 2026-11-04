@@ -11,8 +11,8 @@ import (
 
 	"github.com/spf13/viper"
 
-	"9router/proxy/internal/constants"
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/constants"
+	"xroute/proxy/internal/log"
 )
 
 // Config holds the proxy gateway configuration.
@@ -76,12 +76,12 @@ func ProvideConfig(v *viper.Viper) *Config {
 }
 
 // ResolveDataDir returns the base data directory: DATA_DIR env, else the
-// value from .env, else the platform default (~/.9router, or
-// %APPDATA%/9router on Windows).
+// value from .env, else the platform default (~/.xroute, or
+// %APPDATA%/xroute on Windows).
 //
 // The .env read is load-bearing, not a convenience. The server resolves its
 // data dir through viper (LoadConfigFromViper), which does read .env, while
-// `9router-go status|stop|logs` runs in a separate short-lived process that
+// `xroute status|stop|logs` runs in a separate short-lived process that
 // never boots the server. Reading only os.Getenv here meant a deployment
 // configured purely through .env — every Docker/compose setup — had the CLI
 // look at a different directory than the running daemon: status reported "not
@@ -100,11 +100,11 @@ func ResolveDataDir() string {
 			if appData == "" {
 				appData = filepath.Join(homeDir, "AppData", "Roaming")
 			}
-			return filepath.Join(appData, "9router")
+			return filepath.Join(appData, "xroute")
 		}
-		return filepath.Join(homeDir, ".9router")
+		return filepath.Join(homeDir, ".xroute")
 	}
-	return ".9router"
+	return ".xroute"
 }
 
 // dataDirFromEnvFile reads DATA_DIR out of the .env next to the binary or in
@@ -178,8 +178,8 @@ func LoadConfigFromViper(v *viper.Viper) *Config {
 			dbPath = filepath.Join(dbPath, "db", "data.sqlite")
 		} else if _, err := os.Stat(filepath.Join(dbPath, "data.sqlite")); err == nil {
 			dbPath = filepath.Join(dbPath, "data.sqlite")
-		} else if _, err := os.Stat(filepath.Join(dbPath, "9router.db")); err == nil {
-			dbPath = filepath.Join(dbPath, "9router.db")
+		} else if _, err := os.Stat(filepath.Join(dbPath, "xroute.db")); err == nil {
+			dbPath = filepath.Join(dbPath, "xroute.db")
 		} else {
 			dbPath = filepath.Join(dbPath, "db", "data.sqlite")
 		}

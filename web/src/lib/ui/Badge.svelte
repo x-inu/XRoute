@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Port of decolua/9router src/shared/components/Badge.js
+  // Port of decolua/xroute src/shared/components/Badge.js
   import type { Snippet } from 'svelte'
 
   type Tone = 'default' | 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'error' | 'info' | 'outline'

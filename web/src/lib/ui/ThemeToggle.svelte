@@ -1,9 +1,9 @@
 <script lang="ts">
-  // Port of decolua/9router src/shared/components/ThemeToggle.js
+  // Port of decolua/xroute src/shared/components/ThemeToggle.js
   let theme = $state<'light' | 'dark'>('dark')
 
   $effect(() => {
-    const stored = localStorage.getItem('9router-theme')
+    const stored = localStorage.getItem('xroute-theme')
     if (stored === 'light' || stored === 'dark') theme = stored
     apply(theme)
   })
@@ -11,7 +11,7 @@
   function apply(t: 'light' | 'dark') {
     document.documentElement.classList.toggle('dark', t === 'dark')
     document.documentElement.classList.toggle('light', t === 'light')
-    localStorage.setItem('9router-theme', t)
+    localStorage.setItem('xroute-theme', t)
   }
 
   function toggle() {

@@ -10,7 +10,7 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/log"
 )
 
 // maxAntigravityOutputTokens caps generationConfig.maxOutputTokens; Google's
@@ -37,7 +37,7 @@ var antigravityRequestBlacklist = []string{
 }
 
 // AntigravityRequest is the wrapper format for Antigravity API.
-// RequestType is omitempty: PR decolua/9router#3986 showed Google's Cloud Code
+// RequestType is omitempty: PR decolua/xroute#3986 showed Google's Cloud Code
 // endpoint enforces a tiny separate quota bucket whenever requestType="agent"
 // is present, causing false 429 RESOURCE_EXHAUSTED on OMP harness payloads
 // even with quota remaining. So the agent path omits the field entirely.
@@ -225,7 +225,7 @@ var competitivePromptBlacklist = []string{
 }
 
 // Harness tag patterns that trigger false 429 RESOURCE_EXHAUSTED rejections on
-// the Antigravity gateway (parity with decolua/9router PR #3987). OMP-family
+// the Antigravity gateway (parity with decolua/xroute PR #3987). OMP-family
 // harnesses inject these XML markers in system text; normalizing them to
 // neutral tags keeps instruction bodies intact while bypassing the filter.
 var (
@@ -239,14 +239,14 @@ var (
 	// antigravityOpenCodeRegex matches the literal `opencode` provider
 	// identifier upstream rewrites in the system instruction. Upstream's rule
 	// is unbounded and case-insensitive, so `opencode-zen` and
-	// `.config/opencode/` are rewritten too (parity with decolua/9router
+	// `.config/opencode/` are rewritten too (parity with decolua/xroute
 	// open-sse/config/appConstants.js:194).
 	antigravityOpenCodeRegex = regexp.MustCompile(`(?i)opencode`)
 	// hermesIdentityRegex matches every Hermes identity variant upstream
 	// rewrites, and the whole match is replaced by a neutral sentence. The
 	// legacy rule only matched one exact phrasing, so the other variants
 	// reached the Antigravity backend with the fingerprint intact and could
-	// trigger a fake 429 RESOURCE_EXHAUSTED (parity with decolua/9router
+	// trigger a fake 429 RESOURCE_EXHAUSTED (parity with decolua/xroute
 	// commit a61fc6a0).
 	//
 	// The upstream expression is transliterated exactly, including the
@@ -274,7 +274,7 @@ func rewriteCompetingBranding(text string) string {
 
 // rewriteAntigravityBrand rewrites the literal `opencode` provider
 // identifier to `antigravity`, matching upstream's fourth row of
-// ANTIGRAVITY_PROMPT_REWRITES (decolua/9router
+// ANTIGRAVITY_PROMPT_REWRITES (decolua/xroute
 // open-sse/config/appConstants.js:194). Upstream's replacement preserves the
 // three capitalisations it names and lowercases everything else.
 func rewriteAntigravityBrand(text string) string {
@@ -377,7 +377,7 @@ var AntigravityModelSynonyms = map[string]string{
 	"gemini-4-argon-high":   "gemini-4-argon-high",
 	"gemini-4-argon-medium": "gemini-4-argon-medium",
 	"gemini-4-argon-low":    "gemini-4-argon-low",
-	// Upstream decolua/9router#24034f69 retired the gemini-3.5 family and
+	// Upstream decolua/xroute#24034f69 retired the gemini-3.5 family and
 	// gemini-3-flash; the default moved to the 3.8 medium tier.
 	"gemini-default":             "gemini-3.8-flash-medium",
 	"gemini-3.5-flash":           "gemini-3.8-flash-medium",
@@ -440,7 +440,7 @@ func NormalizeAntigravityModel(model string) string {
 // shared with the lock and quota paths, which key on a bare model family.
 //
 // Port of open-sse/providers/registry/antigravity.js (upstream
-// decolua/9router#a07ed95b, refreshed by #24034f69). Every value was probed
+// decolua/xroute#a07ed95b, refreshed by #24034f69). Every value was probed
 // live against daily-cloudcode-pa.googleapis.com on 2026-10-09.
 var antigravityUpstreamModelIDs = map[string]string{
 	// Gemini 4 Argon serves one backend id per tier; the bare catalog id is medium tier.
@@ -482,7 +482,7 @@ var antigravityUpstreamModelIDs = map[string]string{
 // backend expects, applying the registry's upstreamModelId column.
 //
 // The parenthesised effort the registry carries ("gemini-3.8-flash-high(high)")
-// is 9router's own thinking notation, not a Google model id, and it is stripped
+// is xroute's own thinking notation, not a Google model id, and it is stripped
 // before the id reaches the wire — exactly as upstream's chatCore does with
 // stripThinkingSuffix(upstreamModel) on both the passthrough and the
 // translateRequest branch. Cloud Code answers 404 NOT_FOUND for every
@@ -830,7 +830,7 @@ func fixAntigravityContents(req *GeminiRequest, model string) bool {
 
 // WrapForAntigravity wraps a standard Gemini request in Antigravity API envelope.
 func WrapForAntigravity(geminiBody []byte, projectID, modelName string) ([]byte, error) {
-	// The wire id is the registry's upstreamModelId with 9router's own effort
+	// The wire id is the registry's upstreamModelId with xroute's own effort
 	// notation stripped, not the bare synonym the lock and quota paths share.
 	// proxy.ForwardGemini normalises the model before calling this, so the
 	// synonym lookup inside AntigravityUpstreamModel is idempotent and the two
@@ -857,7 +857,7 @@ func WrapForAntigravity(geminiBody []byte, projectID, modelName string) ([]byte,
 		Project:   projectID,
 		Model:     modelName,
 		UserAgent: "antigravity",
-		// Omit RequestType (was "agent"): parity with decolua/9router#3986.
+		// Omit RequestType (was "agent"): parity with decolua/xroute#3986.
 		// Google rejects agent-bucketed requests with false 429s; requestId
 		// keeps its existing agent/<...>/<...>/<...>/<step> shape.
 		RequestID: antigravityBuildRequestID(projectID, modelName, "agent", contentCount),

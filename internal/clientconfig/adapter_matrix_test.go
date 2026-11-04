@@ -61,8 +61,8 @@ func TestAdapterS1RoundTrip(t *testing.T) {
 			}
 			for _, f := range paths.Files {
 				got := readFixture(t, f.Path)
-				if n := strings.Count(got, "9router"); n > 0 && id != "kilo" {
-					t.Errorf("%s: Reset left 9router behind:\n%s", f.Purpose, got)
+				if n := strings.Count(got, "xroute"); n > 0 && id != "kilo" {
+					t.Errorf("%s: Reset left xroute behind:\n%s", f.Purpose, got)
 				}
 			}
 		})

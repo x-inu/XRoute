@@ -49,7 +49,7 @@ func requestScheme(r *http.Request) string {
 }
 
 // callbackRedirectURI resolves the OAuth callback URL for authorize handlers:
-// an explicit ?redirect_uri= wins when valid (mirrors upstream 9router
+// an explicit ?redirect_uri= wins when valid (mirrors upstream xroute
 // route.js), otherwise it is derived from the request host so the callback
 // follows wherever the dashboard is served (host + port), e.g.
 // http://localhost:20131/callback.

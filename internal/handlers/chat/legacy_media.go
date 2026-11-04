@@ -3,9 +3,9 @@ package chat
 import (
 	"strings"
 
-	json "9router/proxy/internal/fastjson"
+	json "xroute/proxy/internal/fastjson"
 
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/log"
 )
 
 // An image sent turns ago still rides in the history of every later request,

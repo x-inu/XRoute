@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy/executor"
 )
 
 func TestProcessCodexEvent_OutputTextDelta(t *testing.T) {

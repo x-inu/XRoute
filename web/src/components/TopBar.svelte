@@ -30,7 +30,7 @@
   // The group invite rotates. Everything user-facing points at the redirect
   // page instead, so a revoked link is repaired by editing site/tg.html alone
   // and every already-installed dashboard follows the new one.
-  const TELEGRAM_GROUP_URL = 'https://luqman-v1.github.io/9router-go/tg'
+  const TELEGRAM_GROUP_URL = 'https://x-inu.github.io/XRoute/tg'
 
   // Theme state
   let isDark = $state(true)
@@ -45,7 +45,7 @@
   })
   $effect(() => {
     if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('9router-theme') || localStorage.getItem('theme')
+      const stored = localStorage.getItem('xroute-theme') || localStorage.getItem('theme')
       if (stored === 'light') {
         isDark = false
       } else if (stored === 'dark') {
@@ -60,7 +60,7 @@
   function applyTheme(dark: boolean) {
     document.documentElement.classList.toggle('dark', dark)
     document.documentElement.classList.toggle('light', !dark)
-    localStorage.setItem('9router-theme', dark ? 'dark' : 'light')
+    localStorage.setItem('xroute-theme', dark ? 'dark' : 'light')
     localStorage.setItem('theme', dark ? 'dark' : 'light')
   }
 
@@ -165,7 +165,7 @@
     },
     skills: {
       title: 'Agent Skills',
-      description: 'Copy a link and paste to your AI to use 9router-go — no install needed',
+      description: 'Copy a link and paste to your AI to use xroute — no install needed',
       icon: 'extension',
     },
     'console-log': {
@@ -342,7 +342,7 @@
       <div class="flex items-center justify-between pb-3 border-b border-border-subtle">
         <h2 class="text-lg font-semibold text-text-main flex items-center gap-2">
           <span class="material-symbols-outlined text-pink-500">volunteer_activism</span>
-          Support 9router-go
+          Support xroute
         </h2>
         <button
           type="button"
@@ -355,7 +355,7 @@
       </div>
 
       <p class="text-sm text-text-muted leading-relaxed">
-        9router-go is a fast, lightweight and open-source high-throughput AI gateway in Go. If 9router-go saves you time and tokens, consider supporting the project!
+        xroute is a fast, lightweight and open-source high-throughput AI gateway in Go. If xroute saves you time and tokens, consider supporting the project!
       </p>
 
       <!-- Three destinations, stacked rather than tiled: a 2-column grid leaves
@@ -363,7 +363,7 @@
            reads as a list, which is what these are. -->
       <div class="flex flex-col gap-2.5">
         <a
-          href="https://github.com/luqman-v1/9router-go"
+          href="https://github.com/x-inu/XRoute"
           target="_blank"
           rel="noopener noreferrer"
           class="flex items-center gap-3 p-3.5 rounded-xl border border-border-subtle bg-surface-2 hover:border-brand-500/40 transition-colors group"
@@ -380,7 +380,7 @@
         </a>
 
         <a
-          href="https://github.com/luqman-v1/9router-go/releases"
+          href="https://github.com/x-inu/XRoute/releases"
           target="_blank"
           rel="noopener noreferrer"
           class="flex items-center gap-3 p-3.5 rounded-xl border border-border-subtle bg-surface-2 hover:border-pink-500/40 transition-colors group"

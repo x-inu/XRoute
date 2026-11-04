@@ -9,9 +9,9 @@ import (
 
 	json "encoding/json/v2"
 
-	"9router/proxy/internal/app"
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlers"
+	"xroute/proxy/internal/app"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlers"
 )
 
 // A /v1/responses client on a Responses-speaking upstream with a token saver
@@ -19,7 +19,7 @@ import (
 // backend answers `400 Unknown parameter: 'input[0].content'` for the Chat
 // shape `{"role":"system","content":"<text>"}` a messages[] injector writes,
 // and that 400 takes the whole request down (issue #307; upstream
-// decolua/9router carries the same failure as #2497).
+// decolua/xroute carries the same failure as #2497).
 
 // cavemanSaver turns the one token saver that injects a system prompt, leaving
 // RTK off so the outbound body differs only by the injected turn.

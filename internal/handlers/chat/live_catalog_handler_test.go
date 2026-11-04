@@ -10,7 +10,7 @@ import (
 
 	json "encoding/json/v2"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 // resetLiveCatalog clears the process-wide cache and restores the real endpoints

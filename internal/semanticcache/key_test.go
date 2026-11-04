@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/translator"
 )
 
 func imageOnlyRequest(url string) *translator.OpenAIRequest {

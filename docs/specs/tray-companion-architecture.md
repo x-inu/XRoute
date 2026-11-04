@@ -3,7 +3,7 @@
 **Date:** 2026-10-20
 **Author:** KunN-21 <kunn21.nv@gmail.com>
 **Status:** Discovery Gate G27 [CONDITIONAL] — **Documentation Only** (không có Go source nào được viết)
-**Target Repository:** `9router-go` (`D:\Code\9router-go`, module `9router/proxy`), HEAD `f5bc08b`
+**Target Repository:** `xroute` (`D:\Code\xroute`, module `xroute/proxy`), HEAD `f5bc08b`
 **Toolchain verified locally:** `go1.27.0 windows/amd64` (`GOTOOLCHAIN=local GOPROXY=off GOSUMDB=off`)
 
 > **Revision history**
@@ -16,7 +16,7 @@
 
 ## 0. Tóm tắt Điều hành
 
-`9router-tray` là một **binary riêng**, không phải một chế độ của `9router-go`. Nó quan sát và điều khiển một gateway đang chạy như một tiến trình độc lập, qua đúng những đường mà CLI đã có. Tài liệu này khoá lại kiến trúc đó, cộng với sáu bất biến (§2) và một ma trận nghiệm thu thật trên ba hệ điều hành (§8).
+`xroute-tray` là một **binary riêng**, không phải một chế độ của `xroute`. Nó quan sát và điều khiển một gateway đang chạy như một tiến trình độc lập, qua đúng những đường mà CLI đã có. Tài liệu này khoá lại kiến trúc đó, cộng với sáu bất biến (§2) và một ma trận nghiệm thu thật trên ba hệ điều hành (§8).
 
 **Bốn phát hiện định hình toàn bộ thiết kế** (chi tiết ở các mục tương ứng):
 
@@ -29,7 +29,7 @@
 
 | # | Bất biến | Tóm tắt |
 | --- | --- | --- |
-| **C1** | Headless Core | `9router-go` vẫn build `CGO_ENABLED=0` cho mọi cặp trong `CROSS_TARGETS`; không mã GUI nào vào core |
+| **C1** | Headless Core | `xroute` vẫn build `CGO_ENABLED=0` cho mọi cặp trong `CROSS_TARGETS`; không mã GUI nào vào core |
 | **C2** | Identity Before Control | Không hành động điều khiển nào trước khi port + PID + data scope được xác minh |
 | **C3** | No Token To Foreign Process | `CLIToken()` chỉ rời process khi L1 **và** L2 cùng qua; không có L2 thì từ chối |
 | **C4** | Quit Decoupling | Quit chỉ giải phóng GUI và thoát process tray; gateway tiếp tục chạy |
@@ -38,7 +38,7 @@
 
 **Ba trạng thái render, và trạng thái thứ ba là trạng thái thật:** `Running`, `Stopped`, `Unknown`. `Info.ActiveUnknown` (`internal/service/service.go:76-80`) có nghĩa "không hỏi được", **không** có nghĩa "không chạy". Một tray in `Stopped` khi thực chất là `Unknown` đang nói dối người dùng, và sẽ khiến họ bấm `Start` trên một gateway đang chạy (§7.1, §10).
 
-**Trạng thái:** Phase 1 đã triển khai trong PR #577 (`cmd/9router-tray/`, `internal/tray/`). §11 ghi lại trạng thái của tài liệu **tại thời điểm nó được viết**; ma trận nghiệm thu §8 vẫn chưa chạy, nên G27 vẫn mở.
+**Trạng thái:** Phase 1 đã triển khai trong PR #577 (`cmd/xroute-tray/`, `internal/tray/`). §11 ghi lại trạng thái của tài liệu **tại thời điểm nó được viết**; ma trận nghiệm thu §8 vẫn chưa chạy, nên G27 vẫn mở.
 
 ---
 
@@ -50,7 +50,7 @@ Ba lý do, mỗi lý do đều là một ràng buộc đã tồn tại trong rep
 
 | Lý do | Bằng chứng | Hệ quả |
 | --- | --- | --- |
-| Core phải build được `CGO_ENABLED=0` cho cả năm target | `Makefile:197` `CROSS_TARGETS := linux-amd64 linux-arm64 darwin-amd64 darwin-arm64 windows-amd64`; vòng kiểm ở `AGENTS.md:161-164` | Một dependency GUI cần cgo trong `cmd/9router-go` sẽ phá cả năm target cùng lúc (`AGENTS.md:171`) |
+| Core phải build được `CGO_ENABLED=0` cho cả năm target | `Makefile:197` `CROSS_TARGETS := linux-amd64 linux-arm64 darwin-amd64 darwin-arm64 windows-amd64`; vòng kiểm ở `AGENTS.md:161-164` | Một dependency GUI cần cgo trong `cmd/xroute` sẽ phá cả năm target cùng lúc (`AGENTS.md:171`) |
 | GUI là mã theo nền tảng, không phải mã di động | Windows cần `Shell_NotifyIconW`, macOS cần Objective-C runtime, Linux cần StatusNotifierItem/AppIndicator | Đưa GUI vào core biến "một binary di động" thành "một bản build cho mỗi nền tảng", đúng thứ `AGENTS.md:172` cấm |
 | Tray có vòng đời người dùng, gateway có vòng đời máy | Bất biến C4 | Hai vòng đời khác nhau không nên chia sẻ một process |
 
@@ -69,7 +69,7 @@ Mọi giá trị dưới đây đọc trực tiếp từ source. Không có drif
 | `daemon.Dir()` | `internal/daemon/daemon.go:62` | `filepath.Join(config.ResolveDataDir(), "run")` |
 | `daemonLocalURL()` | `internal/daemon/daemon.go:245` | `"http://127.0.0.1:" + port`, port từ `config.LoadConfig()`, fallback `defaultPort = 20130` (`:37`) |
 | `claim.owner()` | `internal/daemon/pidfile.go:100-111` | `pid > 0` **và** `exePath != ""` **và** `proc.Alive(pid)` **và** `proc.Executable(pid)` khớp sau `EvalSymlinks` |
-| `daemon.EnvBackground` | `internal/daemon/health.go:26` | `"9ROUTER_BACKGROUND"` |
+| `daemon.EnvBackground` | `internal/daemon/health.go:26` | `"XROUTE_BACKGROUND"` |
 | `daemon.IsBackgroundProcess()` | `internal/daemon/health.go:34-36` | `os.Getenv(EnvBackground) == "1"` |
 | `daemon.HealthPath` | `internal/daemon/health.go:31` | `"/health"` |
 | `service.Status()` | `internal/service/service.go:138` | `func Status() (Info, bool)` — backend đầu tiên khớp trong thứ tự `:139-146` |
@@ -80,7 +80,7 @@ Mọi giá trị dưới đây đọc trực tiếp từ source. Không có drif
 | `service.Start()` | `internal/service/control.go:21` | `func Start() (Info, error)` → `control("start")` |
 | `service.Stop()` | `internal/service/control.go:26` | `func Stop() (Info, error)` → `control("stop")` |
 | `service.ErrNoSupervisor` | `internal/service/control.go:13` | `errors.New("service: autostart backend has no supervisor, manage the process directly")` |
-| `service.ErrNotInstalled` | `internal/service/service.go:34` | `errors.New("9router-go autostart is not installed")` |
+| `service.ErrNotInstalled` | `internal/service/service.go:34` | `errors.New("xroute autostart is not installed")` |
 | `controlTimeout` | `internal/service/control.go:17` | `10 * time.Second` |
 | `auth.CLIToken()` | `internal/auth/clitoken.go:24` | `func CLIToken() string` — `sha256(rawMachineID + "9r-cli-auth" + cliSecret).hex[:16]` |
 | `auth.ValidCLIToken()` | `internal/auth/clitoken.go:36` | so sánh constant-time |
@@ -90,14 +90,14 @@ Mọi giá trị dưới đây đọc trực tiếp từ source. Không có drif
 | Cổng auth của route shutdown | `internal/handlers/router.go:476` | `r.Use(middleware.RequireAdminAuth())` |
 | `RequireAdminAuth` | `internal/middleware/dashboard_auth.go:113-124` | session **hoặc** `CLITokenHeader` hợp lệ |
 | `IsAlwaysProtectedPath` | `internal/middleware/dashboard_auth.go:45-62` | gồm `/api/version/shutdown` (`:53`), `/api/version/update` (`:54`), `/admin/health/reset` (`:55`), `/api/oauth/cursor/auto-import` (`:56`) |
-| `config.ResolveDataDir()` | `internal/config/config.go:90-108` | `DATA_DIR` → `.env` → `%APPDATA%\9router` / `~/.9router` |
+| `config.ResolveDataDir()` | `internal/config/config.go:90-108` | `DATA_DIR` → `.env` → `%APPDATA%\xroute` / `~/.xroute` |
 | `config.LoadConfig().Port` | `internal/config/config.go:157` | `PORT`, mặc định `20130` (`:48`) |
-| `windowsTaskName` | `internal/service/windows.go:10` | `"9router-go"` |
-| `unitName` | `internal/service/systemd.go:14` | `"9router-go.service"` |
-| `launchdLabel` | `internal/service/launchd.go:14` | `"com.9router.gateway"` |
-| `BINARY_NAME` | `Makefile:2` | `9router-go$(BINARY_SUFFIX)` |
+| `windowsTaskName` | `internal/service/windows.go:10` | `"xroute"` |
+| `unitName` | `internal/service/systemd.go:14` | `"xroute.service"` |
+| `launchdLabel` | `internal/service/launchd.go:14` | `"com.xroute.gateway"` |
+| `BINARY_NAME` | `Makefile:2` | `xroute$(BINARY_SUFFIX)` |
 | `CROSS_TARGETS` | `Makefile:197` | `linux-amd64 linux-arm64 darwin-amd64 darwin-arm64 windows-amd64` |
-| Target `cross-one` | `Makefile:217` | `go build -ldflags="$(LDFLAGS)" -o $(OUT) ./cmd/9router-go/` |
+| Target `cross-one` | `Makefile:217` | `go build -ldflags="$(LDFLAGS)" -o $(OUT) ./cmd/xroute/` |
 
 Bổ sung đã đọc và dùng trong tài liệu này:
 
@@ -112,29 +112,29 @@ Bổ sung đã đọc và dùng trong tài liệu này:
 | `proc.ForceKill` | `internal/proc/proc.go:42` | `TerminateProcess` (Windows) / `SIGKILL` (Unix) |
 | `proc.ErrStopUnsupported` | `internal/proc/proc_windows.go:21` | `"proc: graceful stop unsupported on this platform"` |
 | `requestStop` (Windows) | `internal/proc/proc_windows.go:47-49` | luôn trả `ErrStopUnsupported` |
-| `controlWindowsTask("stop")` | `internal/service/control.go:151-153` | `schtasks.exe /end /tn 9router-go` = `TerminateProcess` ở tầng scheduler |
+| `controlWindowsTask("stop")` | `internal/service/control.go:151-153` | `schtasks.exe /end /tn xroute` = `TerminateProcess` ở tầng scheduler |
 | `systemd Restart=always` | `internal/service/systemd.go:51-52` | `Restart=always`, `RestartSec=3` |
 | `launchd KeepAlive` | `internal/service/launchd.go:39` | `<key>KeepAlive</key><true/>` |
 | `HandleShutdown` | `internal/handlers/shutdown.go:23-34` | 200 trước, rồi `:30` chờ 500 ms, `:32` `shutdown.RequestStop()` |
-| `signal.Notify` | `cmd/9router-go/main.go:251` | `os.Interrupt, syscall.SIGTERM` |
-| Nhánh select shutdown | `cmd/9router-go/main.go:261-266` | `<-signals` và `<-shutdown.StopRequested()` cùng một `select` |
-| `fxApp.Stop` budget | `cmd/9router-go/main.go:276-278` | `20 * time.Second` |
-| `daemon.RegisterPID()` gate | `cmd/9router-go/main.go:256-259` | chỉ khi `daemon.IsBackgroundProcess()` |
-| Set `9ROUTER_BACKGROUND` | `internal/daemon/daemon.go:145` | `cmd.Env = append(os.Environ(), EnvBackground+"=1")` — **duy nhất** chỗ này |
-| Lệnh CLI hiện có | `cmd/9router-go/daemon_cmd.go:21-142` | `daemonURL`, `startDetached`, `stopDetached`, `restartDetached`, `statusDetached`, `logsDetached`, `forwardArgs` |
-| Alias lệnh con | `cmd/9router-go/main.go:127-148` | `start`, `stop`, `restart`, `status`, `logs` |
-| Lệnh `service` | `cmd/9router-go/main.go:158-193` | `install`, `uninstall`, `start`, `stop`, `restart`, `status` |
+| `signal.Notify` | `cmd/xroute/main.go:251` | `os.Interrupt, syscall.SIGTERM` |
+| Nhánh select shutdown | `cmd/xroute/main.go:261-266` | `<-signals` và `<-shutdown.StopRequested()` cùng một `select` |
+| `fxApp.Stop` budget | `cmd/xroute/main.go:276-278` | `20 * time.Second` |
+| `daemon.RegisterPID()` gate | `cmd/xroute/main.go:256-259` | chỉ khi `daemon.IsBackgroundProcess()` |
+| Set `XROUTE_BACKGROUND` | `internal/daemon/daemon.go:145` | `cmd.Env = append(os.Environ(), EnvBackground+"=1")` — **duy nhất** chỗ này |
+| Lệnh CLI hiện có | `cmd/xroute/daemon_cmd.go:21-142` | `daemonURL`, `startDetached`, `stopDetached`, `restartDetached`, `statusDetached`, `logsDetached`, `forwardArgs` |
+| Alias lệnh con | `cmd/xroute/main.go:127-148` | `start`, `stop`, `restart`, `status`, `logs` |
+| Lệnh `service` | `cmd/xroute/main.go:158-193` | `install`, `uninstall`, `start`, `stop`, `restart`, `status` |
 
 ### 1.3 Ngoài phạm vi
 
 | Việc | Thuộc về |
 | --- | --- |
-| Viết `cmd/9router-tray/main.go` hay `internal/tray/` | STOP Gate §11 — Phase 2, sau khi spec này được duyệt |
+| Viết `cmd/xroute-tray/main.go` hay `internal/tray/` | STOP Gate §11 — Phase 2, sau khi spec này được duyệt |
 | Thêm UDS / named-pipe control channel vào gateway | Thay đổi phía gateway, ngoài G27 (§9). Tài liệu này **không** được đọc như thể nó đã tồn tại |
 | Thêm L2 (socket-owner lookup) cho Windows/macOS | Task riêng; §5.4 chốt fail-closed cho tới lúc đó, §9 ghi đường nâng cấp |
 | Sửa `daemon.Stop()` để bỏ force-kill | Task 7 (`docs/specs/service-drain-coordination.md`) đã định nghĩa đường mới và **cấm** đường cũ |
 | Tự động cập nhật tray, auto-update tray | Không có trong G27 |
-| Đóng gói / phát hành `9router-tray` lên npm hay release artifact | Phase 2; §8 chỉ định nghĩa nghiệm thu, không định nghĩa kênh phát hành |
+| Đóng gói / phát hành `xroute-tray` lên npm hay release artifact | Phase 2; §8 chỉ định nghĩa nghiệm thu, không định nghĩa kênh phát hành |
 
 ---
 
@@ -144,13 +144,13 @@ Mỗi bất biến có: phát biểu, cơ chế thực thi, và cái gì hỏng 
 
 ### C1 — Headless Core
 
-**Phát biểu:** `9router-go` build được với `CGO_ENABLED=0` cho **mọi** cặp trong `CROSS_TARGETS` sau khi G27 hoàn tất. Không mã GUI, không import GUI, không build tag GUI nào lọt vào `cmd/9router-go/`.
+**Phát biểu:** `xroute` build được với `CGO_ENABLED=0` cho **mọi** cặp trong `CROSS_TARGETS` sau khi G27 hoàn tất. Không mã GUI, không import GUI, không build tag GUI nào lọt vào `cmd/xroute/`.
 
-**Cơ chế:** `CROSS_TARGETS := linux-amd64 linux-arm64 darwin-amd64 darwin-arm64 windows-amd64` (`Makefile:197`). `AGENTS.md:161-164` cho một vòng kiểm copy-runnable; `AGENTS.md:171` cấm "any library requiring cgo" và `:172` cấm build tag phá bất kỳ target nào. Tray nằm ở `cmd/9router-tray/`, **ngoài** vòng `cross-one` (`Makefile:217`, `go build … ./cmd/9router-go/`) và ngoài mọi target của `CROSS_TARGETS`.
+**Cơ chế:** `CROSS_TARGETS := linux-amd64 linux-arm64 darwin-amd64 darwin-arm64 windows-amd64` (`Makefile:197`). `AGENTS.md:161-164` cho một vòng kiểm copy-runnable; `AGENTS.md:171` cấm "any library requiring cgo" và `:172` cấm build tag phá bất kỳ target nào. Tray nằm ở `cmd/xroute-tray/`, **ngoài** vòng `cross-one` (`Makefile:217`, `go build … ./cmd/xroute/`) và ngoài mọi target của `CROSS_TARGETS`.
 
-**Điểm dễ hiểu sai:** "tray được phép dùng cgo" không phải một ngoại lệ của `AGENTS.md §4.F` — nó là kết quả của việc `§4.F` chỉ ràng buộc **binary được ship trong `CROSS_TARGETS`**. Tray là binary thứ hai, không có mặt trong vòng lặp đó. Nếu ai thêm `cmd/9router-tray` vào `CROSS_TARGETS` hoặc vào `cross`, C1 vỡ ngay lập tức và vỡ cho cả năm target cùng lúc.
+**Điểm dễ hiểu sai:** "tray được phép dùng cgo" không phải một ngoại lệ của `AGENTS.md §4.F` — nó là kết quả của việc `§4.F` chỉ ràng buộc **binary được ship trong `CROSS_TARGETS`**. Tray là binary thứ hai, không có mặt trong vòng lặp đó. Nếu ai thêm `cmd/xroute-tray` vào `CROSS_TARGETS` hoặc vào `cross`, C1 vỡ ngay lập tức và vỡ cho cả năm target cùng lúc.
 
-**Hệ quả lên `./...`:** `go vet ./...`, `go test ./...` và `golangci-lint run ./...` đều duyệt **mọi** package, kể cả tray — nên một import GUI không có build constraint sẽ kéo `pkg-config ayatana-appindicator3-0.1` vào mọi lệnh workspace trên Linux, và làm đỏ ba job CI trên runner không cài `libayatana-appindicator3-dev`. Vì vậy `cmd/9router-tray/gui.go` mang `//go:build windows || tray`: Windows vào constraint không cần tag (systray gọi thẳng Win32 API, không cgo, không pkg-config), macOS/Linux cần `-tags tray` và phải build trên host thật của chúng. Bản build không có tag sinh ra `gui_stub.go`, thoát lúc khởi động kèm tên flag cần thêm — im lặng không hiện icon thì người dùng sẽ đi tìm lỗi ở gateway. Job `Build tray binary` trong `ci.yml` chạy trên `windows-latest` để constraint này không âm thầm che một `gui.go` hỏng.
+**Hệ quả lên `./...`:** `go vet ./...`, `go test ./...` và `golangci-lint run ./...` đều duyệt **mọi** package, kể cả tray — nên một import GUI không có build constraint sẽ kéo `pkg-config ayatana-appindicator3-0.1` vào mọi lệnh workspace trên Linux, và làm đỏ ba job CI trên runner không cài `libayatana-appindicator3-dev`. Vì vậy `cmd/xroute-tray/gui.go` mang `//go:build windows || tray`: Windows vào constraint không cần tag (systray gọi thẳng Win32 API, không cgo, không pkg-config), macOS/Linux cần `-tags tray` và phải build trên host thật của chúng. Bản build không có tag sinh ra `gui_stub.go`, thoát lúc khởi động kèm tên flag cần thêm — im lặng không hiện icon thì người dùng sẽ đi tìm lỗi ở gateway. Job `Build tray binary` trong `ci.yml` chạy trên `windows-latest` để constraint này không âm thầm che một `gui.go` hỏng.
 
 **Khi vi phạm:** một dependency GUI cần cgo trong core biến "một binary di động" thành "một bản build cho mỗi nền tảng" — đúng thứ `AGENTS.md:172` nói pipeline này tồn tại để tránh.
 
@@ -202,8 +202,8 @@ Mỗi bất biến có: phát biểu, cơ chế thực thi, và cái gì hỏng 
 
 | Thành phần | Binary | CGO | Vòng đời | Được làm gì với gateway |
 | --- | --- | --- | --- | --- |
-| `cmd/9router-go` (core) | `9router-go` | **Không bao giờ** | do người dùng hoặc supervisor | sở hữu listener, sở hữu DB |
-| `cmd/9router-tray` (tray) | `9router-tray` | Được phép | do người dùng đóng/mở | quan sát + điều khiển qua đúng API/CLI đã có |
+| `cmd/xroute` (core) | `xroute` | **Không bao giờ** | do người dùng hoặc supervisor | sở hữu listener, sở hữu DB |
+| `cmd/xroute-tray` (tray) | `xroute-tray` | Được phép | do người dùng đóng/mở | quan sát + điều khiển qua đúng API/CLI đã có |
 | `internal/daemon` | — | không | — | spawn/stop gateway (đường CLI) |
 | `internal/service` | — | không | — | cài/bật/tắt supervisor entry |
 | `internal/clientconfig` | — | không | — | patch cấu hình client (G24a–b, Task 1–5) |
@@ -245,7 +245,7 @@ Mỗi bất biến có: phát biểu, cơ chế thực thi, và cái gì hỏng 
 
 1. **License permissive** (BSD-3-Clause) và bảo trì tích cực hơn bản gốc — hai thuộc tính duy nhất ta thực sự cần ở một GUI shim mỏng.
 2. **Bề mặt API nhỏ.** Ta cần đúng bốn thứ: một icon, một menu động nhiều mục, callback chọn mục, và một vòng lặp có thể dừng. Không cần window, không cần canvas, không cần theme system.
-3. **Nó là cgo — nhưng chỉ trong `9router-tray`.** C1 nói rõ vì sao điều đó hợp lệ.
+3. **Nó là cgo — nhưng chỉ trong `xroute-tray`.** C1 nói rõ vì sao điều đó hợp lệ.
 
 **Loại `getlantern/systray`** không phải vì nó sai, mà vì bản fork của Fyne có cùng mô hình với bảo trì tốt hơn; nếu fork có vấn đề license hoặc build, `getlantern` là phương án dự phòng cùng kiến trúc — đổi import, không đổi thiết kế.
 
@@ -259,7 +259,7 @@ Hai điều kiện của `AGENTS.md §4.F` áp cho `go.mod` **sau khi** thêm de
 # Điều kiện 1 — portability của CORE vẫn xanh sau khi thêm tray dep
 for pair in $(grep -E '^CROSS_TARGETS *:=' Makefile | sed 's/.*:=[[:space:]]*//'); do
   CGO_ENABLED=0 GOOS=${pair%-*} GOARCH=${pair#*-} \
-    go build -o /dev/null ./cmd/9router-go/ || echo "FAIL $pair"
+    go build -o /dev/null ./cmd/xroute/ || echo "FAIL $pair"
 done
 
 # Điều kiện 2 — module graph vẫn coherent
@@ -272,7 +272,7 @@ go mod tidy && git diff --exit-code go.mod
 
 | Câu hỏi | Cách trả lời |
 | --- | --- |
-| `fyne.io/systray` build được trên Windows **không cần** MSYS2/mingw? | `GOOS=windows CGO_ENABLED=1 go build ./cmd/9router-tray/` trên Windows thật |
+| `fyne.io/systray` build được trên Windows **không cần** MSYS2/mingw? | `GOOS=windows CGO_ENABLED=1 go build ./cmd/xroute-tray/` trên Windows thật |
 | Linux build có cần `libayatana-appindicator3-dev` không, và package nào? | build trong container sạch, đọc thông báo lỗi linker |
 | macOS build có cần Xcode CLI tools; có ký không? | build trên macOS thật; chạy thử chưa ký |
 | Menu item động (thêm/xoá theo trạng thái) có race với event loop không? | test tay: đổi trạng thái liên tục khi menu đang mở |
@@ -329,7 +329,7 @@ service.Status() → (info, ok)
 
 **Tại sao supervised không cần token:** `service.Stop()` → `control("stop")` → `systemctl --user stop` / `rc-service … stop` / `sv stop …` / `launchctl unload` (`internal/service/control.go:68-144`). Trên systemd, SIGTERM đi vào `main.go:251` (`signal.Notify(signals, os.Interrupt, syscall.SIGTERM)`) và rơi vào cùng nhánh `select` với `shutdown.StopRequested()` (`main.go:262-263`), rồi `fxApp.Stop` (`:278`) — đó **chính là** graceful drain. Không POST, không token, không cần biết PID.
 
-**Tại sao `windows-task` bị từ chối:** `controlWindowsTask("stop")` = `schtasks.exe /end /tn 9router-go` (`internal/service/control.go:151-153`). `/end` là `TerminateProcess` ở tầng scheduler — không drain, không SIGTERM. Windows không nâng được SIGTERM cho chính nó (comment tại `internal/handlers/shutdown.go` và `main.go:265-266`), nên không có đường graceful nào từ supervisor. Và không có L2 trên Windows ⇒ không token. Vậy: từ chối.
+**Tại sao `windows-task` bị từ chối:** `controlWindowsTask("stop")` = `schtasks.exe /end /tn xroute` (`internal/service/control.go:151-153`). `/end` là `TerminateProcess` ở tầng scheduler — không drain, không SIGTERM. Windows không nâng được SIGTERM cho chính nó (comment tại `internal/handlers/shutdown.go` và `main.go:265-266`), nên không có đường graceful nào từ supervisor. Và không có L2 trên Windows ⇒ không token. Vậy: từ chối.
 
 ### 5.4 Hệ quả phải nói thẳng
 
@@ -341,7 +341,7 @@ service.Status() → (info, ok)
 - gọi `daemon.Stop()` — hàm đó tự escalate sang `proc.Terminate` rồi `ForceKill` (`internal/daemon/daemon.go:197`, `internal/proc/proc.go:25-39`), vi phạm C2 của Task 7;
 - hạ chuẩn binding xuống L1 khi L2 vắng mặt — đó đúng là L3 đã bị xoá.
 
-Người dùng Windows/macOS vẫn có đường dừng hợp lệ: dashboard, hoặc `9router-go stop` trên Linux. Trên Windows, `schtasks /end` từ chính CLI cũng không phải graceful — nên "refuse" ở đây không mất gì so với hiện trạng; nó chỉ **không thêm** một đường mới tệ hơn.
+Người dùng Windows/macOS vẫn có đường dừng hợp lệ: dashboard, hoặc `xroute stop` trên Linux. Trên Windows, `schtasks /end` từ chính CLI cũng không phải graceful — nên "refuse" ở đây không mất gì so với hiện trạng; nó chỉ **không thêm** một đường mới tệ hơn.
 
 **Trên Linux unsupervised:** L1 + L2 đều phải qua. Nếu port đang bị process lạ giữ, tray báo xung đột cổng và **không gửi gì**.
 
@@ -384,14 +384,14 @@ Không dùng `sleep` để "chờ tray exit" — chờ process exit thật, có 
 
 | Trạng thái | Nguồn | Menu |
 | --- | --- | --- |
-| `Running` | `daemon.RunningPID() > 0` **hoặc** `service.Status()` với `Active == true && !ActiveUnknown` | `9Router (Port {port})`, `Open Dashboard`, `Auto-start on Boot`, `Stop Gateway`, `Quit Tray` |
-| `Stopped` | không có listener, `daemon.RunningPID() == 0`, và supervisor **không** báo `ActiveUnknown`. `Status()` trả `ok == false` cũng rơi vào đây — xem dưới | `9Router (Stopped)`, `Start Gateway`, `Auto-start on Boot`, `Quit Tray` |
-| `Unknown` | `Info.ActiveUnknown` **hoặc** đọc state/pid lỗi | `9Router (Unknown)`, `Quit Tray` — **không** có Start/Stop |
-| `PortConflict` | listener có mặt nhưng không xác minh được danh tính, **hoặc** không khớp PID | `9Router (Port {port} in use by foreign process (PID {pid}))`, `Quit Tray` |
+| `Running` | `daemon.RunningPID() > 0` **hoặc** `service.Status()` với `Active == true && !ActiveUnknown` | `XRoute (Port {port})`, `Open Dashboard`, `Auto-start on Boot`, `Stop Gateway`, `Quit Tray` |
+| `Stopped` | không có listener, `daemon.RunningPID() == 0`, và supervisor **không** báo `ActiveUnknown`. `Status()` trả `ok == false` cũng rơi vào đây — xem dưới | `XRoute (Stopped)`, `Start Gateway`, `Auto-start on Boot`, `Quit Tray` |
+| `Unknown` | `Info.ActiveUnknown` **hoặc** đọc state/pid lỗi | `XRoute (Unknown)`, `Quit Tray` — **không** có Start/Stop |
+| `PortConflict` | listener có mặt nhưng không xác minh được danh tính, **hoặc** không khớp PID | `XRoute (Port {port} in use by foreign process (PID {pid}))`, `Quit Tray` |
 
 **`Unknown` không phải `Stopped`.** Đó là toàn bộ nội dung của C5. Lý do tồn tại của `ActiveUnknown` được ghi ngay tại `internal/service/service.go:76-79`: in zero value thành "not running" là "stating as fact what is only an unanswered question".
 
-**`ok == false` không phải `Unknown`.** `service.Status()` trả `ok == false` khi **không có** autostart entry nào được cài (`internal/service/service.go:137-152` — comment của chính hàm: "the autostart entry in effect, or false when none exists"). Đó là trạng thái bình thường của một máy vừa cài hoặc một người dùng chỉ chạy `9router-go start` không cài service, không phải một câu hỏi chưa trả lời. Vì vậy: `ok == false` + `RunningPID() == 0` + không listener ⇒ `Stopped`, có `Start Gateway`. Chỉ `ActiveUnknown` (backend tồn tại nhưng không hỏi được) hoặc lỗi đọc state/pid mới là `Unknown`. §5.3 vẫn route `ok == false` sang UNSUPERVISED — đó là chuyện **đường nào để dừng**, không phải chuyện trạng thái hiển thị, và hai câu hỏi này độc lập.
+**`ok == false` không phải `Unknown`.** `service.Status()` trả `ok == false` khi **không có** autostart entry nào được cài (`internal/service/service.go:137-152` — comment của chính hàm: "the autostart entry in effect, or false when none exists"). Đó là trạng thái bình thường của một máy vừa cài hoặc một người dùng chỉ chạy `xroute start` không cài service, không phải một câu hỏi chưa trả lời. Vì vậy: `ok == false` + `RunningPID() == 0` + không listener ⇒ `Stopped`, có `Start Gateway`. Chỉ `ActiveUnknown` (backend tồn tại nhưng không hỏi được) hoặc lỗi đọc state/pid mới là `Unknown`. §5.3 vẫn route `ok == false` sang UNSUPERVISED — đó là chuyện **đường nào để dừng**, không phải chuyện trạng thái hiển thị, và hai câu hỏi này độc lập.
 
 ### 7.2 `Port {port}` lấy từ đâu
 
@@ -399,7 +399,7 @@ Từ `config.LoadConfig().Port` (`internal/config/config.go:157-159`: `v.GetInt(
 
 ### 7.3 Data scope
 
-`DATA_DIR` resolve qua `config.ResolveDataDir()` (`internal/config/config.go:90-108`): env `DATA_DIR` → `.env` trong **cwd hiện tại**, rồi `.env` cạnh binary (`internal/config/config.go:134-140`: `envFileCandidates()` trả `{".env"}` rồi mới nối `filepath.Join(filepath.Dir(exe), ".env")`) → `%APPDATA%\9router` (Windows) / `~/.9router` (khác). Hai vị trí `.env` có nghĩa là **cwd là một phần của data scope**: tray và gateway chạy với cwd khác nhau có thể resolve `DATA_DIR` khác nhau, xem cảnh báo ngay dưới. Pid file nằm ở `<DATA_DIR>/run/gateway.pid` (`internal/daemon/daemon.go:62-69`).
+`DATA_DIR` resolve qua `config.ResolveDataDir()` (`internal/config/config.go:90-108`): env `DATA_DIR` → `.env` trong **cwd hiện tại**, rồi `.env` cạnh binary (`internal/config/config.go:134-140`: `envFileCandidates()` trả `{".env"}` rồi mới nối `filepath.Join(filepath.Dir(exe), ".env")`) → `%APPDATA%\xroute` (Windows) / `~/.xroute` (khác). Hai vị trí `.env` có nghĩa là **cwd là một phần của data scope**: tray và gateway chạy với cwd khác nhau có thể resolve `DATA_DIR` khác nhau, xem cảnh báo ngay dưới. Pid file nằm ở `<DATA_DIR>/run/gateway.pid` (`internal/daemon/daemon.go:62-69`).
 
 Tray dùng **cùng** `ResolveDataDir()` — không tự suy đường dẫn. Đây là điều làm "data scope" thành một phần của identity: nếu hai tray hoặc một tray + một CLI resolve được hai `DATA_DIR` khác nhau, chúng đang nói về hai gateway khác nhau dù cùng port.
 
@@ -422,30 +422,30 @@ Không chuỗi nào chứa `CLIToken()`, `api-key`, hay giá trị header.
 
 ### 8.1 Nguyên tắc
 
-**Cross-compile không chứng minh gì về GUI.** `make cross` (`Makefile:204-215`) build `./cmd/9router-go/` — nó **không** chạm `cmd/9router-tray`, và cả nếu có thì một binary tray cross-build cũng không mở được một cửa sổ hay một icon. Mọi mục dưới đây phải chạy trên **host thật** của nền tảng đó.
+**Cross-compile không chứng minh gì về GUI.** `make cross` (`Makefile:204-215`) build `./cmd/xroute/` — nó **không** chạm `cmd/xroute-tray`, và cả nếu có thì một binary tray cross-build cũng không mở được một cửa sổ hay một icon. Mọi mục dưới đây phải chạy trên **host thật** của nền tảng đó.
 
 ### 8.2 Ma trận
 
 | # | Nền tảng | Ca | Cách kiểm | Kết quả đạt |
 | --- | --- | --- | --- | --- |
-| W1 | Windows 11 | Icon hiện trong notification area | chạy `9router-tray.exe`, nhìn | icon hiện trong 10 s, có tooltip |
+| W1 | Windows 11 | Icon hiện trong notification area | chạy `xroute-tray.exe`, nhìn | icon hiện trong 10 s, có tooltip |
 | W2 | Windows 11 | Menu Running đủ 5 mục | click phải icon | đúng 5 mục §7.1 |
 | W3 | Windows 11 | `Stop Gateway` từ chối | click `Stop Gateway` | thông báo §7.4 dòng 2 hoặc 3; gateway **vẫn sống** (`GET /health` 200) |
 | W4 | Windows 11 | `Quit Tray` giữ gateway | `Quit Tray`, rồi `curl /health` | 200, cùng PID như trước |
-| W5 | Windows 11 | Scheduled Task installed | `9router-go service install`, mở tray | trạng thái `Running` hoặc `Unknown`; **không** `Stopped` |
-| W6 | Windows 11 | Gateway dừng, **không** cài autostart | `9router-go stop`, không `service install`, mở tray | `Stopped` với `Start Gateway` có mặt — đây là ca phân biệt `ok == false` với `Unknown` (§7.1) |
-| M1 | macOS 14+ | Icon hiện trên menu bar | chạy `9router-tray`, nhìn | icon hiện, không bị cắt |
+| W5 | Windows 11 | Scheduled Task installed | `xroute service install`, mở tray | trạng thái `Running` hoặc `Unknown`; **không** `Stopped` |
+| W6 | Windows 11 | Gateway dừng, **không** cài autostart | `xroute stop`, không `service install`, mở tray | `Stopped` với `Start Gateway` có mặt — đây là ca phân biệt `ok == false` với `Unknown` (§7.1) |
+| M1 | macOS 14+ | Icon hiện trên menu bar | chạy `xroute-tray`, nhìn | icon hiện, không bị cắt |
 | M2 | macOS 14+ | Menu + `Open Dashboard` | click | mở `http://127.0.0.1:{port}/dashboard` |
 | M3 | macOS 14+ | `Stop Gateway` từ chối (không L2) | click | thông báo §7.4 dòng 2; gateway sống |
 | M4 | macOS 14+ | `launchd` integration | `service install` qua launchd, mở tray | trạng thái đọc được từ `launchctl`; không `Unknown` giả |
 | M5 | macOS 14+ | `Quit Tray` giữ gateway | như W4 | 200, cùng PID |
-| L1 | Linux (GNOME) | Icon hiện qua AppIndicator | chạy `9router-tray` | icon hiện trong top bar |
+| L1 | Linux (GNOME) | Icon hiện qua AppIndicator | chạy `xroute-tray` | icon hiện trong top bar |
 | L2 | Linux (GNOME) | `systemd-user` stop không token | `service install`, `Stop Gateway` | gateway dừng; **không** có header `x-9r-cli-token` trong bất kỳ request nào (kiểm bằng `tcpdump -A -i lo port {port}`) |
 | L3 | Linux | unsupervised + port lạ | chạy `python3 -m http.server {port}`, mở tray | `PortConflict`, `Stop` vắng mặt, không request nào rời tray |
-| L4 | Linux | unsupervised + gateway thật | `9router-go start`, mở tray, `Stop Gateway` | L1+L2 qua, drain xong, `GET /health` fail, PID đã chết |
+| L4 | Linux | unsupervised + gateway thật | `xroute start`, mở tray, `Stop Gateway` | L1+L2 qua, drain xong, `GET /health` fail, PID đã chết |
 | L5 | Linux (KDE) | Icon hiện qua StatusNotifierItem | như L1 | icon hiện; nếu không, ghi nhận là giới hạn của DE, không phải bug |
-| X1 | mọi | Không cgo trong core | `for pair in $(…CROSS_TARGETS…); do CGO_ENABLED=0 … go build ./cmd/9router-go/; done` | 5/5 pass |
-| X2 | mọi | Không import GUI trong core | `go list -deps ./cmd/9router-go/` rồi grep ba tên `fyne`, `systray`, `gtk` | 0 dòng |
+| X1 | mọi | Không cgo trong core | `for pair in $(…CROSS_TARGETS…); do CGO_ENABLED=0 … go build ./cmd/xroute/; done` | 5/5 pass |
+| X2 | mọi | Không import GUI trong core | `go list -deps ./cmd/xroute/` rồi grep ba tên `fyne`, `systray`, `gtk` | 0 dòng |
 | X3 | mọi | `TestTray_QuitDecoupling` | `go test ./internal/tray/ -run TestTray_QuitDecoupling` | pass trên Linux CI; W4/M5 phủ hai nền tảng còn lại bằng tay |
 
 ### 8.3 Cái gì không được tính là đạt
@@ -540,7 +540,7 @@ Khai báo tường minh, vì một tài liệu không nói ra giới hạn của
 
 | Kiểm tra | Kết quả |
 | --- | --- |
-| Tệp source Go được tạo | **0** — không có `cmd/9router-tray/`, không có `internal/tray/` |
+| Tệp source Go được tạo | **0** — không có `cmd/xroute-tray/`, không có `internal/tray/` |
 | Tệp `.go` bị sửa | **0** |
 | `go.mod` / `go.sum` bị thay đổi | **0** |
 | Test bị thêm/sửa | **0** |
@@ -579,9 +579,9 @@ Deliverable là **quyết định thiết kế được ghi lại**, không ph�
 | `internal/handlers/router.go`, `shutdown.go` | `/health` công khai, `/api/version/shutdown` + gate, `HandleShutdown` (500 ms rồi `RequestStop`) |
 | `internal/config/config.go` | `ResolveDataDir`, `LoadConfig().Port`, `HOST`/`BIND_ADDR` |
 | `internal/proc/proc.go`, `proc_windows.go` | `Alive`, `Terminate` (tự escalate), `ForceKill`, `SelfExecutable`, `ErrStopUnsupported` |
-| `cmd/9router-go/main.go`, `daemon_cmd.go` | `signal.Notify`, nhánh `select` shutdown, `fxApp.Stop(20s)`, các lệnh daemon |
+| `cmd/xroute/main.go`, `daemon_cmd.go` | `signal.Notify`, nhánh `select` shutdown, `fxApp.Stop(20s)`, các lệnh daemon |
 | `Makefile`, `AGENTS.md` | `CROSS_TARGETS`, `cross-one`, §4.F invariants và hai điều kiện bắt buộc |
 | `golang.org/x/sys@v0.48.0` | peer-credential + named-pipe primitives (§9.2); xác nhận `Shell_NotifyIcon` và `GetExtendedTcpTable` **vắng mặt** |
 | `docs/specs/service-drain-coordination.md` | quy tắc hai đường §3.7, C2 (cấm force-trong-cùng-lần-chạy), §6.4 (`windows-task` + `--force` từ chối), lý do L3 bị xoá |
-| `docs/superpowers/specs/2026-10-18-9router-go-desktop-design.md` | §3.A luồng tray, invariants, ma trận test, yêu cầu `TestTray_QuitDecoupling`. Tệp đã được đưa vào repo đích (trước đó chỉ nằm untracked trong worktree điều phối `D:/Code/9router/.claude/worktrees/upstream-05104-merge/`), nên trích dẫn nay kiểm chứng được từ `9router-go` |
+| `docs/superpowers/specs/2026-10-18-xroute-desktop-design.md` | §3.A luồng tray, invariants, ma trận test, yêu cầu `TestTray_QuitDecoupling`. Tệp đã được đưa vào repo đích (trước đó chỉ nằm untracked trong worktree điều phối `D:/Code/xroute/.claude/worktrees/upstream-05104-merge/`), nên trích dẫn nay kiểm chứng được từ `xroute` |
 

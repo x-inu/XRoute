@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/middleware"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/middleware"
 )
 
 // Provider-scope enforcement, request side. These tests cover the properties the

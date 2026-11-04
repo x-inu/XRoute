@@ -1,4 +1,4 @@
-// Auto-generated provider catalog matching upstream 9router
+// Auto-generated provider catalog matching upstream xroute
 export interface ProviderCatalogItem {
   id: string
   name: string

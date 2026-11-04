@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 func TestOpencodeStealthClient_BunProfileSpec(t *testing.T) {

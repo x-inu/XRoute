@@ -34,7 +34,7 @@
     onRefresh
   }: Props = $props()
 
-  let statuses = $state<Record<string, { installed?: boolean; version?: string | null; has9Router?: boolean } | null>>({})
+  let statuses = $state<Record<string, { installed?: boolean; version?: string | null; hasXRoute?: boolean } | null>>({})
   let isLoading = $state(true)
   let searchQuery = $state('')
   let activeCategory = $state<'all' | 'cli' | 'ide' | 'mitm'>('all')
@@ -62,7 +62,7 @@
   // has to be shaped like a real config, so it carries an explicit
   // placeholder rather than an empty string (an empty apiKey makes pi treat
   // the provider as unauthenticated) and the card says why it is a placeholder.
-  const API_KEY_PLACEHOLDER = '<your-9router-api-key>'
+  const API_KEY_PLACEHOLDER = '<your-xroute-api-key>'
   let snippetApiKey = $derived(apiKeys[0]?.key || API_KEY_PLACEHOLDER)
   let noApiKey = $derived(!apiKeys[0]?.key)
 
@@ -100,7 +100,7 @@
       configType: 'env',
       envVars: {
         ANTHROPIC_BASE_URL: `${localOrigin}`,
-        ANTHROPIC_API_KEY: 'sk-9router-local-token',
+        ANTHROPIC_API_KEY: 'sk-xroute-local-token',
         ...(autoCompactWindow !== 'default'
           ? {
               CLAUDE_CODE_AUTO_COMPACT_WINDOW:
@@ -129,7 +129,7 @@
           : []),
         enable1mContext
           ? `Run 'claude --model claude-sonnet-4-6[1m]' (or append [1m] to any supported 1M context model).`
-          : `Run 'claude' in any directory to start coding with 9router-go routing.`,
+          : `Run 'claude' in any directory to start coding with xroute routing.`,
       ],
     },
     {
@@ -142,7 +142,7 @@
       configType: 'settings',
       instructions: [
         'Open Cursor Settings > Models.',
-        `Under OpenAI API Key: enter your 9router-go API Key.`,
+        `Under OpenAI API Key: enter your xroute API Key.`,
         `Click Override OpenAI Base URL and enter: ${localOrigin}/v1`,
         'Enable your favorite models in the Cursor model list.',
       ],
@@ -159,7 +159,7 @@
         'Open Cline extension settings in VS Code.',
         'Select API Provider: "OpenAI Compatible".',
         `Set Base URL: ${localOrigin}/v1`,
-        'Set API Key: enter your 9router-go API Key.',
+        'Set API Key: enter your xroute API Key.',
         'Set Model ID: choose any configured model or combo.',
       ],
     },
@@ -173,7 +173,7 @@
       configType: 'mitm',
       instructions: [
         'Antigravity MITM intercepts Google Cloud Code PA traffic transparently.',
-        `Point HTTP_PROXY or system proxy to 9router-go on port 20130.`,
+        `Point HTTP_PROXY or system proxy to xroute on port 20130.`,
         'All tools with _ide suffixes will be seamlessly uncloaked and routed to configured connections.',
       ],
     },
@@ -187,7 +187,7 @@
       configType: 'mitm',
       instructions: [
         'Kiro MITM captures telemetry and auth token exchanges.',
-        `Ensure Kiro network routing directs through 9router-go gateway.`,
+        `Ensure Kiro network routing directs through xroute gateway.`,
       ],
     },
     {
@@ -200,7 +200,7 @@
       configType: 'env',
       envVars: {
         OPENAI_BASE_URL: `${localOrigin}/v1`,
-        OPENAI_API_KEY: 'sk-9router-local-token',
+        OPENAI_API_KEY: 'sk-xroute-local-token',
       },
       instructions: [
         `export OPENAI_BASE_URL="${localOrigin}/v1"`,
@@ -230,7 +230,7 @@
       configType: 'env',
       envVars: {
         DROID_BASE_URL: `${localOrigin}/v1`,
-        DROID_API_KEY: 'sk-9router-local-token',
+        DROID_API_KEY: 'sk-xroute-local-token',
       },
       instructions: [
         `export DROID_BASE_URL="${localOrigin}/v1"`,
@@ -247,7 +247,7 @@
       configType: 'env',
       envVars: {
         DEVIN_BASE_URL: `${localOrigin}/v1`,
-        DEVIN_API_KEY: 'sk-9router-local-token',
+        DEVIN_API_KEY: 'sk-xroute-local-token',
       },
       instructions: [
         `export DEVIN_BASE_URL="${localOrigin}/v1"`,
@@ -264,7 +264,7 @@
       configType: 'env',
       envVars: {
         HERMES_BASE_URL: `${localOrigin}/v1`,
-        HERMES_API_KEY: 'sk-9router-local-token',
+        HERMES_API_KEY: 'sk-xroute-local-token',
       },
       instructions: [
         `export HERMES_BASE_URL="${localOrigin}/v1"`,
@@ -332,7 +332,7 @@
       color: '#D97757',
       configType: 'settings',
       instructions: [
-        'Add 9router-go MCP servers to your claude_desktop_config.json.',
+        'Add xroute MCP servers to your claude_desktop_config.json.',
         `Point MCP endpoints to ${localOrigin}/v1.`,
       ],
     },
@@ -347,7 +347,7 @@
       instructions: [
         'In Roo Code provider settings, select OpenAI Compatible.',
         `Base URL: ${localOrigin}/v1`,
-        'API Key: enter your 9router-go key.',
+        'API Key: enter your xroute key.',
       ],
     },
     {
@@ -370,7 +370,7 @@
       category: 'cli',
       image: '/providers/amp.png',
       color: '#F97316',
-      description: 'Sourcegraph Amp coding assistant CLI with 9router-go model aliases',
+      description: 'Sourcegraph Amp coding assistant CLI with xroute model aliases',
       configType: 'guide',
       instructions: [
         `export OPENAI_BASE_URL="${localOrigin}/v1"`,
@@ -413,8 +413,8 @@
       description: 'High-performance Rust-based coding agent harness',
       configType: 'env',
       instructions: [
-        `export JCODE_9ROUTER_API_KEY="<your-api-key>"`,
-        `Configure [[providers.9router]] with base_url = "${localOrigin}/v1"`,
+        `export JCODE_XROUTE_API_KEY="<your-api-key>"`,
+        `Configure [[providers.xroute]] with base_url = "${localOrigin}/v1"`,
       ],
     },
     {
@@ -428,7 +428,7 @@
       instructions: [
         `/plugin marketplace add manalkaff/opendesign`,
         `/plugin install opendesign@opendesign`,
-        `Inherits host agent's model config via 9router-go.`,
+        `Inherits host agent's model config via xroute.`,
       ],
     },
     {
@@ -437,13 +437,13 @@
       category: 'cli',
       image: '/providers/pi.png',
       color: '#111827',
-      description: 'pi coding agent — point ~/.pi/agent/models.json at the 9router-go gateway',
+      description: 'pi coding agent — point ~/.pi/agent/models.json at the xroute gateway',
       configType: 'guide',
       instructions: [
-        `Add a 9router-go provider to ~/.pi/agent/models.json (Windows: %USERPROFILE%\\.pi\\agent\\models.json):`,
-        `{"providers":{"9router":{"baseUrl":"${localOrigin}/v1","api":"openai-completions","apiKey":"${snippetApiKey}","models":[{"id":"kr/claude-sonnet-4.5","name":"9router kr/claude-sonnet-4.5","reasoning":true,"contextWindow":200000,"maxTokens":64000}]}}}`,
+        `Add a xroute provider to ~/.pi/agent/models.json (Windows: %USERPROFILE%\\.pi\\agent\\models.json):`,
+        `{"providers":{"xroute":{"baseUrl":"${localOrigin}/v1","api":"openai-completions","apiKey":"${snippetApiKey}","models":[{"id":"kr/claude-sonnet-4.5","name":"xroute kr/claude-sonnet-4.5","reasoning":true,"contextWindow":200000,"maxTokens":64000}]}}}`,
         noApiKey
-          ? `No API key exists yet — open API Keys, create one, then reopen this card. Pasting the line as-is will send "<your-9router-api-key>" upstream and get 401.`
+          ? `No API key exists yet — open API Keys, create one, then reopen this card. Pasting the line as-is will send "<your-xroute-api-key>" upstream and get 401.`
           : `Run 'pi', then /model to pick the model — models.json is re-read without a restart.`,
         `If the model does not show up, set "api" to "openai-responses"; the gateway serves both lanes.`,
         `List every routable id with: curl -s ${localOrigin}/v1/models -H "Authorization: Bearer ${snippetApiKey}"`,
@@ -458,11 +458,11 @@
       description: 'omp coding agent — register the gateway in ~/.omp/agent/models.yml',
       configType: 'guide',
       instructions: [
-        `Add a 9router-go provider to ~/.omp/agent/models.yml (profiles live in ~/.omp/profiles/<name>/agent/):`,
-        `providers:\n  9router:\n    baseUrl: ${localOrigin}/v1\n    api: openai-completions\n    authHeader: true\n    apiKey: 9ROUTER_API_KEY\n    models:\n      - id: kr/claude-sonnet-4.5\n        name: 9router kr/claude-sonnet-4.5\n        reasoning: true\n        contextWindow: 200000\n        maxTokens: 64000`,
+        `Add a xroute provider to ~/.omp/agent/models.yml (profiles live in ~/.omp/profiles/<name>/agent/):`,
+        `providers:\n  xroute:\n    baseUrl: ${localOrigin}/v1\n    api: openai-completions\n    authHeader: true\n    apiKey: XROUTE_API_KEY\n    models:\n      - id: kr/claude-sonnet-4.5\n        name: xroute kr/claude-sonnet-4.5\n        reasoning: true\n        contextWindow: 200000\n        maxTokens: 64000`,
         noApiKey
-          ? `No API key exists yet — open API Keys, create one, then reopen this card; 9ROUTER_API_KEY has to be set to that key before 'omp' can authenticate.`
-          : `export 9ROUTER_API_KEY="${snippetApiKey}" before starting 'omp' — the key is read from the environment first, and an unset variable is sent as its literal name.`,
+          ? `No API key exists yet — open API Keys, create one, then reopen this card; XROUTE_API_KEY has to be set to that key before 'omp' can authenticate.`
+          : `export XROUTE_API_KEY="${snippetApiKey}" before starting 'omp' — the key is read from the environment first, and an unset variable is sent as its literal name.`,
         `Run 'omp', then /model to select the model. 'omp models' lists everything the gateway exposes.`,
         `Use api: openai-responses instead if a model does not stream correctly over Chat Completions.`,
       ],
@@ -476,11 +476,11 @@
       description: 'Crush AI terminal agent — configure ~/.config/crush/crush.json',
       configType: 'guide',
       instructions: [
-        `Add 9router-go to your Crush config in ~/.config/crush/crush.json:`,
-        `{"providers":{"9router":{"type":"openai-compat","base_url":"${localOrigin}/v1","api_key":"${snippetApiKey}","models":["claude-sonnet-4-6"]}}}`,
+        `Add xroute to your Crush config in ~/.config/crush/crush.json:`,
+        `{"providers":{"xroute":{"type":"openai-compat","base_url":"${localOrigin}/v1","api_key":"${snippetApiKey}","models":["claude-sonnet-4-6"]}}}`,
         noApiKey
           ? `No API key exists yet — create one in API Keys first, then update "api_key".`
-          : `Point your active model to 9router in crush.json or pass --provider 9router on startup.`,
+          : `Point your active model to xroute in crush.json or pass --provider xroute on startup.`,
         `List available models: curl -s ${localOrigin}/v1/models -H "Authorization: Bearer ${snippetApiKey}"`,
       ],
     },
@@ -493,11 +493,11 @@
       description: 'Forge AI coding CLI — configure ~/.forge/config.toml',
       configType: 'guide',
       instructions: [
-        `Configure 9router-go endpoint under the [openai] section in ~/.forge/config.toml:`,
+        `Configure xroute endpoint under the [openai] section in ~/.forge/config.toml:`,
         `[openai]\nbase_url = "${localOrigin}/v1"\napi_key = "${snippetApiKey}"`,
         noApiKey
           ? `No API key exists yet — create one in API Keys first, then update api_key.`
-          : `Run 'forge' to start working with models routed through 9router-go.`,
+          : `Run 'forge' to start working with models routed through xroute.`,
         `Optionally override model via --model flag or config.toml default_model setting.`,
       ],
     },
@@ -510,8 +510,8 @@
       description: 'Smelt terminal coding agent — configure ~/.smelt/config.json',
       configType: 'guide',
       instructions: [
-        `Add 9router-go gateway configuration to ~/.smelt/config.json:`,
-        `{"baseUrl":"${localOrigin}/v1","apiKey":"${snippetApiKey}","_managedBy":"9router"}`,
+        `Add xroute gateway configuration to ~/.smelt/config.json:`,
+        `{"baseUrl":"${localOrigin}/v1","apiKey":"${snippetApiKey}","_managedBy":"xroute"}`,
         noApiKey
           ? `No API key exists yet — create one in API Keys first, then update "apiKey".`
           : `Launch 'smelt' in your workspace directory to begin.`,
@@ -527,7 +527,7 @@
       description: 'CodeWhale terminal developer suite — configure ~/.codewhale/config.toml',
       configType: 'guide',
       instructions: [
-        `Add 9router-go endpoint under [openai] in ~/.codewhale/config.toml:`,
+        `Add xroute endpoint under [openai] in ~/.codewhale/config.toml:`,
         `[openai]\nbase_url = "${localOrigin}/v1"\napi_key = "${snippetApiKey}"`,
         noApiKey
           ? `No API key exists yet — create one in API Keys first, then update api_key.`
@@ -563,7 +563,7 @@
       return { label: 'Guide', cls: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20' }
     }
     if (s.installed) {
-      if (s.has9Router) {
+      if (s.hasXRoute) {
         return { label: 'Connected', cls: 'bg-success/10 text-success border-success/20' }
       }
       return { label: 'Not configured', cls: 'bg-warning/10 text-warning border-warning/20' }
@@ -585,7 +585,7 @@
             CLI & IDE Tools
           </h1>
           <p class="font-body text-xs sm:text-sm text-text-muted">
-            Configure Cursor, Claude Code, Cline, and terminal agents to connect to 9router-go
+            Configure Cursor, Claude Code, Cline, and terminal agents to connect to xroute
           </p>
         </div>
       </div>

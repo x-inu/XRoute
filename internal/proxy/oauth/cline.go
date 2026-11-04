@@ -1,8 +1,8 @@
 package oauth
 
 import (
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/updater"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/updater"
 	"bytes"
 	"context"
 	json "encoding/json/v2"
@@ -57,7 +57,7 @@ func RefreshCline(ctx context.Context, p *Params) (*TokenResult, error) {
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Accept", "application/json")
-	// 9Router client identity (upstream buildClineHeaders); the body keeps
+	// XRoute client identity (upstream buildClineHeaders); the body keeps
 	// clientType "extension" like upstream.
 	for k, v := range providers.ClineIdentityHeaders(updater.CurrentVersion, nil) {
 		req.Header.Set(k, v)

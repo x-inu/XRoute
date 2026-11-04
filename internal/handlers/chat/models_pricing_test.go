@@ -6,7 +6,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"9router/proxy/internal/pricing"
+	"xroute/proxy/internal/pricing"
 )
 
 func TestHandleModels_Pricing(t *testing.T) {

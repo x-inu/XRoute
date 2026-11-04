@@ -14,8 +14,8 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/tokensaver"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/tokensaver"
 )
 
 // seedConnDB inserts a single active connection for the given provider pointing at upstream.

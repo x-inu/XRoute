@@ -485,7 +485,7 @@ func TestConcealFingerprintToolsChatShapeWhenNoTools(t *testing.T) {
 }
 
 func TestConcealFingerprintTools_AliasesDeclaredTerminalTools(t *testing.T) {
-	// Upstream decolua/9router#5319, #5328: free tier rejects tool names containing "terminal"
+	// Upstream decolua/xroute#5319, #5328: free tier rejects tool names containing "terminal"
 	body := []byte(`{"model":"oc/deepseek-v4.1-free","tools":[
 		{"type":"function","name":"read_file"},
 		{"type":"function","name":"terminal"},

@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/proxy"
 )
 
 // displayCurrencySettingKey is the settings key the dashboard's Currency section
@@ -447,7 +447,7 @@ func readCurrencyRates(ctx context.Context, client *http.Client, source string, 
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("User-Agent", "9Router")
+	req.Header.Set("User-Agent", "XRoute")
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err

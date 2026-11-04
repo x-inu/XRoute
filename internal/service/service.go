@@ -13,7 +13,7 @@ import (
 	"strconv"
 	"strings"
 
-	"9router/proxy/internal/proc"
+	"xroute/proxy/internal/proc"
 )
 
 // Backend names the init/autostart system an install targets.
@@ -27,11 +27,11 @@ const (
 	BackendRunit       Backend = "runit"
 	BackendCron        Backend = "cron"
 	BackendWindowsTask Backend = "windows-task"
-	BackendOverrideEnv         = "9ROUTER_SERVICE_BACKEND"
+	BackendOverrideEnv         = "XROUTE_SERVICE_BACKEND"
 )
 
 // ErrNotInstalled is returned when no autostart entry exists to remove.
-var ErrNotInstalled = errors.New("9router-go autostart is not installed")
+var ErrNotInstalled = errors.New("xroute autostart is not installed")
 
 // Test seams. CI only runs one OS, so the live host facts detection and the
 // Windows guard depend on are read through these instead of the runtime
@@ -152,7 +152,7 @@ func Status() (Info, bool) {
 }
 
 // Detect picks the backend Install will use on this machine. The
-// 9ROUTER_SERVICE_BACKEND env var forces one (systemd, launchd, openrc,
+// XROUTE_SERVICE_BACKEND env var forces one (systemd, launchd, openrc,
 // runit, cron) for machines with several inits or for testing. The override is
 // read before the OS short-circuits so it is authoritative on every platform:
 // a pinned backend must win even on Windows, where the schtasks check would

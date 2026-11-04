@@ -65,20 +65,20 @@ func TestCLIDetectors_HasAllToolIDs(t *testing.T) {
 	}
 }
 
-func TestCLIDetectors_ClaudeHas9Router(t *testing.T) {
+func TestCLIDetectors_ClaudeHasXRoute(t *testing.T) {
 	t.Run("env ANTHROPIC_BASE_URL", func(t *testing.T) {
 		t.Setenv("ANTHROPIC_BASE_URL", "http://127.0.0.1:20130/v1")
 		t.Setenv("NINEROUTER_URL", "")
-		if !claudeHas9Router() {
-			t.Fatal("expected claudeHas9Router to be true when ANTHROPIC_BASE_URL is set")
+		if !claudeHasXRoute() {
+			t.Fatal("expected claudeHasXRoute to be true when ANTHROPIC_BASE_URL is set")
 		}
 	})
 
 	t.Run("env NINEROUTER_URL", func(t *testing.T) {
 		t.Setenv("ANTHROPIC_BASE_URL", "")
 		t.Setenv("NINEROUTER_URL", "http://127.0.0.1:20130")
-		if !claudeHas9Router() {
-			t.Fatal("expected claudeHas9Router to be true when NINEROUTER_URL is set")
+		if !claudeHasXRoute() {
+			t.Fatal("expected claudeHasXRoute to be true when NINEROUTER_URL is set")
 		}
 	})
 
@@ -101,8 +101,8 @@ func TestCLIDetectors_ClaudeHas9Router(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		if !claudeHas9Router() {
-			t.Fatal("expected claudeHas9Router to be true from ~/.claude/settings.json")
+		if !claudeHasXRoute() {
+			t.Fatal("expected claudeHasXRoute to be true from ~/.claude/settings.json")
 		}
 	})
 
@@ -121,7 +121,7 @@ func TestCLIDetectors_ClaudeHas9Router(t *testing.T) {
 			t.Fatal(err)
 		}
 		content := `{
-			// custom endpoint for 9router
+			// custom endpoint for xroute
 			"env": {
 				"ANTHROPIC_BASE_URL": "http://127.0.0.1:20130/v1",
 			}
@@ -130,8 +130,8 @@ func TestCLIDetectors_ClaudeHas9Router(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		if !claudeHas9Router() {
-			t.Fatal("expected claudeHas9Router to be true from JSONC settings.json")
+		if !claudeHasXRoute() {
+			t.Fatal("expected claudeHasXRoute to be true from JSONC settings.json")
 		}
 	})
 
@@ -151,13 +151,13 @@ func TestCLIDetectors_ClaudeHas9Router(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		if claudeHas9Router() {
-			t.Fatal("expected claudeHas9Router to be false when unconfigured")
+		if claudeHasXRoute() {
+			t.Fatal("expected claudeHasXRoute to be false when unconfigured")
 		}
 	})
 }
 
-func TestCLIToolsHandler_AllStatuses_CarriesHas9Router(t *testing.T) {
+func TestCLIToolsHandler_AllStatuses_CarriesHasXRoute(t *testing.T) {
 	t.Setenv("ANTHROPIC_BASE_URL", "http://127.0.0.1:20130/v1")
 	tmpBin := t.TempDir()
 	fakeClaude := filepath.Join(tmpBin, "claude")
@@ -175,19 +175,19 @@ func TestCLIToolsHandler_AllStatuses_CarriesHas9Router(t *testing.T) {
 		t.Fatalf("status = %d, want 200", rec.Code)
 	}
 	body := rec.Body.String()
-	if !strings.Contains(body, `"has9Router":true`) && !strings.Contains(body, `"has9Router": true`) {
-		t.Fatalf("expected all-statuses response to carry has9Router, got %s", body)
+	if !strings.Contains(body, `"hasXRoute":true`) && !strings.Contains(body, `"hasXRoute": true`) {
+		t.Fatalf("expected all-statuses response to carry hasXRoute, got %s", body)
 	}
 
 	// When binary is not on PATH (like in a CI runner) but tool is configured in env,
-	// it must still report installed: true and has9Router: true.
+	// it must still report installed: true and hasXRoute: true.
 	t.Run("without binary on PATH but configured in env", func(t *testing.T) {
 		t.Setenv("PATH", t.TempDir()) // empty PATH
 		t.Setenv("ANTHROPIC_BASE_URL", "http://127.0.0.1:20130/v1")
 		recEmptyPath := httptest.NewRecorder()
 		h.HandleAllStatuses(recEmptyPath, httptest.NewRequest(http.MethodGet, "/api/cli-tools/all-statuses", nil))
-		if !strings.Contains(recEmptyPath.Body.String(), `"has9Router":true`) && !strings.Contains(recEmptyPath.Body.String(), `"has9Router": true`) {
-			t.Fatalf("expected has9Router true even without binary in PATH, got %s", recEmptyPath.Body.String())
+		if !strings.Contains(recEmptyPath.Body.String(), `"hasXRoute":true`) && !strings.Contains(recEmptyPath.Body.String(), `"hasXRoute": true`) {
+			t.Fatalf("expected hasXRoute true even without binary in PATH, got %s", recEmptyPath.Body.String())
 		}
 	})
 }

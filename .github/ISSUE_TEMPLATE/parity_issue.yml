@@ -1,12 +1,12 @@
 name: Upstream parity
-description: decolua/9router has a behaviour 9router-go does not — port it, or record why not
+description: decolua/xroute has a behaviour xroute does not — port it, or record why not
 title: "parity: "
 labels: ["parity"]
 body:
   - type: markdown
     attributes:
       value: |
-        `9router-go` is a Go port of [`decolua/9router`](https://github.com/decolua/9router) and keeps the same
+        `xroute` is a Go port of [`decolua/xroute`](https://github.com/decolua/xroute) and keeps the same
         wire contracts, so behaviour that exists upstream and not here is a **gap**, not a feature request.
 
         Issues sourced from `diegosouzapw/OmniRoute` are welcome too — link the cited file there and note it below.
@@ -24,7 +24,7 @@ body:
     attributes:
       label: Upstream commit / PR / issue
       description: A link, not just a description.
-      placeholder: https://github.com/decolua/9router/pull/4197
+      placeholder: https://github.com/decolua/xroute/pull/4197
     validations:
       required: true
 
@@ -35,7 +35,7 @@ body:
       description: |
         Map by responsibility, not by file path. Common targets:
 
-        | Upstream | 9router-go |
+        | Upstream | xroute |
         | --- | --- |
         | `open-sse/translator/` | `internal/translator/` |
         | `open-sse/executors/` | `internal/proxy/executor/`, `internal/proxy/` |
@@ -57,7 +57,7 @@ body:
       label: Contract to preserve
       description: |
         Endpoints, request/response payloads, SSE chunk shapes, status codes, error semantics (e.g. a typed
-        `409 no_credit` must not collapse into a generic 500), and the SQLite schema at `~/.9router/db/data.sqlite`.
+        `409 no_credit` must not collapse into a generic 500), and the SQLite schema at `~/.xroute/db/data.sqlite`.
     validations:
       required: false
 

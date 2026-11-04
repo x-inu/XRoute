@@ -1,5 +1,5 @@
 // Command sitegen renders README.md into the GitHub Pages site published at
-// https://luqman-v1.github.io/9router-go.
+// https://x-inu.github.io/XRoute.
 //
 // The homepage is the README, not a second copy of it: a landing page written
 // separately drifts from the README within a release, and every fix then has to
@@ -36,7 +36,7 @@ func main() {
 	readmePath := flag.String("readme", "README.md", "markdown file rendered as the site homepage")
 	assetsDir := flag.String("assets", "site", "directory of static files copied verbatim into the site")
 	outDir := flag.String("out", "_site", "directory the site is written to")
-	repo := flag.String("repo", "luqman-v1/9router-go", "owner/name used to resolve relative repository links")
+	repo := flag.String("repo", "x-inu/XRoute", "owner/name used to resolve relative repository links")
 	flag.Parse()
 
 	if err := generate(*readmePath, *assetsDir, *outDir, *repo); err != nil {

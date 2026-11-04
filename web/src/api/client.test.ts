@@ -27,18 +27,18 @@ describe('dashboard API authentication and errors', () => {
     },
   })
   it('omits Authorization when no API key is explicitly stored', () => {
-    localStorage.removeItem('9router_key')
+    localStorage.removeItem('xroute_key')
 
     expect(getAuthHeaders()).toEqual({ 'Content-Type': 'application/json' })
   })
 
   it('uses an explicitly stored API key', () => {
-    localStorage.setItem('9router_key', 'sk-test')
+    localStorage.setItem('xroute_key', 'sk-test')
 
     try {
       expect(getAuthHeaders().Authorization).toBe('Bearer sk-test')
     } finally {
-      localStorage.removeItem('9router_key')
+      localStorage.removeItem('xroute_key')
     }
   })
 
@@ -49,21 +49,21 @@ describe('dashboard API authentication and errors', () => {
   })
 
   it('omits Authorization when the stored value is masked', () => {
-    localStorage.setItem('9router_key', 'sk-8b7…e34f')
+    localStorage.setItem('xroute_key', 'sk-8b7…e34f')
     try {
       expect(getAuthHeaders()).toEqual({ 'Content-Type': 'application/json' })
     } finally {
-      localStorage.removeItem('9router_key')
+      localStorage.removeItem('xroute_key')
     }
   })
 
   it('uses only the full stored key for media runners', () => {
-    localStorage.setItem('9router_key', ' sk-test-123 ')
+    localStorage.setItem('xroute_key', ' sk-test-123 ')
     try {
       expect(getStoredAPIKey()).toBe('sk-test-123')
       expect(getAuthHeaders().Authorization).toBe('Bearer sk-test-123')
     } finally {
-      localStorage.removeItem('9router_key')
+      localStorage.removeItem('xroute_key')
     }
   })
 
@@ -113,7 +113,7 @@ describe('dashboard API authentication and errors', () => {
 
   it('triggers onUnauthorized and clears storage on 401 responses', async () => {
     const originalFetch = globalThis.fetch
-    localStorage.setItem('9router_auth', 'true')
+    localStorage.setItem('xroute_auth', 'true')
 
     const { promise, resolve } = Promise.withResolvers<void>()
     const unsub = onUnauthorized(() => {
@@ -131,11 +131,11 @@ describe('dashboard API authentication and errors', () => {
       await expect(api.getConnections()).rejects.toThrow()
       await promise
 
-      expect(localStorage.getItem('9router_auth')).toBeNull()
+      expect(localStorage.getItem('xroute_auth')).toBeNull()
     } finally {
       unsub()
       globalThis.fetch = originalFetch
-      localStorage.removeItem('9router_auth')
+      localStorage.removeItem('xroute_auth')
     }
   })
 

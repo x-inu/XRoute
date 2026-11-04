@@ -7,9 +7,9 @@ import (
 	"sync"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/translator"
 )
 
 const (
@@ -26,7 +26,7 @@ type ActiveRequest struct {
 	// RequestedModel is the name the client asked for, and ComboName is set
 	// only when a combo served the request. A combo request reports the member
 	// that serves it in Model/Provider, so the dashboard can draw
-	// 9router-go -> combo -> member instead of showing the member as if the
+	// xroute -> combo -> member instead of showing the member as if the
 	// caller had asked for it by name. ComboName is the explicit signal: the
 	// map must not have to guess which names are combos.
 	RequestedModel string `json:"requestedModel,omitempty"`

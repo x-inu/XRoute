@@ -8,11 +8,11 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/constants"
-	"9router/proxy/internal/handlers/chat"
-	"9router/proxy/internal/handlers/shared"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/constants"
+	"xroute/proxy/internal/handlers/chat"
+	"xroute/proxy/internal/handlers/shared"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
 )
 
 // SoundGenerationRequest is the caller's body for /v1/audio/sound-generation.

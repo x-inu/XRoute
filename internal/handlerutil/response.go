@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"strings"
 
-	"9router/proxy/internal/constants"
+	"xroute/proxy/internal/constants"
 )
 
 // deterministicJSON makes Go maps serialize with their keys in sorted order, so

@@ -1,11 +1,11 @@
-# 9router-go Architecture
+# xroute Architecture
 
 This document describes the current Go implementation. Source code is authoritative when a compatibility statement and local behavior differ.
 
 ## Version and compatibility status
 
 - Current Go release: **v1.9.9**, declared consistently by `VERSION`, `version.json`, and `internal/updater.CurrentVersion`.
-- Declared upstream baseline: [`decolua/9router` v0.5.85](https://github.com/decolua/9router). The local checked-out upstream has `package.json` version `0.5.85` and a v0.5.85 changelog; published upstream npm/Docker `latest` is v0.5.86.
+- Declared upstream baseline: [`decolua/xroute` v0.5.85](https://github.com/decolua/xroute). The local checked-out upstream has `package.json` version `0.5.85` and a v0.5.85 changelog; published upstream npm/Docker `latest` is v0.5.86.
 - Go v1.9.0 records selected upstream v0.5.86 parity work and explicitly deferred items in `CHANGELOG.md`. Those entries do not change the v0.5.85 manifest baseline or imply complete v0.5.86 parity.
 - Upstream remains the compatibility reference. Its Next.js app and shared SSE core are historical sources for API, database, auth, and routing behavior. They are **not** the current Go runtime or dashboard.
 
@@ -15,11 +15,11 @@ This document describes the current Go implementation. Source code is authoritat
 
 ```mermaid
 flowchart LR
-    CLI[CLI, SDK, and agent clients] --> GW[9router-go HTTP process]
+    CLI[CLI, SDK, and agent clients] --> GW[xroute HTTP process]
     Browser[Browser] --> SPA[Embedded Svelte 5 SPA]
     SPA --> API[Native Go dashboard API]
 
-    subgraph GW[9router-go HTTP process]
+    subgraph GW[xroute HTTP process]
       SPA
       API
       ENGINE[Routing, translation, provider executors, SSE]
@@ -39,7 +39,7 @@ The Go binary owns proxy routing, dashboard APIs, auth, persistence, OAuth, medi
 
 | Path | Responsibility |
 | --- | --- |
-| `cmd/9router-go/` | CLI parser, commands, daemon lifecycle sub-commands, signal handling, Fx start/stop |
+| `cmd/xroute/` | CLI parser, commands, daemon lifecycle sub-commands, signal handling, Fx start/stop |
 | `internal/app/` | Fx modules, dependency graph, server and DB lifecycle |
 | `internal/config/` | Viper/env configuration, data and database path resolution, JWT secret |
 | `internal/handlers/` | Chi route composition, chat, media, OAuth, dashboard, SSO, usage |
@@ -56,7 +56,7 @@ The Go binary owns proxy routing, dashboard APIs, auth, persistence, OAuth, medi
 
 ## Fx lifecycle
 
-`cmd/9router-go/main.go` builds an `urfave/cli` application. The default server action loads CLI parameters and starts `app.AppModule` with `fx.Replace(cliParams)`. Set `FX_LOGGING=true` to enable the console Fx logger; otherwise Fx logging is disabled.
+`cmd/xroute/main.go` builds an `urfave/cli` application. The default server action loads CLI parameters and starts `app.AppModule` with `fx.Replace(cliParams)`. Set `FX_LOGGING=true` to enable the console Fx logger; otherwise Fx logging is disabled.
 
 `--background` (alias `-d`, also the `start` sub-command) makes the CLI spawn
 this same binary detached — new session on POSIX, `CREATE_NO_WINDOW` on
@@ -245,14 +245,14 @@ Retryable upstream errors are classified from status and text. Capacity/rate-lim
 - opens a `modernc.org/sqlite` database in WAL mode;
 - enables foreign keys, a five-second busy timeout, normal synchronous mode, memory temp storage, and bounded connection settings;
 - chmods the directory and database to user-only permissions where supported; and
-- shares compatible rows/JSON payloads with upstream 9router.
+- shares compatible rows/JSON payloads with upstream xroute.
 
 `ProvideDatabase` bootstraps the upstream core schema additively via `db.EnsureCoreSchema` (`internal/db/schema.go`): creates the 11 upstream tables/indexes when absent, backfills missing columns, seeds `_meta.schemaVersion='1'` and an empty settings row, then creates the Go-only `upstream_leases` table. All statements are idempotent — a fresh `DATA_DIR` boots into a working installation. Go does **not** import legacy JSON files, run destructive migrations, or take pre-migration backups.
 
 Consequences:
 
 - A fresh empty file is now a supported bootstrap path; existing databases are untouched (columns backfilled, rows preserved).
-- `DB_PATH` may point to a file. If it points to a directory, resolution recognizes `db/data.sqlite`, `data.sqlite`, or `9router.db` when present, otherwise it selects `db/data.sqlite`.
+- `DB_PATH` may point to a file. If it points to a directory, resolution recognizes `db/data.sqlite`, `data.sqlite`, or `xroute.db` when present, otherwise it selects `db/data.sqlite`.
 - There is no Go-side legacy-JSON import or backup transaction equivalent to upstream's schema migrator.
 - Provider credentials are stored in the database; protect the file and volume as secrets.
 
@@ -316,6 +316,6 @@ The web package has no frontend unit/component test script. Dashboard verificati
 
 ## Compatibility history and future work
 
-The upstream project was a Next.js/React application with a JavaScript SSE/routing core and SQLite migrator. 9router-go ports the proxy behavior, selected data shapes, route/auth contracts, and dashboard behavior into a Go/Svelte single process. References to upstream Next.js code in comments and changelog entries identify provenance for a contract; they do not identify the current runtime.
+The upstream project was a Next.js/React application with a JavaScript SSE/routing core and SQLite migrator. xroute ports the proxy behavior, selected data shapes, route/auth contracts, and dashboard behavior into a Go/Svelte single process. References to upstream Next.js code in comments and changelog entries identify provenance for a contract; they do not identify the current runtime.
 
 Database migration/bootstrap support, frontend automated tests, additional unported upstream features, and parity gaps belong in `ROADMAP.md` or `TECHNICAL_DEBT.md` only as future work until implemented and verified.

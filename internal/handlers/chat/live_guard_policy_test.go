@@ -45,7 +45,7 @@ func TestUpstreamUnavailable_SkipsOnlyProviderAvailabilityStatuses(t *testing.T)
 }
 
 // The opt-in is what keeps CI deterministic, so the accepted spellings are
-// pinned: a developer who writes 9ROUTER_LIVE_TESTS=true must not silently get
+// pinned: a developer who writes XROUTE_LIVE_TESTS=true must not silently get
 // a skipped run, and a CI job that forgets the variable must get skips rather
 // than a red build at the mercy of someone else's free tier.
 func TestLiveUpstreamEnabled_AcceptsOnlyExplicitOptIn(t *testing.T) {

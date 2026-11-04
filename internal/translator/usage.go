@@ -188,7 +188,7 @@ func RequestedModelFromContext(ctx context.Context) string {
 }
 
 // SeedStreamState pre-seeds a stream session with the requested model so message_start
-// echoes the client's model instead of the provider's chunk model (decolua/9router#3693).
+// echoes the client's model instead of the provider's chunk model (decolua/xroute#3693).
 func SeedStreamState(sessionKey, model string) {
 	if sessionKey == "" || model == "" {
 		return

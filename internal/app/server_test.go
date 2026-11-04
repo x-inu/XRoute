@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/app"
-	"9router/proxy/internal/config"
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/app"
+	"xroute/proxy/internal/config"
+	"xroute/proxy/internal/db"
 	"github.com/go-chi/chi/v5"
 	"go.uber.org/fx"
 )

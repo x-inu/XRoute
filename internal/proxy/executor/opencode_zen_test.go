@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
+	"xroute/proxy/internal/translator"
 )
 
 // zenProbe is a fake upstream that records where the gateway sent a request.

@@ -7,8 +7,8 @@ import (
 	"os"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/dbtest"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/dbtest"
 )
 
 func setupTestDB(t *testing.T) (*sql.DB, func()) {

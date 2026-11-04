@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
-# 9router-go single-line installer: detects OS/arch, downloads the latest
+# xroute single-line installer: detects OS/arch, downloads the latest
 # release binary from GitHub, installs it, and prints next steps.
 #
-#   curl -fsSL https://raw.githubusercontent.com/luqman-v1/9router-go/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/x-inu/XRoute/main/install.sh | bash
 #
 # Env overrides: VERSION (e.g. v1.9.2, default: latest), BINDIR (default:
 # /usr/local/bin, falls back to ~/.local/bin).
 set -euo pipefail
 
-REPO="${REPO:-luqman-v1/9router-go}"
+REPO="${REPO:-x-inu/XRoute}"
 VERSION="${VERSION:-latest}"
 BINDIR="${BINDIR:-/usr/local/bin}"
 
-info()  { printf '\033[1;32m[9router-go]\033[0m %s\n' "$*"; }
-warn()  { printf '\033[1;33m[9router-go]\033[0m %s\n' "$*" >&2; }
-fatal() { printf '\033[1;31m[9router-go]\033[0m %s\n' "$*" >&2; exit 1; }
+info()  { printf '\033[1;32m[xroute]\033[0m %s\n' "$*"; }
+warn()  { printf '\033[1;33m[xroute]\033[0m %s\n' "$*" >&2; }
+fatal() { printf '\033[1;31m[xroute]\033[0m %s\n' "$*" >&2; exit 1; }
 
 OS="$(uname -s | tr '[:upper:]' '[:lower:]')"
 ARCH="$(uname -m)"
@@ -28,7 +28,7 @@ case "$ARCH" in
   *) fatal "unsupported architecture: $ARCH (amd64/arm64 only)" ;;
 esac
 
-ASSET="9router-go-${OS}-${ARCH}"
+ASSET="xroute-${OS}-${ARCH}"
 if [ "$VERSION" = "latest" ]; then
   URL="https://github.com/${REPO}/releases/latest/download/${ASSET}"
 else
@@ -38,21 +38,21 @@ fi
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 info "downloading $URL ..."
-curl -fsSL --retry 3 -o "$TMP/9router-go" "$URL" \
+curl -fsSL --retry 3 -o "$TMP/xroute" "$URL" \
   || fatal "download failed — check https://github.com/$REPO/releases"
-chmod +x "$TMP/9router-go"
+chmod +x "$TMP/xroute"
 
 if [ -w "$BINDIR" ]; then
-  mv "$TMP/9router-go" "$BINDIR/9router-go"
+  mv "$TMP/xroute" "$BINDIR/xroute"
 else
   warn "$BINDIR not writable, trying sudo (or set BINDIR=\$HOME/.local/bin)"
-  sudo mv "$TMP/9router-go" "$BINDIR/9router-go"
+  sudo mv "$TMP/xroute" "$BINDIR/xroute"
 fi
 trap - EXIT
 
-info "installed to $BINDIR/9router-go"
-"$BINDIR/9router-go" version || true
+info "installed to $BINDIR/xroute"
+"$BINDIR/xroute" version || true
 echo
 info "start it with:"
-echo "       9router-go"
-echo "Dashboard: http://localhost:20130 (defaults: port 20130, data ~/.9router)"
+echo "       xroute"
+echo "Dashboard: http://localhost:20130 (defaults: port 20130, data ~/.xroute)"

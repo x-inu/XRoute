@@ -19,13 +19,13 @@ import (
 	"sync"
 	"time"
 
-	"9router/proxy/internal/config"
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/config"
+	"xroute/proxy/internal/log"
 )
 
 // The upstream Node implementation downloads cloudflared into
 // `<DATA_DIR>/bin/cloudflared`. This binary resolves the same data dir, so the
-// path is shared on purpose: an operator who ran upstream 9router and then
+// path is shared on purpose: an operator who ran upstream xroute and then
 // switched here must not download a second 30 MB binary, and a binary the
 // operator placed there by hand must be used rather than replaced.
 const (

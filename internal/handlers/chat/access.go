@@ -1,13 +1,13 @@
 package chat
 
 import (
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/middleware"
-	"9router/proxy/internal/models"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/thinking"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/middleware"
+	"xroute/proxy/internal/models"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/thinking"
 	"database/sql"
 	"errors"
 	"net/http"
@@ -370,7 +370,7 @@ func writeModelAccessError(w http.ResponseWriter, err error) {
 }
 
 // modelAccessDeniedMessage is the client-facing sentence for a model-access
-// denial. It reproduces upstream decolua/9router's
+// denial. It reproduces upstream decolua/xroute's
 // `keyAccessDeniedMessage(requested)` from
 // src/shared/constants/keyAccess.js verbatim:
 //

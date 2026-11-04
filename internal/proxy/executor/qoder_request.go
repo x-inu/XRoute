@@ -12,8 +12,8 @@ import (
 
 	"github.com/google/uuid"
 
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/providers"
 )
 
 // Qoder chat payload — port of open-sse/executors/qoder.js: extractText,

@@ -25,7 +25,7 @@ export function getLatencyBadge(
 
 /**
  * A pool counts as failed when its last probe reported a hard failure. The
- * gateway writes `failed`, upstream `decolua/9router` writes `error`, and rows
+ * gateway writes `failed`, upstream `decolua/xroute` writes `error`, and rows
  * imported from an upstream database can still carry either.
  */
 export function isFailedStatus(pool: ProxyPool): boolean {

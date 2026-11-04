@@ -10,17 +10,17 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/constants"
-	json "9router/proxy/internal/fastjson"
-	"9router/proxy/internal/guardrails"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/providers"
-	internalproxy "9router/proxy/internal/proxy"
-	"9router/proxy/internal/proxy/executor"
-	"9router/proxy/internal/semanticcache"
-	"9router/proxy/internal/shutdown"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/constants"
+	json "xroute/proxy/internal/fastjson"
+	"xroute/proxy/internal/guardrails"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/providers"
+	internalproxy "xroute/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/semanticcache"
+	"xroute/proxy/internal/shutdown"
+	"xroute/proxy/internal/translator"
 )
 
 // forwardRequest sends the request to the upstream provider and streams/pipes the response.
@@ -295,7 +295,7 @@ func (h *ChatHandler) handleStreamResponse(ctx context.Context, w http.ResponseW
 	}
 
 	sessionKey := translator.NewSessionKey("stream")
-	// Seed with requested model so message_start echoes client's model (decolua/9router#3693)
+	// Seed with requested model so message_start echoes client's model (decolua/xroute#3693)
 	if reqModel := translator.RequestedModelFromContext(ctx); reqModel != "" {
 		translator.SeedStreamState(sessionKey, reqModel)
 	}
@@ -359,7 +359,7 @@ func (h *ChatHandler) handleStreamResponse(ctx context.Context, w http.ResponseW
 }
 
 // sseToClaudeJSON aggregates OpenAI SSE chunks into a single chat.completion JSON for forced-SSE handling.
-// Port of executor/codebuddy.go sseToOpenAIJSON for chatCore forced-SSE fix (decolua/9router#3683).
+// Port of executor/codebuddy.go sseToOpenAIJSON for chatCore forced-SSE fix (decolua/xroute#3683).
 func sseToClaudeJSON(raw []byte) ([]byte, bool) {
 	var chunks []map[string]any
 	var streamErr map[string]any

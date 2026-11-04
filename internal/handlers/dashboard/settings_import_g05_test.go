@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/auth"
+	"xroute/proxy/internal/auth"
 )
 
 // A Node backup carries a key's restriction as access{restricted,allow}. The

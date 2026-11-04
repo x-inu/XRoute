@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/models"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy/oauth"
+	"xroute/proxy/internal/models"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy/oauth"
 )
 
 // The three regressions the merged PR #83 produced on a real account set:

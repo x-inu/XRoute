@@ -11,9 +11,9 @@ import (
 	"sync"
 	"time"
 
-	json "9router/proxy/internal/fastjson"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/providers"
+	json "xroute/proxy/internal/fastjson"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/providers"
 )
 
 // vars (not consts) so tests can point them at a local server.

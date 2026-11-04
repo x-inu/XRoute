@@ -6,9 +6,9 @@ import (
 	"slices"
 	"strings"
 
-	json "9router/proxy/internal/fastjson"
+	json "xroute/proxy/internal/fastjson"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 // A capacity-adapter model is only reached because the request's original model

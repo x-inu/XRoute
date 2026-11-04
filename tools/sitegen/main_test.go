@@ -8,7 +8,7 @@ import (
 )
 
 func TestBlobURL(t *testing.T) {
-	const repo = "luqman-v1/9router-go"
+	const repo = "x-inu/XRoute"
 
 	tests := []struct {
 		name string
@@ -18,17 +18,17 @@ func TestBlobURL(t *testing.T) {
 		{
 			name: "repository markdown becomes a blob url",
 			dest: "DATABASE.md",
-			want: "https://github.com/luqman-v1/9router-go/blob/main/DATABASE.md",
+			want: "https://github.com/x-inu/XRoute/blob/main/DATABASE.md",
 		},
 		{
 			name: "nested path is preserved",
 			dest: "docs/TELEGRAM_RELEASE_NOTIFICATIONS.md",
-			want: "https://github.com/luqman-v1/9router-go/blob/main/docs/TELEGRAM_RELEASE_NOTIFICATIONS.md",
+			want: "https://github.com/x-inu/XRoute/blob/main/docs/TELEGRAM_RELEASE_NOTIFICATIONS.md",
 		},
 		{
 			name: "fragment survives",
 			dest: "docs/DATABASE.md#migration",
-			want: "https://github.com/luqman-v1/9router-go/blob/main/docs/DATABASE.md#migration",
+			want: "https://github.com/x-inu/XRoute/blob/main/docs/DATABASE.md#migration",
 		},
 		{
 			name: "heading anchor is left alone",
@@ -37,8 +37,8 @@ func TestBlobURL(t *testing.T) {
 		},
 		{
 			name: "absolute url is left alone",
-			dest: "https://github.com/decolua/9router",
-			want: "https://github.com/decolua/9router",
+			dest: "https://github.com/decolua/xroute",
+			want: "https://github.com/decolua/xroute",
 		},
 		{
 			name: "scheme relative url is left alone",
@@ -156,7 +156,7 @@ func TestGenerate(t *testing.T) {
 	writeFixture(t, shot, "png-bytes")
 
 	out := filepath.Join(root, "_site")
-	if err := generate(readme, assets, out, "luqman-v1/9router-go"); err != nil {
+	if err := generate(readme, assets, out, "x-inu/XRoute"); err != nil {
 		t.Fatalf("generate: %v", err)
 	}
 
@@ -175,7 +175,7 @@ func TestGenerate(t *testing.T) {
 	page := readFile(t, filepath.Join(out, "index.html"))
 
 	for _, want := range []string{
-		`href="https://github.com/luqman-v1/9router-go/blob/main/docs/DATABASE.md"`,
+		`href="https://github.com/x-inu/XRoute/blob/main/docs/DATABASE.md"`,
 		`src="docs/screenshots/providers.png"`,
 		`src="https://img.shields.io/badge/build-passing-green"`,
 		`<h1 id="title">Title</h1>`,
@@ -204,7 +204,7 @@ func TestGenerateFailsOnMissingImage(t *testing.T) {
 	writeFixture(t, filepath.Join(assets, "style.css"), "body{}")
 	writeFixture(t, filepath.Join(assets, "tg.html"), "<a></a>")
 
-	err := generate(readme, assets, filepath.Join(root, "_site"), "luqman-v1/9router-go")
+	err := generate(readme, assets, filepath.Join(root, "_site"), "x-inu/XRoute")
 	if err == nil {
 		t.Fatal("generate() succeeded with a missing image, want an error")
 	}

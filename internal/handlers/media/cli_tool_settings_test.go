@@ -10,10 +10,10 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/clientconfig"
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/dbtest"
-	chathandlers "9router/proxy/internal/handlers/chat"
+	"xroute/proxy/internal/clientconfig"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/dbtest"
+	chathandlers "xroute/proxy/internal/handlers/chat"
 )
 
 // The nine adapters were merged into internal/clientconfig but nothing served

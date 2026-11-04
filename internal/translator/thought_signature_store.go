@@ -7,8 +7,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/log"
 )
 
 const (

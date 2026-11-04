@@ -28,11 +28,11 @@ func TestOpenCodeRoundTrip(t *testing.T) {
 		"// my providers",
 		`"$schema"`,
 		`"other"`, // the user's provider survives
-		`"9router"`,
+		`"xroute"`,
 		`"@ai-sdk/openai-compatible"`,
 		`"baseURL": "http://localhost:20130/v1"`,
 		`"apiKey": "sk-oc-1"`,
-		`"model": "9router/cc/claude-sonnet-5-5"`,
+		`"model": "xroute/cc/claude-sonnet-5-5"`,
 		`"explorer"`,
 		`"mode": "subagent"`,
 	} {
@@ -40,7 +40,7 @@ func TestOpenCodeRoundTrip(t *testing.T) {
 			t.Errorf("after Apply, missing %q\ngot:\n%s", want, got)
 		}
 	}
-	if strings.Contains(got, "9router/9router/") {
+	if strings.Contains(got, "xroute/xroute/") {
 		t.Error("the model prefix was applied twice")
 	}
 
@@ -48,7 +48,7 @@ func TestOpenCodeRoundTrip(t *testing.T) {
 		t.Fatalf("Reset: %v", err)
 	}
 	back := readFixture(t, path)
-	if strings.Contains(back, "9router") {
+	if strings.Contains(back, "xroute") {
 		t.Errorf("Reset left our keys behind:\n%s", back)
 	}
 	for _, keep := range []string{"// my providers", `"$schema"`, `"other"`} {

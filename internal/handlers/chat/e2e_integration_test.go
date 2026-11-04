@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 // TestE2E_Streaming_MetricsAndUsage verifies end-to-end SSE streaming request flow:

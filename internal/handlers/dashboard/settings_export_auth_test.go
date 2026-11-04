@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/auth"
+	"xroute/proxy/internal/auth"
 )
 
 // The dashboard is behind a session cookie, but the backup download demanded the

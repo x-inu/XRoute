@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/models"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy/oauth"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/models"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy/oauth"
 )
 
 // oauthLockTestProvider is a provider id no built-in refresher claims, so the

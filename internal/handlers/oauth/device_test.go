@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 func TestHandleDeviceStart_qoderLocal(t *testing.T) {
@@ -54,7 +54,7 @@ func TestHandleDevicePoll_validation(t *testing.T) {
 
 func TestKimiHeaders_deviceId(t *testing.T) {
 	h := kimiHeaders("dev-1")
-	if h["X-Msh-Device-Id"] != "dev-1" || h["X-Msh-Platform"] != "9router" {
+	if h["X-Msh-Device-Id"] != "dev-1" || h["X-Msh-Platform"] != "xroute" {
 		t.Errorf("bad kimi headers: %v", h)
 	}
 }

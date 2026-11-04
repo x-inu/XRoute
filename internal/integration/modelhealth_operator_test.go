@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"testing"
 
-	"9router/proxy/internal/modelhealth"
+	"xroute/proxy/internal/modelhealth"
 )
 
 // The two invariants the maintainer's review of #687 called out, driven through

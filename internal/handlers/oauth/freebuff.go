@@ -18,9 +18,9 @@ import (
 
 	"github.com/google/uuid"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/proxy/executor"
 )
 
 var freebuffAuthBaseURL = "https://freebuff.com"

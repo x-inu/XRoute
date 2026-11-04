@@ -3,8 +3,8 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * 9Router design tokens
- * Ported from decolua/9router `src/app/globals.css`:
+ * XRoute design tokens
+ * Ported from decolua/xroute `src/app/globals.css`:
  * warm paper light theme + charcoal dark theme, terracotta brand (#E56A4A),
  * frosted sidebar, 10/14px brand radii, soft/warm/elevated shadows.
  */
@@ -258,7 +258,7 @@ body {
   font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
-/* Topology: router card pulse + electric edge beam (matching upstream 9Router).
+/* Topology: router card pulse + electric edge beam (matching upstream XRoute).
    The pulse and the icon shake animate transform only. They used to animate a
    three-layer box-shadow and a drop-shadow filter as well, which made the
    browser re-rasterise a blurred shadow and a filter region on every frame for

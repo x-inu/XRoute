@@ -1,7 +1,7 @@
 # Combo Fusion — Parallel Multi-Model + Judge Synthesis
 
-> **Design doc for combo fusion feature in 9router-go.**
-> Reference: 9router-js `open-sse/services/combo.js` `handleFusionChat()`
+> **Design doc for combo fusion feature in xroute.**
+> Reference: xroute-js `open-sse/services/combo.js` `handleFusionChat()`
 
 ## Goal
 

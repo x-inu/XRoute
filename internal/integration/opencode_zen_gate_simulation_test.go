@@ -19,7 +19,7 @@ import (
 // lenient.
 //
 // The fake upstream implements the gate both in its headers and in its body,
-// using the rules recorded for the /inference gate (upstream decolua/9router
+// using the rules recorded for the /inference gate (upstream decolua/xroute
 // #4842, probed 2026-09-18), and answers 403 FreeTierError when the outbound
 // request violates them. Driving it through the production router exercises the
 // whole pipeline: lane choice, credential swap, header fingerprinting, and body

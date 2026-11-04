@@ -7,8 +7,8 @@ import (
 	"io"
 	"strings"
 
-	"9router/proxy/internal/fastjson"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/fastjson"
+	"xroute/proxy/internal/translator"
 )
 
 // BuildCacheKey generates a deterministic, collision-resistant cache key

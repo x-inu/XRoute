@@ -5,7 +5,7 @@ Ruang lingkup: `providerNodes` (custom provider: `openai-compatible-*` / `anthro
 dan halaman model-nya di dashboard.
 
 Dokumen ini **bukan** port KeiRouter dan **tidak** menyentuh `docs/keirouter-port-plan.md` (F-1…F-15).
-Fitur di sini adalah ekstensi Go-only murni: upstream `decolua/9router` tidak punya limitasi per-node,
+Fitur di sini adalah ekstensi Go-only murni: upstream `decolua/xroute` tidak punya limitasi per-node,
 jadi tidak ada tabrakan paritas — cukup ikut aturan `goOnlyColumns` (schema additive).
 
 ---
@@ -443,7 +443,7 @@ PR2 tidak boleh mendarat sebelum PR1 (butuh kolom + loader). PR5 tidak butuh PR2
 **Lampiran — cek cepat sebelum PR:**
 ```bash
 for pair in $(grep -E '^CROSS_TARGETS *:=' Makefile | sed 's/.*:=[[:space:]]*//'); do
-  CGO_ENABLED=0 GOOS=${pair%-*} GOARCH=${pair#*-} go build -o /dev/null ./cmd/9router-go/ || echo "FAIL $pair"
+  CGO_ENABLED=0 GOOS=${pair%-*} GOARCH=${pair#*-} go build -o /dev/null ./cmd/xroute/ || echo "FAIL $pair"
 done
 make test-integration && make vet-svelte
 git diff --name-only main...HEAD | grep -qx CHANGELOG.md && echo "VIOLATION §7.6"

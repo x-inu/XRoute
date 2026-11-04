@@ -14,7 +14,7 @@ import (
 // MiniMax Code's own sign-in (client mcode-public, PKCE S256), run with our
 // own tokens: ~/.minimax is never read or written, so signing in here does not
 // sign the CLI out and several accounts can coexist. Port of upstream
-// src/lib/oauth/providers/minimax-code-shared.js (decolua/9router 85bc33ce).
+// src/lib/oauth/providers/minimax-code-shared.js (decolua/xroute 85bc33ce).
 //
 //	1) POST {account}/oauth2/device/code
 //	     client_id, scope, audience, code_challenge, code_challenge_method=S256

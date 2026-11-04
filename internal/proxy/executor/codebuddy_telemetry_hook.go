@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy"
 )
 
 // ForwardCodebuddyCNWithTelemetry is the codebuddy-cn executor entry that wraps
@@ -20,7 +20,7 @@ import (
 // The telemetry is fire-and-forget and fail-open: it runs in detached
 // goroutines with a hard 5s timeout per send, never adds latency to the chat
 // request, and never changes its outcome. This is the direct Go port of
-// upstream `CodeBuddyExecutor.execute()` in PR decolua/9router #3257.
+// upstream `CodeBuddyExecutor.execute()` in PR decolua/xroute #3257.
 func ForwardCodebuddyCNWithTelemetry(w http.ResponseWriter, req *Request) error {
 	if req == nil || req.Provider != "codebuddy-cn" {
 		return ForwardCodebuddyCN(w, req)

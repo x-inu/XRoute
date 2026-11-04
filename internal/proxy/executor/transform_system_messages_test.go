@@ -2,7 +2,7 @@ package executor
 
 import "testing"
 
-// decolua/9router#4813: the Responses API has no system role, so every system
+// decolua/xroute#4813: the Responses API has no system role, so every system
 // and developer message collapses into the single `instructions` string. The
 // old code kept only the first non-empty one and silently discarded the rest,
 // so a client sending three system messages reached the model with one of them.

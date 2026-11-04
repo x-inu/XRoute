@@ -13,7 +13,7 @@ import (
 
 // CodeBuddy CN anti-ban telemetry.
 //
-// Port of upstream `open-sse/services/codebuddyTelemetry.js` (PR decolua/9router
+// Port of upstream `open-sse/services/codebuddyTelemetry.js` (PR decolua/xroute
 // #3257). Replicates the official CodeBuddy client's telemetry so a proxied key
 // no longer appears "silent" to Tencent's ban detector.
 //

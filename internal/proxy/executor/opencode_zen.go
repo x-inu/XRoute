@@ -9,9 +9,9 @@ import (
 	"net/http"
 	"strings"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
+	"xroute/proxy/internal/translator"
 )
 
 // OpenCode Zen serves three endpoints off one key

@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"9router/proxy/internal/config"
-	"9router/proxy/internal/constants"
+	"xroute/proxy/internal/config"
+	"xroute/proxy/internal/constants"
 )
 
 // cliAuthSalt mirrors upstream's CLI_TOKEN_SALT ("9r-cli-auth") in

@@ -94,13 +94,13 @@ if [ -z "$entries" ]; then
   entries="$(grep -E '^[-*] ' "$NOTES_FILE" | head -"$ENTRIES" || true)"
 fi
 
-release_url="https://github.com/luqman-v1/9router-go/releases/tag/${TAG}"
-docker_image="${DOCKER_IMAGE:-luqmenul/9router-go}"
+release_url="https://github.com/x-inu/XRoute/releases/tag/${TAG}"
+docker_image="${DOCKER_IMAGE:-luqmenul/xroute}"
 
 # A prerelease must not read like a stable install: it is absent from `latest`,
 # so anyone pulling `latest` still gets the previous version.
 if echo "$TAG" | grep -q -- '-'; then
-  headline="🧪 Experimental build — not on latest, and '9router-go update' will not offer it to a stable install."
+  headline="🧪 Experimental build — not on latest, and 'xroute update' will not offer it to a stable install."
 else
   headline="✅ Stable release"
 fi
@@ -108,7 +108,7 @@ fi
 # No Markdown markers here on purpose: this goes out as plain text (see the
 # curl call below), so a `*` or a backtick would reach the group as a literal
 # asterisk rather than as emphasis.
-message="🚀 9router-go ${TAG}
+message="🚀 xroute ${TAG}
 ${headline}
 "
 if [ -n "$entries" ]; then

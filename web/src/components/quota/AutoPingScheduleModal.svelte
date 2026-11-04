@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Port of 9router src/app/(dashboard)/dashboard/providers/[id]/
+  // Port of xroute src/app/(dashboard)/dashboard/providers/[id]/
   // AutoPingScheduleModal.js (Next.js) to the Go dashboard's Svelte components.
   //
   // One control, three modes, because the settings key has two independent

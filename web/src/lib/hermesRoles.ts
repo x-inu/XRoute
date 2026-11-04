@@ -1,7 +1,7 @@
 /**
  * Hermes model-role catalog.
  *
- * Port of `CLI_TOOLS.hermes.roles` from upstream decolua/9router
+ * Port of `CLI_TOOLS.hermes.roles` from upstream decolua/xroute
  * (`src/shared/constants/cliTools.js`). The card renders the main model as its
  * own "Default Model" picker, so `default` is deliberately absent here and is
  * added at the payload level as the top-level `model:` block.

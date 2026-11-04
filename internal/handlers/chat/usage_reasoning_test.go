@@ -5,8 +5,8 @@ import (
 	json "encoding/json/v2"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/translator"
 )
 
 // TestUsageHistoryStoresReasoningTokens covers the stored token JSON: the

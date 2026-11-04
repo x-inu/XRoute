@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/models"
 )
 
 // openQuotaRepo builds a real sqlite-backed Repo so the quota path is exercised

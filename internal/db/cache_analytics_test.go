@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/analyticsrange"
+	"xroute/proxy/internal/analyticsrange"
 )
 
 func setupAnalyticsTestDB(t *testing.T) (*Repo, func()) {

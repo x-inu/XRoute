@@ -1,11 +1,11 @@
 services:
-  9router-go:
+  xroute:
     build: .
-    container_name: 9router-go
+    container_name: xroute
     ports:
       - "20130:20130"
     volumes:
-      - 9router-data:/data
+      - xroute-data:/data
     environment:
       - PORT=20130
       - DATA_DIR=/data
@@ -18,4 +18,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  9router-data:
+  xroute-data:

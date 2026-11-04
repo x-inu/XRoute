@@ -19,20 +19,20 @@ import (
 
 	"github.com/google/uuid"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlers/media"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/models"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
-	"9router/proxy/internal/proxy/executor"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlers/media"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/models"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
+	"xroute/proxy/internal/proxy/executor"
 )
 
 // probeMessageContent is the short natural test message sent during probe calls (~22 chars).
 const probeMessageContent = "Hi there, how are you?"
 
 // ClassifyUpstreamNetworkError classifies network errors during probe/models fetch.
-// Parity with decolua/9router#4843.
+// Parity with decolua/xroute#4843.
 func ClassifyUpstreamNetworkError(err error) (int, string, string) {
 	if err == nil {
 		return http.StatusOK, "", ""

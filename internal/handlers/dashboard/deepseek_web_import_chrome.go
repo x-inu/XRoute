@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/browsercookies"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/browsercookies"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
 )
 
 // The import of a DeepSeek Web credential from a browser that is already

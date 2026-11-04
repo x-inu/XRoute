@@ -1,7 +1,7 @@
 package executor
 
 import (
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/log"
 	"encoding/json/jsontext"
 	json "encoding/json/v2"
 	"fmt"
@@ -9,7 +9,7 @@ import (
 	"slices"
 	"strings"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 // ExtractSimpleText extracts text from jsontext.Value (string or array[text]).
@@ -79,7 +79,7 @@ func convertUserContent(raw jsontext.Value) map[string]any {
 	return result
 }
 
-// cleanResponsesModel strips the request modifiers a 9router client may wrap a
+// cleanResponsesModel strips the request modifiers a xroute client may wrap a
 // model id in: the opencode provider prefix, and the "(level)" thinking
 // override. Neither is part of the wire id.
 func cleanResponsesModel(model string) string {
@@ -509,7 +509,7 @@ func buildResponsesBody(body []byte) ([]byte, string, error) {
 						}
 						tool["parameters"] = StripCodexUnsupportedPatterns(fn.Parameters)
 						// Nested strict (Chat Completions) wins over a flat one
-						// (parity with decolua/9router#4543/#4573).
+						// (parity with decolua/xroute#4543/#4573).
 						if fn.Strict != nil {
 							strict = fn.Strict
 						}
@@ -861,7 +861,7 @@ func normalizeTopLevelReasoning(reqMap map[string]any) bool {
 // deepSeekV4Pro is the wire id the deepseek -max/-none catalog aliases map to.
 const deepSeekV4Pro = "deepseek-v4-pro"
 
-// deepSeekV4ProAlias is 9router's own catalog alias table, ported from upstream
+// deepSeekV4ProAlias is xroute's own catalog alias table, ported from upstream
 // reasoningContentInjector.js DEEPSEEK_V4_PRO_ALIASES. The alias id is not a
 // wire id, so the request is sent as the base model with the thinking toggle in
 // top-level `thinking.type` and the effort in `reasoning_effort` (empty effort =
@@ -920,7 +920,7 @@ func InjectReasoningContent(body []byte, provider string) []byte {
 
 	changed := false
 	if provider == "deepseek" {
-		// The -max/-none catalog ids are 9router's own aliases, not wire ids;
+		// The -max/-none catalog ids are xroute's own aliases, not wire ids;
 		// resolve them to the base model with their thinking toggle/effort
 		// attached so the injection below runs against the id the API serves.
 		changed = applyDeepSeekV4ProAlias(reqMap, modelLower)

@@ -17,10 +17,10 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/sync/singleflight"
 
-	"9router/proxy/internal/handlers/shared"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/models"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/handlers/shared"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/models"
+	"xroute/proxy/internal/providers"
 )
 
 // Live model discovery for /v1/models, ported from the upstream

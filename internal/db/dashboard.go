@@ -1,7 +1,7 @@
 package db
 
 import (
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/models"
 	"context"
 	"database/sql"
 	json "encoding/json/v2"

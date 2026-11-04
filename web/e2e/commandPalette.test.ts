@@ -98,7 +98,7 @@ describe('Pinned entries', () => {
 
     await page.locator('ul[role="listbox"] li button[title*="Pin"]').first().click()
     await page.waitForTimeout(300)
-    expect(await page.evaluate(() => localStorage.getItem('9router-nav-pinned'))).toContain(
+    expect(await page.evaluate(() => localStorage.getItem('xroute-nav-pinned'))).toContain(
       'analytics'
     )
 

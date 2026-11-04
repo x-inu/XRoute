@@ -11,9 +11,9 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/middleware"
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/middleware"
+	"xroute/proxy/internal/models"
 )
 
 // The tests here pin the ways the caps could still be walked around after the
@@ -37,7 +37,7 @@ func liveHeap(t *testing.T) uint64 {
 // already read, so the guard has to refuse the body instead of measuring zero.
 func malformedTailMultipart(t *testing.T, payload []byte) (*bytes.Buffer, string) {
 	t.Helper()
-	const boundary = "9routerTestBoundary"
+	const boundary = "xrouteTestBoundary"
 	buf := &bytes.Buffer{}
 	buf.WriteString("--" + boundary + "\r\n")
 	buf.WriteString("Content-Disposition: form-data; name=\"model\"\r\n\r\nwhisper-1\r\n")

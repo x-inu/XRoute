@@ -3,9 +3,9 @@ package chat
 import (
 	"context"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/translator"
 )
 
 // resolveJailbreak returns the injection document for a request, or nil when

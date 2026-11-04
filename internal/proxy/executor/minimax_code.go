@@ -11,15 +11,15 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
+	"xroute/proxy/internal/translator"
 )
 
 // MiniMax Code (mcode) — the credits lane. Anthropic Messages on MiniMax's
 // mavis gateway, reached with the OAuth bearer plus the per-request session
 // headers the gateway expects. Port of upstream open-sse/executors/minimax-code.js
-// (decolua/9router 85bc33ce).
+// (decolua/xroute 85bc33ce).
 
 // quotaWordRE matches a body that says the account ran out of credits rather
 // than that its credential is bad.
@@ -204,7 +204,7 @@ func miniMaxCodeSessionID(req *Request) string {
 func randomSessionID() string {
 	var b [16]byte
 	if _, err := rand.Read(b[:]); err != nil {
-		return "9router-go-session"
+		return "xroute-session"
 	}
 	return hex.EncodeToString(b[:])
 }

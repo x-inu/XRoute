@@ -51,14 +51,14 @@ func AddHostsEntries() error {
 	return c.Run()
 }
 
-// RemoveHostsEntries removes /etc/hosts entries added by 9router.
+// RemoveHostsEntries removes /etc/hosts entries added by xroute.
 func RemoveHostsEntries() error {
 	if runtime.GOOS == "windows" {
 		return fmt.Errorf("Windows MITM not yet supported")
 	}
-	args := []string{"sed", "-i", "-e", "/# 9router-mitm/d"}
+	args := []string{"sed", "-i", "-e", "/# xroute-mitm/d"}
 	if runtime.GOOS == "darwin" {
-		args = []string{"sed", "-i", "", "-e", "/# 9router-mitm/d"}
+		args = []string{"sed", "-i", "", "-e", "/# xroute-mitm/d"}
 	}
 	args = append(args, "/etc/hosts")
 	return exec.Command("sudo", args...).Run()
@@ -76,10 +76,10 @@ func CheckDNSStatus() (map[string]bool, error) {
 
 func hostsEntries() string {
 	var b strings.Builder
-	b.WriteString("\n# 9router-mitm\n")
+	b.WriteString("\n# xroute-mitm\n")
 	for _, d := range AllDomains() {
 		b.WriteString(fmt.Sprintf("127.0.0.1 %s\n", d))
 	}
-	b.WriteString("# end 9router-mitm\n")
+	b.WriteString("# end xroute-mitm\n")
 	return b.String()
 }

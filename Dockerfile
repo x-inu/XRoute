@@ -28,11 +28,11 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     VERSION=${VERSION:-$(cat VERSION 2>/dev/null || cat version.json | sed -n 's/.*"latestVersion": *"\([^"]*\)".*/\1/p')} && \
     echo "Building version $VERSION for ${TARGETOS:-linux}/${TARGETARCH:-amd64} on $BUILDPLATFORM" && \
     CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH:-amd64} \
-    go build -ldflags="-s -w -X '9router/proxy/internal/updater.CurrentVersion=${VERSION}'" -o 9router-go ./cmd/9router-go/
+    go build -ldflags="-s -w -X 'xroute/proxy/internal/updater.CurrentVersion=${VERSION}'" -o xroute ./cmd/xroute/
 
 # Stage 3: Minimal runtime image for target platform
 FROM alpine:3.21
 RUN apk add --no-cache ca-certificates tzdata
-COPY --from=builder /app/9router-go /usr/local/bin/9router-go
+COPY --from=builder /app/xroute /usr/local/bin/xroute
 EXPOSE 20130
-ENTRYPOINT ["9router-go"]
+ENTRYPOINT ["xroute"]

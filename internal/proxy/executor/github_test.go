@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
 )
 
 func TestForwardGithubContextOverflowNormalization(t *testing.T) {

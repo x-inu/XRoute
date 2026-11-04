@@ -14,7 +14,7 @@ import (
 // in a late fragment and omit the id entirely, and strict OpenAI-compatible
 // clients answer with "Expected 'id' to be a string" and abort the whole
 // turn. The id is remembered per tool-call index so a later fragment for the
-// same index reuses it. Upstream parity: decolua/9router 95c9d03e
+// same index reuses it. Upstream parity: decolua/xroute 95c9d03e
 // (ensureStreamToolCallIds).
 type StreamToolCallIDFill struct {
 	seen map[int]string

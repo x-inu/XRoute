@@ -1,16 +1,16 @@
 package chat
 
 import (
-	"9router/proxy/internal/changelogfrag"
-	json "9router/proxy/internal/fastjson"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/middleware"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/semanticcache"
-	"9router/proxy/internal/thinking"
-	"9router/proxy/internal/translator"
-	"9router/proxy/internal/updater"
+	"xroute/proxy/internal/changelogfrag"
+	json "xroute/proxy/internal/fastjson"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/middleware"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/semanticcache"
+	"xroute/proxy/internal/thinking"
+	"xroute/proxy/internal/translator"
+	"xroute/proxy/internal/updater"
 	"bytes"
 	"context"
 	"errors"
@@ -480,8 +480,8 @@ func (h *ChatHandler) HandleChangelog(w http.ResponseWriter, r *http.Request) {
 	}
 
 	urls := []string{
-		"https://raw.githubusercontent.com/luqman-v1/9router-go/main/CHANGELOG.md",
-		"https://raw.githubusercontent.com/decolua/9router/refs/heads/master/CHANGELOG.md",
+		"https://raw.githubusercontent.com/x-inu/XRoute/main/CHANGELOG.md",
+		"https://raw.githubusercontent.com/decolua/xroute/refs/heads/master/CHANGELOG.md",
 	}
 	client := &http.Client{Timeout: 5 * time.Second}
 	for _, u := range urls {
@@ -558,7 +558,7 @@ func (h *ChatHandler) HandleTriggerUpdate(w http.ResponseWriter, r *http.Request
 	if !info.HasUpdate {
 		handlerutil.WriteJSON(w, http.StatusOK, map[string]any{
 			"status":  "up_to_date",
-			"message": "9router-go is already on the latest version",
+			"message": "xroute is already on the latest version",
 			"version": info.CurrentVersion,
 		})
 		return

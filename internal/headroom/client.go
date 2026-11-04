@@ -12,8 +12,8 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/proxy"
 )
 
 // DefaultTimeoutMs is the default timeout in milliseconds for compression requests,

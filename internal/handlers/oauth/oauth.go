@@ -13,9 +13,9 @@ import (
 	"net/url"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/log"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/log"
 )
 
 // OAuthHandler handles OAuth token import and social auth exchange endpoints.

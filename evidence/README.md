@@ -1,6 +1,6 @@
 # Evidence — issue #160 (backup JSON, bukan zip)
 
-Direkam dari binary `9router-go` yang benar-benar dijalankan di port 20999
+Direkam dari binary `xroute` yang benar-benar dijalankan di port 20999
 dengan `DATA_DIR` sementara, bukan dari unit test. Tanggal: 2026-10-05.
 
 ## 1. Download lewat dashboard
@@ -25,12 +25,12 @@ JSON, bukan arsip.
 
 ```
 HTTP/1.1 200 OK
-Content-Disposition: attachment; filename="9router-backup-2026-10-05.json"
+Content-Disposition: attachment; filename="xroute-backup-2026-10-05.json"
 Content-Type: application/json
 Content-Length: 532
 ```
 
-`evidence/9router-backup-download.json` — body persis seperti yang diterima
+`evidence/xroute-backup-download.json` — body persis seperti yang diterima
 user:
 
 ```json
@@ -61,11 +61,11 @@ milik upstream.
 
 ```
 $ curl -D- ".../api/settings/database?format=zip"   | grep content-
-Content-Disposition: attachment; filename="9router-backup-2026-10-05.json"
+Content-Disposition: attachment; filename="xroute-backup-2026-10-05.json"
 Content-Type: application/json
 
 $ curl -D- -H "Accept: application/zip" ".../api/settings/database" | grep content-
-Content-Disposition: attachment; filename="9router-backup-2026-10-05.json"
+Content-Disposition: attachment; filename="xroute-backup-2026-10-05.json"
 Content-Type: application/json
 ```
 
@@ -81,7 +81,7 @@ $ curl ".../api/connections"
 []
 
 $ curl -X POST -H 'x-9r-password: 123456' \
-       --data-binary @evidence/9router-backup-download.json \
+       --data-binary @evidence/xroute-backup-download.json \
        ".../api/settings/database"
 {"success":true}
 

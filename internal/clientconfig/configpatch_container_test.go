@@ -218,15 +218,15 @@ func TestPatchTOMLDelete(t *testing.T) {
 		},
 		{
 			name: "key inside a table",
-			src:  "[model_providers.9router]\nname = \"9Router\"\nbase_url = \"http://x/v1\"\n",
-			edit: Edit{KeyPath: []string{"model_providers", "9router", "name"}, Delete: true},
-			want: "[model_providers.9router]\nbase_url = \"http://x/v1\"\n",
+			src:  "[model_providers.xroute]\nname = \"XRoute\"\nbase_url = \"http://x/v1\"\n",
+			edit: Edit{KeyPath: []string{"model_providers", "xroute", "name"}, Delete: true},
+			want: "[model_providers.xroute]\nbase_url = \"http://x/v1\"\n",
 		},
 		{
 			name: "comments elsewhere survive",
-			src:  "# top\nmodel = \"x\"\n# below\nmodel_provider = \"9router\"\n",
+			src:  "# top\nmodel = \"x\"\n# below\nmodel_provider = \"xroute\"\n",
 			edit: Edit{KeyPath: []string{"model"}, Delete: true},
-			want: "# top\n# below\nmodel_provider = \"9router\"\n",
+			want: "# top\n# below\nmodel_provider = \"xroute\"\n",
 		},
 	}
 	for _, tt := range tests {
@@ -261,9 +261,9 @@ func TestPatchYAMLDelete(t *testing.T) {
 		},
 		{
 			name: "nested scalar",
-			src:  "providers:\n  \"9router\":\n    baseUrl: http://x/v1\n    apiKey: k\n",
-			edit: Edit{KeyPath: []string{"providers", "9router", "apiKey"}, Delete: true},
-			want: "providers:\n  \"9router\":\n    baseUrl: http://x/v1\n",
+			src:  "providers:\n  \"xroute\":\n    baseUrl: http://x/v1\n    apiKey: k\n",
+			edit: Edit{KeyPath: []string{"providers", "xroute", "apiKey"}, Delete: true},
+			want: "providers:\n  \"xroute\":\n    baseUrl: http://x/v1\n",
 		},
 		{
 			name: "comments elsewhere survive",
@@ -324,19 +324,19 @@ func TestPatchTOMLRefusesValueJSON(t *testing.T) {
 	}
 }
 
-// Nested creation replaced a refusal: writing providers["9router"] into a file
+// Nested creation replaced a refusal: writing providers["xroute"] into a file
 // with no providers object is omp's normal first run. One indent stop per path
 // element, and the result must read back.
 func TestPatchYAMLCreateNestedKey(t *testing.T) {
 	out, err := Patch([]byte("a: 1\n"), FormatYAML, []Edit{
-		{KeyPath: []string{"providers", "9router", "baseUrl"}, Value: "http://h/v1", CreateIfMissing: true},
+		{KeyPath: []string{"providers", "xroute", "baseUrl"}, Value: "http://h/v1", CreateIfMissing: true},
 	})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}
 	// Every key is quoted, at every level: one style, and a plain key containing
 	// ":" or starting with a reserved indicator would change meaning unquoted.
-	for _, want := range []string{"\"providers\":", "\"9router\":", "\"baseUrl\":"} {
+	for _, want := range []string{"\"providers\":", "\"xroute\":", "\"baseUrl\":"} {
 		if !strings.Contains(string(out), want) {
 			t.Errorf("missing %q in:\n%s", want, out)
 		}
@@ -345,7 +345,7 @@ func TestPatchYAMLCreateNestedKey(t *testing.T) {
 	if err != nil {
 		t.Fatalf("output does not parse: %v", err)
 	}
-	n, err := findYAMLScalar(docs, []string{"providers", "9router", "baseUrl"})
+	n, err := findYAMLScalar(docs, []string{"providers", "xroute", "baseUrl"})
 	if err != nil {
 		t.Fatalf("created path does not read back: %v", err)
 	}

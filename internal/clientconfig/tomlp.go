@@ -344,7 +344,7 @@ func tomlCreateConflict(doc *tomlDoc, fullPath []string) error {
 // Two headers can be left empty by this and are cleaned up with it: the table
 // whose last key just went, and — because a nested table's header is written
 // under its parent's — the parent if that removal empties it in turn. A config
-// holding a bare "[model_providers.9router]" line is not what "reset" means,
+// holding a bare "[model_providers.xroute]" line is not what "reset" means,
 // and TOML itself reads the empty table as a value the user did not ask for
 // (matrix §5.2 "xoá container rỗng").
 func removeTOMLLine(src []byte, kv tomlKeyValue, tablePath []string) []byte {

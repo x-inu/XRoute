@@ -7,9 +7,9 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlers/shared"
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlers/shared"
+	"xroute/proxy/internal/models"
 )
 
 // TestResolveLiveCatalogPinnedEnabledModelsSkipsFetch pins that a connection

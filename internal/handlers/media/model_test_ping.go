@@ -14,8 +14,8 @@ import (
 	"strings"
 	"time"
 
-	"9router/proxy/internal/handlerutil"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/handlerutil"
+	"xroute/proxy/internal/translator"
 )
 
 // The dashboard's per-model Test button pings a model through the same endpoint

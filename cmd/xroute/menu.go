@@ -15,10 +15,10 @@ import (
 
 	"github.com/urfave/cli/v2"
 
-	"9router/proxy/internal/config"
-	"9router/proxy/internal/daemon"
-	"9router/proxy/internal/proc"
-	"9router/proxy/internal/updater"
+	"xroute/proxy/internal/config"
+	"xroute/proxy/internal/daemon"
+	"xroute/proxy/internal/proc"
+	"xroute/proxy/internal/updater"
 )
 
 // stdinIsTerminal reports whether the bare invocation has a human at the
@@ -32,7 +32,7 @@ func stdinIsTerminal() bool {
 	return fi.Mode()&os.ModeCharDevice != 0
 }
 
-// runMenu is the bare-`9router-go` entry point on a terminal: the same
+// runMenu is the bare-`xroute` entry point on a terminal: the same
 // interface picker the Node CLI shows instead of silently booting a server.
 func runMenu(cCtx *cli.Context) error {
 	in := bufio.NewReader(os.Stdin)
@@ -131,7 +131,7 @@ func parseChoice(line string) string {
 // startTray hands the tray to its own binary and returns, so the terminal is
 // free while the icon stays.
 //
-// The tray lives in cmd/9router-tray because a GUI toolkit cannot be linked
+// The tray lives in cmd/xroute-tray because a GUI toolkit cannot be linked
 // into this binary without breaking the CGO_ENABLED=0 cross-build for all five
 // targets (docs/specs/tray-companion-architecture.md §X2). Spawning keeps the
 // menu entry the Node CLI has ("Hide to Tray") without importing it here.
@@ -148,7 +148,7 @@ func startTray() error {
 		exe += ".exe"
 	}
 	if _, err := os.Stat(exe); err != nil {
-		return fmt.Errorf("tray: %s not found next to %s — install the 9router-tray package", filepath.Base(exe), filepath.Base(self))
+		return fmt.Errorf("tray: %s not found next to %s — install the xroute-tray package", filepath.Base(exe), filepath.Base(self))
 	}
 	// CommandContext with a context that is never cancelled, not a deadline:
 	// this process is released immediately below and is meant to outlive the

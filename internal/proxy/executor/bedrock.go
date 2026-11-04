@@ -11,9 +11,9 @@ import (
 	"encoding/json/jsontext"
 	json "encoding/json/v2"
 
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
 )
 
 // ForwardBedrock forwards to Amazon Bedrock.

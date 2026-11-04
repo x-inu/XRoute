@@ -1,5 +1,5 @@
-// 9router-go Service Worker
-const CACHE_NAME = '9router-go-static-v2'
+// xroute Service Worker
+const CACHE_NAME = 'xroute-static-v2'
 
 self.addEventListener('install', () => {
   self.skipWaiting()

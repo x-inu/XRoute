@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-28  
 **Status:** Approved / Ready for Plan  
-**Target:** 9router-go (`internal/handlers/chat`, `internal/handlerutil`, `internal/db`)
+**Target:** xroute (`internal/handlers/chat`, `internal/handlerutil`, `internal/db`)
 
 ---
 
@@ -29,7 +29,7 @@ Upstream backends isolate prompt prefix caches per account/organization workspac
 - **Zero Memory Leaks:** Bound in-memory affinity tables with inactivity TTLs and capacity caps.
 
 ### Non-Goals
-- **Global Cross-Instance Distributed Sync:** The affinity store is process-local in-memory (matching 9router-go's single-daemon architecture). It does not require Redis or external coordination.
+- **Global Cross-Instance Distributed Sync:** The affinity store is process-local in-memory (matching xroute's single-daemon architecture). It does not require Redis or external coordination.
 - **Sticky Locking to Failing Accounts:** The router will not hold a session on an account that cannot serve the requested model or is actively rate-limited.
 
 ### Anti-Goals
@@ -41,7 +41,7 @@ Upstream backends isolate prompt prefix caches per account/organization workspac
 ## 3. Constraints
 - **Zero External Dependencies:** Use standard Go stdlib (`sync`, `time`).
 - **Thread Safety:** High concurrency under streaming and concurrent multi-tool turns.
-- **Parity with Upstream 9router Specification:** Maintain compatibility with existing `ProviderStrategy` settings and DB schema.
+- **Parity with Upstream xroute Specification:** Maintain compatibility with existing `ProviderStrategy` settings and DB schema.
 
 ---
 

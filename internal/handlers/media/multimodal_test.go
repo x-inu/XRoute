@@ -9,9 +9,9 @@ import (
 	"strings"
 	"testing"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/handlers/chat"
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/handlers/chat"
+	"xroute/proxy/internal/providers"
 )
 
 func setupMultimodalTestDB(t *testing.T) (*sql.DB, func()) {

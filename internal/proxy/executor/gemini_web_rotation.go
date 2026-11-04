@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
-	"9router/proxy/internal/db"
-	"9router/proxy/internal/log"
-	"9router/proxy/internal/models"
+	"xroute/proxy/internal/db"
+	"xroute/proxy/internal/log"
+	"xroute/proxy/internal/models"
 )
 
 // The background rotation of a Gemini Web session.

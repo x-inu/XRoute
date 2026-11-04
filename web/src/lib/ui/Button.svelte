@@ -1,5 +1,5 @@
 <script lang="ts">
-  // Port of decolua/9router src/shared/components/Button.js
+  // Port of decolua/xroute src/shared/components/Button.js
   import type { Snippet } from 'svelte'
 
   type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'success'

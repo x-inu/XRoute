@@ -1,9 +1,9 @@
 package executor
 
 import (
-	"9router/proxy/internal/providers"
-	"9router/proxy/internal/proxy"
-	"9router/proxy/internal/translator"
+	"xroute/proxy/internal/providers"
+	"xroute/proxy/internal/proxy"
+	"xroute/proxy/internal/translator"
 	"context"
 	json "encoding/json/v2"
 	"io"
@@ -354,7 +354,7 @@ func TestForwardOpencode(t *testing.T) {
 // a tool without a schema, and a foreign cache_control key — is canonicalized
 // into exactly what the v2 inference gate accepts, so the same model works
 // whether the caller is a clean API client or an agent harness
-// (decolua/9router#4842 gate rules).
+// (decolua/xroute#4842 gate rules).
 func TestForwardOpencode_HarnessBodyIsCanonicalizedForTheGate(t *testing.T) {
 	var sent map[string]any
 	var sentRaw string
@@ -487,7 +487,7 @@ func TestForwardOpencodeGo_OpenAIRouting(t *testing.T) {
 			t.Errorf("expected Authorization Bearer secret-go-key header, got %s", r.Header.Get("Authorization"))
 		}
 		// The paid go lane keeps the v1 identity: only the keyless free
-		// executor moved to v2 (upstream decolua/9router#4842 leaves keyed
+		// executor moved to v2 (upstream decolua/xroute#4842 leaves keyed
 		// executors untouched).
 		if r.Header.Get("User-Agent") != proxy.DefaultOpenCodeV1UA {
 			t.Errorf("expected paid-lane User-Agent %s, got %s", proxy.DefaultOpenCodeV1UA, r.Header.Get("User-Agent"))
@@ -1190,7 +1190,7 @@ func responsesEventStream(text string) string {
 // Two hint-less requests on one connection must share one upstream session:
 // the free tier accounts its quota per session, so a fresh id per request
 // burns through it and surfaces as 429 FreeUsageLimitError with a growing
-// retry-after (decolua/9router stableSessionId; dsh-our-free-model
+// retry-after (decolua/xroute stableSessionId; dsh-our-free-model
 // sessionForConversation).
 func TestForwardOpencode_StableSessionPerConnection(t *testing.T) {
 	var sessions []string

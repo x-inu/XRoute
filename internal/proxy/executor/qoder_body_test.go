@@ -12,7 +12,7 @@ import (
 	"testing"
 	"time"
 
-	"9router/proxy/internal/providers"
+	"xroute/proxy/internal/providers"
 )
 
 // Issue #121: every Qoder chat request answered

@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"9router/proxy/internal/db"
+	"xroute/proxy/internal/db"
 )
 
 func TestHandleFreebuffSessionStatus_MethodNotAllowed(t *testing.T) {
