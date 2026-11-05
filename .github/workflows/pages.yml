@@ -5,21 +5,6 @@ name: Deploy site
 # one. Nothing else in this workflow is allowed to fail silently: a broken link
 # rewrite or a missing screenshot has to fail here rather than ship.
 on:
-  push:
-    branches: [main]
-    paths:
-      - README.md
-      - docs/screenshots/**
-      - site/**
-      - tools/sitegen/**
-      - .github/workflows/pages.yml
-  pull_request:
-    paths:
-      - README.md
-      - docs/screenshots/**
-      - site/**
-      - tools/sitegen/**
-      - .github/workflows/pages.yml
   workflow_dispatch:
 
 permissions:
